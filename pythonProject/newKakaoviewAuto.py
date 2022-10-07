@@ -1,6 +1,6 @@
 import pyautogui
 from datetime import datetime, timedelta
-import  os
+import os
 import time
 
 

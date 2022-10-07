@@ -10,7 +10,7 @@ def win_activate(dataset):
 
 
 def find_location(dataset):
-    work_dir = os.getcwd()
+    work_dir = os.getcwd()+"\img"
     file_ext = ".png"
     file_name_list = dataset['file_name_list']
     result = []

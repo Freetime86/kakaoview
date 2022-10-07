@@ -347,7 +347,7 @@ def find_heart(dataset):
 
     next_step = False
     while not next_step:
-        #testdata push
+
         # My View 화면인지 세팅 아이콘으로 판단
         dataset['file_name_list'] = ['\setting_icon', '\setting_icon1']
         setting_icon = find_location(dataset)  # 옵션 닷 버튼 찾기

@@ -26,7 +26,7 @@ def find_location(dataset):
 
 
 def find_location_accuracy(dataset, accuracy):
-    work_dir = "Z:\HDD1\kakaoview_macro\img"
+    work_dir = os.getcwd()+"\img"
     file_ext = ".png"
     file_name_list = dataset['file_name_list']
     result = []
@@ -42,7 +42,7 @@ def find_location_accuracy(dataset, accuracy):
 
 
 def find_loading_status(dataset, accuracy):
-    work_dir = "Z:\HDD1\kakaoview_macro\img"
+    work_dir = os.getcwd()+"\img"
     file_ext = ".png"
     file_name_list = dataset['file_name_list']
     result = []
@@ -103,6 +103,11 @@ def scroll_down(dataset):
     timeout_flag = False
 
     while not next_step:
+
+        if dataset['is_refresh']:
+            pyautogui.click(scroll_loc)
+            time.sleep(float(dataset['speed']))
+            dataset['is_refresh'] = False
 
         dataset['file_name_list'] = ['\scroll_down']
         scroll_down_icon = find_location(dataset)
@@ -165,24 +170,28 @@ def capture_back(dataset):
             while not next_step:
 
                 dataset['file_name_list'] = ['\capture_back', '\capture_back1']
-                # dataset['file_name_list'] = ['\my_view_return', '\my_view_return1']
                 my_view_return = find_location(dataset)
 
                 if len(my_view_return) > 0:
                     my_view_return_loc = pyautogui.center(my_view_return[0])
-                    # pyautogui.click(my_view_return_loc)
                     set_time_out = timeout(dataset)
                     timeout_flag = False
                     first_try = True
+                    try_count = 0
                     while not next_step:
                         if check_timeout(set_time_out):
                             if not timeout_flag:
-                                # 2번 클릭 보드 > 채널 > 마이뷰
-                                pyautogui.doubleClick(my_view_return_loc)
-                                time.sleep(float(dataset['speed']))
-                                if first_try:
+                                if try_count == 3:
+                                    for index in range(0, try_count):
+                                        pyautogui.click(my_view_return_loc)
+                                        try_count = 0
+                                else:
+                                    if first_try:
+                                        pyautogui.click(my_view_return_loc)
+                                        first_try = False
+
                                     pyautogui.click(my_view_return_loc)
-                                    first_try = False
+                                    try_count = try_count + 1
                                 timeout_flag = True
 
                             dataset['file_name_list'] = ['\my_view_text']
@@ -194,8 +203,8 @@ def capture_back(dataset):
                                 next_step = True
                         else:
                             print("마이뷰 인식 실패")
-                            set_time_out = timeout(dataset)
                             timeout_flag = False
+                            set_time_out = timeout(dataset)
         else:
             print("뒤로가기")
             while not next_step:
@@ -210,10 +219,11 @@ def capture_back(dataset):
                         if check_timeout(set_time_out):
                             if not timeout_flag:
                                 if try_count == 3:
-                                    pyautogui.click(capture_back_loc)
-                                    pyautogui.click(capture_back_loc)
+                                    for index in range(0, try_count):
+                                        pyautogui.click(capture_back_loc)
+                                        try_count = 0
                                 else:
-                                    pyautogui.doubleClick(capture_back_loc)
+                                    pyautogui.click(capture_back_loc)
                                     try_count = try_count + 1
                                 timeout_flag = True
 
@@ -331,6 +341,7 @@ def refresh_reload(dataset):
                     page_refresh_loc = pyautogui.center(page_refresh[0])
                     pyautogui.click(page_refresh_loc)
                     page_refresh_flag = True
+                    dataset['is_refresh'] = True
 
             # 보드 재클릭
             time.sleep(1)
@@ -382,6 +393,7 @@ def find_heart(dataset):
                         pyautogui.moveTo(setting_icon_loc)
                         pyautogui.mouseUp()
                         next_step = True
+                        time.sleep(float(dataset['speed']))
                     else:
                         print("마이뷰에서 옵션버튼 위치 찾기 실패")
                         win_activate(dataset)
@@ -451,7 +463,7 @@ def select_channel(dataset):
         elif len(heart_full) > 0:
             curr_loc = (full_x, full_y)
             full_heart = True
-        print("좋아요 : " + full_heart)
+        print("좋아요 : " + str(full_heart))
         set_time_out = timeout(dataset)
         timeout_flag = False
         capture_flag = False
@@ -719,7 +731,8 @@ def activate_auto_tour():
                "loading_img_list": ['\loading_bar1', '\loading_bar2', '\loading_bar3', '\loading_bar4', '\loading_bar5',
                                     '\loading_bar6', '\loading_bar7', '\loading_bar8', '\loading_bar9'],
                "more_kakao_board": ['\more_kakaoview_txt', '\more_kakaoview_txt1'],
-               'file_name_list': ['\home_for_scroll_base', '\home_for_scroll_base1']}
+               'file_name_list': ['\home_for_scroll_base', '\home_for_scroll_base1'],
+               'is_refresh': False}
 
     home_for_scroll = find_location_accuracy(dataset, 0.75)
     home_for_scroll = pyautogui.center(home_for_scroll[0])

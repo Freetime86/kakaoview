@@ -451,7 +451,7 @@ def select_channel(dataset):
         elif len(heart_full) > 0:
             curr_loc = (full_x, full_y)
             full_heart = True
-        print(full_heart)
+        print("좋아요 : " + full_heart)
         set_time_out = timeout(dataset)
         timeout_flag = False
         capture_flag = False
@@ -581,7 +581,7 @@ def click_top_ad(dataset):
         if is_board(dataset):
             print('상단 광고 찾음')
             dataset['file_name_list'] = ['\main_board_txt']
-            board_txt = find_location_accuracy(dataset, 0.80)
+            board_txt = find_location_accuracy(dataset, 0.75)
             top_ad_x = 0
             top_ad_y = 0
             for loc in board_txt:
@@ -664,17 +664,17 @@ def click_bottom_ad(dataset):
             print('하단광고 찾기 완료!')
 
             # 하단에 광고가 위치할 수 도 있기에 어느정도를 스크롤한다.
+            pyautogui.moveTo(dataset['scroll_base'])
             for i in range(1, 8):
-                pyautogui.moveTo(dataset['scroll_base'])
                 pyautogui.scroll(-500)
                 time.sleep(float(dataset['speed']))
 
             # 이 채널의 다른보드 메시지 다시 찾기 위에서 스크롤 이동함
             dataset['file_name_list'] = ['\other_msg_txt']
-            other_msg_txt_loc = find_location_accuracy(dataset, 0.85)
+            other_msg_txt_loc = find_location_accuracy(dataset, 0.80)
 
             dataset['file_name_list'] = ['\more_kakaoview_txt', '\more_kakaoview_txt1']
-            more_kakaoview_loc = find_location_accuracy(dataset, 0.80)
+            more_kakaoview_loc = find_location_accuracy(dataset, 0.75)
             if len(other_msg_txt_loc) > 0:
                 bottom_ad_loc = pyautogui.center(other_msg_txt_loc[0])
                 bottom_ad_loc = (bottom_ad_loc.x + 50, bottom_ad_loc.y + 400)
@@ -713,7 +713,7 @@ def activate_auto_tour():
     time.sleep(5)
 
     # 과거 정보
-    dataset = {"accuracy": 0.95, "filename_option": "_1", "speed": 0.5, "limit_time": 5, "scroll_speed": 0.5,
+    dataset = {"accuracy": 0.95, "filename_option": "_2", "speed": 0.5, "limit_time": 5, "scroll_speed": 0.5,
                "scroll_count": 5, "mouse_scroll_cnt": 5, "return_my_view": False, "loading_wait_time": 3,
                "win_title": '상민의 Galaxy S20+ 5G',
                "loading_img_list": ['\loading_bar1', '\loading_bar2', '\loading_bar3', '\loading_bar4', '\loading_bar5',

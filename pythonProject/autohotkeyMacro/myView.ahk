@@ -39,7 +39,7 @@ startRangeX:=0
 startRangeY:=0
 searchRangeX:=1920
 searchRangeY:=570
-searchDetail:=70
+searchDetail:=100
 Delay=Delay*1000
 
 workDir=%A_scriptDir%\image
@@ -82,7 +82,7 @@ Loop, %Cnt%
         }
 
         ;if (Number)
-        imagesearch,xx,yy,startRangeX,startRangeY,searchRangeX,searchRangeY, *%searchDetail% %workDir%\channelDisable%fileName%.png
+        imagesearch,xx,yy,1800,100,1980,200, *%searchDetail% %workDir%\channelDisable%fileName%.png
         if(ErrorLevel = 0) 
         {
             WinActivate, %Title%
@@ -90,7 +90,7 @@ Loop, %Cnt%
             ChannelBlock:=0
             While (ChannelBlock=0)
             {
-                imagesearch,xx,yy,startRangeX,startRangeY,searchRangeX,searchRangeY, *%searchDetail% %workDir%\ChannelBlock%fileName%.png
+                imagesearch,xx,yy,1050,500,1150,600, *%searchDetail% %workDir%\ChannelBlock%fileName%.png
                 if(ErrorLevel = 0)
                 {
                     WinActivate, %Title%
@@ -98,7 +98,7 @@ Loop, %Cnt%
                     channelComplete:=0
                     While (channelComplete=0)
                     {
-                        imagesearch,xx,yy,startRangeX,startRangeY,searchRangeX,searchRangeY, *%searchDetail% %workDir%\channelComplete%fileName%.png
+                        imagesearch,xx,yy,1050,500,1150,600, *%searchDetail% %workDir%\channelComplete%fileName%.png
                         if(ErrorLevel = 0)
                         {
                             Mouseclick,left,xx,yy
@@ -114,7 +114,7 @@ Loop, %Cnt%
         }
         
         WinActivate, %Title%
-        imagesearch,xx,yy,startRangeX,startRangeY,searchRangeX,searchRangeY, *%searchDetail% %workDir%\channelEnable%fileName%.png
+        imagesearch,xx,yy,1800,100,1980,200, *%searchDetail% %workDir%\channelEnable%fileName%.png
         if(ErrorLevel = 0) {
             channelDisable=1
             ChannelBlock=1
@@ -133,7 +133,7 @@ Loop, %Cnt%
         }
 
         WinActivate, %Title%
-        imagesearch,xx,yy,startRangeX,startRangeY,searchRangeX,searchRangeY, *%searchDetail% %workDir%\channelEnable%fileName%.png
+        imagesearch,xx,yy,1800,100,1980,200, *%searchDetail% %workDir%\channelEnable%fileName%.png
         if(ErrorLevel = 0)
         {
             WinActivate, %Title%
@@ -141,7 +141,8 @@ Loop, %Cnt%
             ChannelAdd:=0
             While (ChannelAdd=0)
             {
-                imagesearch,xx,yy,startRangeX,startRangeY,searchRangeX,searchRangeY, *%searchDetail% %workDir%\channelAdd%fileName%.png
+                Sleep, 500
+                imagesearch,xx,yy,950,500,1100,600, *%searchDetail% %workDir%\channelAdd%fileName%.png
                 if(ErrorLevel = 0)
                 {
                     WinActivate, %Title%
@@ -164,7 +165,7 @@ Loop, %Cnt%
             channelHome = 1
         }
 
-        imagesearch,xx,yy,startRangeX,startRangeY,searchRangeX,searchRangeY, *%searchDetail% %workDir%\channelHome%fileName%.png
+        imagesearch,xx,yy,0,40,50,100, *%searchDetail% %workDir%\channelHome%fileName%.png
         if(ErrorLevel = 0)
         {
             WinActivate, %Title%
@@ -175,7 +176,7 @@ Loop, %Cnt%
             While (mainHome=0)
             {
                 WinActivate, %Title%
-                imagesearch,xx,yy,startRangeX,startRangeY,searchRangeX,searchRangeY, *%searchDetail% %workDir%\mainHome%fileName%.png
+                imagesearch,xx,yy,40,40,130,90, *%searchDetail% %workDir%\mainHome%fileName%.png
                 if(ErrorLevel = 0)
                 {
                     channelHome=1
@@ -206,7 +207,7 @@ WinActivate, %Title%
 is_next_kakao = False
 While(is_next_kakao)
 {
-    imagesearch,xx,yy,0,0,1920,1080, *%searchDetail% %workDir%\kakaoNext.png
+    imagesearch,xx,yy,800,1000,1200,1080, *%searchDetail% %workDir%\kakaoNext.png
     if(ErrorLevel = 0)
     {
         WinActivate, %Title%
@@ -249,7 +250,7 @@ Loop, %Cnt%
 
         ;if (Number)
         WinActivate, %Title%
-        imagesearch,xx,yy,startRangeX,startRangeY,searchRangeX,searchRangeY, *%searchDetail% %workDir%\channelDisable%fileName%.png
+        imagesearch,xx,yy,1800,100,1980,200, *%searchDetail% %workDir%\channelDisable%fileName%.png
         if(ErrorLevel = 0) 
         {
             WinActivate, %Title%
@@ -257,7 +258,7 @@ Loop, %Cnt%
             ChannelBlock:=0
             While (ChannelBlock=0)
             {
-                imagesearch,xx,yy,startRangeX,startRangeY,searchRangeX,searchRangeY, *%searchDetail% %workDir%\ChannelBlock%fileName%.png
+                imagesearch,xx,yy,1050,500,1150,600, *%searchDetail% %workDir%\ChannelBlock%fileName%.png
                 if(ErrorLevel = 0)
                 {
                     WinActivate, %Title%
@@ -265,7 +266,7 @@ Loop, %Cnt%
                     channelComplete:=0
                     While (channelComplete=0)
                     {
-                        imagesearch,xx,yy,startRangeX,startRangeY,searchRangeX,searchRangeY, *%searchDetail% %workDir%\channelComplete%fileName%.png
+                        imagesearch,xx,yy,1050,500,1150,600, *%searchDetail% %workDir%\channelComplete%fileName%.png
                         if(ErrorLevel = 0)
                         {
                             Mouseclick,left,xx,yy
@@ -281,7 +282,7 @@ Loop, %Cnt%
         }
         
         WinActivate, %Title%
-        imagesearch,xx,yy,startRangeX,startRangeY,searchRangeX,searchRangeY, *%searchDetail% %workDir%\channelEnable%fileName%.png
+        imagesearch,xx,yy,1800,100,1980,200, *%searchDetail% %workDir%\channelEnable%fileName%.png
         if(ErrorLevel = 0) {
             channelDisable=1
             ChannelBlock=1
@@ -300,7 +301,7 @@ Loop, %Cnt%
         }
 
         WinActivate, %Title%
-        imagesearch,xx,yy,startRangeX,startRangeY,searchRangeX,searchRangeY, *%searchDetail% %workDir%\channelEnable%fileName%.png
+        imagesearch,xx,yy,1800,100,1980,200, *%searchDetail% %workDir%\channelEnable%fileName%.png
         if(ErrorLevel = 0)
         {
             WinActivate, %Title%
@@ -308,7 +309,8 @@ Loop, %Cnt%
             ChannelAdd:=0
             While (ChannelAdd=0)
             {
-                imagesearch,xx,yy,startRangeX,startRangeY,searchRangeX,searchRangeY, *%searchDetail% %workDir%\channelAdd%fileName%.png
+                Sleep, 500
+                imagesearch,xx,yy,950,500,1100,600, *%searchDetail% %workDir%\channelAdd%fileName%.png
                 if(ErrorLevel = 0)
                 {
                     WinActivate, %Title%
@@ -331,7 +333,7 @@ Loop, %Cnt%
             channelHome = 1
         }
 
-        imagesearch,xx,yy,startRangeX,startRangeY,searchRangeX,searchRangeY, *%searchDetail% %workDir%\channelHome%fileName%.png
+        imagesearch,xx,yy,0,40,50,100, *%searchDetail% %workDir%\channelHome%fileName%.png
         if(ErrorLevel = 0)
         {
             WinActivate, %Title%
@@ -342,7 +344,7 @@ Loop, %Cnt%
             While (mainHome=0)
             {
                 WinActivate, %Title%
-                imagesearch,xx,yy,startRangeX,startRangeY,searchRangeX,searchRangeY, *%searchDetail% %workDir%\mainHome%fileName%.png
+                imagesearch,xx,yy,40,40,130,90, *%searchDetail% %workDir%\mainHome%fileName%.png
                 if(ErrorLevel = 0)
                 {
                     channelHome=1

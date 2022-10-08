@@ -350,7 +350,7 @@ def find_heart(dataset):
 
         # My View 화면인지 세팅 아이콘으로 판단
         dataset['file_name_list'] = ['\setting_icon', '\setting_icon1']
-        setting_icon = find_location(dataset)  # 옵션 닷 버튼 찾기
+        setting_icon = find_location_accuracy(dataset, 0.80)  # 옵션 닷 버튼 찾기
 
         if len(setting_icon) > 0:
             if not init:
@@ -721,7 +721,7 @@ def activate_auto_tour():
                "more_kakao_board": ['\more_kakaoview_txt', '\more_kakaoview_txt1'],
                'file_name_list': ['\home_for_scroll_base', '\home_for_scroll_base1']}
 
-    home_for_scroll = find_location(dataset)
+    home_for_scroll = find_location_accuracy(dataset, 0.75)
     home_for_scroll = pyautogui.center(home_for_scroll[0])
     home_for_scroll = (home_for_scroll.x, home_for_scroll.y - 400)
     dataset['scroll_base'] = home_for_scroll

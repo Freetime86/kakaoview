@@ -10,7 +10,7 @@ def win_activate(dataset):
 
 
 def find_location(dataset):
-    work_dir = os.getcwd()+"\img"
+    work_dir = os.getcwd() + "\img"
     file_ext = ".png"
     file_name_list = dataset['file_name_list']
     result = []
@@ -26,12 +26,12 @@ def find_location(dataset):
 
 
 def find_location_accuracy(dataset, accuracy):
-    work_dir = os.getcwd()+"\img"
+    work_dir = os.getcwd() + "\img"
     file_ext = ".png"
     file_name_list = dataset['file_name_list']
     result = []
     for file_name in file_name_list:
-        print("find_location : " + file_name + dataset['filename_option'] + file_ext)
+        # print("find_location : " + file_name + dataset['filename_option'] + file_ext)
         out_list = pyautogui.locateAllOnScreen(work_dir + file_name + dataset['filename_option'] + file_ext,
                                                confidence=accuracy)
         out_list = list(out_list)
@@ -42,7 +42,7 @@ def find_location_accuracy(dataset, accuracy):
 
 
 def find_loading_status(dataset, accuracy):
-    work_dir = os.getcwd()+"\img"
+    work_dir = os.getcwd() + "\img"
     file_ext = ".png"
     file_name_list = dataset['file_name_list']
     result = []
@@ -71,13 +71,19 @@ def is_board(dataset):
 
 def is_loaded(dataset):
     dataset['file_name_list'] = dataset['loading_img_list']
-    loading_bar = find_location_accuracy(dataset, 0.99)
+    loading_bar = find_location_accuracy(dataset, 0.90)
 
+    if not dataset['loading_msg']:
+        print('로딩 중..')
+        dataset['loading_msg'] = True
     result = True
     for loc in loading_bar:
         this_loc = pyautogui.center(loc)
-        if this_loc.y < 150:
+        if 150 > this_loc.y > 100 and 450 > this_loc.x > 0:
             result = False
+
+    if result:
+        dataset['loading_msg'] = False
     return result
 
 
@@ -130,7 +136,7 @@ def scroll_down(dataset):
                     pyautogui.mouseDown()
                     pyautogui.moveTo(5, scroll_close_loc.y)
                     pyautogui.mouseUp()
-                    #time.sleep(float(dataset['speed']))
+                    # time.sleep(float(dataset['speed']))
 
                     is_capture = False
                     while not next_step:
@@ -182,14 +188,15 @@ def capture_back(dataset):
                         if check_timeout(set_time_out):
                             if not timeout_flag:
                                 if try_count == 3:
-                                    for index in range(0, try_count):
-                                        pyautogui.click(my_view_return_loc)
-                                        try_count = 0
+                                    for index in range(1, try_count):
+                                        if not is_board(dataset):
+                                            pyautogui.click(my_view_return_loc)
+                                            try_count = 0
                                 else:
                                     if first_try:
                                         pyautogui.click(my_view_return_loc)
                                         first_try = False
-
+                                        time.sleep(1)
                                     pyautogui.click(my_view_return_loc)
                                     try_count = try_count + 1
                                 timeout_flag = True
@@ -219,9 +226,10 @@ def capture_back(dataset):
                         if check_timeout(set_time_out):
                             if not timeout_flag:
                                 if try_count == 3:
-                                    for index in range(0, try_count):
-                                        pyautogui.click(capture_back_loc)
-                                        try_count = 0
+                                    for index in range(1, try_count):
+                                        if not is_board(dataset):
+                                            pyautogui.click(capture_back_loc)
+                                            try_count = 0
                                 else:
                                     pyautogui.click(capture_back_loc)
                                     try_count = try_count + 1
@@ -256,7 +264,6 @@ def check_loading_capture(dataset):
             # 보드 로딩바 확인 불가 (입장 완료 또는 입장 실패) 확인 될 때까지 재실행
             loading_finish = False
             while not loading_finish:
-                #if is_loaded(dataset):
                 loading_finish = True
                 next_step = scroll_down(dataset)
 
@@ -278,17 +285,6 @@ def check_loading_capture(dataset):
                 set_timeout = datetime.now() + timedelta(seconds=30)
 
     return next_step
-
-
-def reload(dataset):
-    print("reload")
-    dataset['file_name_list'] = ['\capture_back', '\capture_back']
-    capture_back = find_location(dataset)
-    capture_back_loc = pyautogui.center(capture_back[0])
-    pyautogui.click(capture_back_loc)
-    time.sleep(1)
-    pyautogui.click(dataset['last_location'])
-    return True
 
 
 def refresh_reload(dataset):
@@ -557,16 +553,18 @@ def click_contents(dataset):
 
             if title_x > 0 and title_y > 0:
                 title_loc = (title_x - 150, title_y + 50)
+                title_loc1 = (title_x - 150, title_y + 100)
 
                 set_time_out = timeout(dataset)
                 timeout_flag = False
                 while not next_step:
                     if check_timeout(set_time_out):
                         if not timeout_flag:
-                            print(title_loc)
+                            print("채널 보드 클릭!")
+                            time.sleep(1)
                             pyautogui.click(title_loc)
-                            time.sleep(float(dataset['speed']))
-                            pyautogui.click(title_loc)
+                            time.sleep(0.5)
+                            pyautogui.click(title_loc1)
                             timeout_flag = True
 
                         if not is_board(dataset):
@@ -613,8 +611,8 @@ def click_top_ad(dataset):
                         time.sleep(1)
                         pyautogui.click(top_ad_loc)
                         timeout_flag = True
-                    #test
-                    #time.sleep(float(dataset['loading_wait_time']))
+                    # test
+                    # time.sleep(float(dataset['loading_wait_time']))
                     print('상단광고 로딩바 로딩 중')
                     next_step = check_loading_capture(dataset)
                     if not next_step:
@@ -662,8 +660,8 @@ def click_bottom_ad(dataset):
                         time.sleep(1)
                         pyautogui.click(bottom_ad_loc)
                         timeout_flag = True
-                    #test
-                    #time.sleep(float(dataset['loading_wait_time']))
+                    # test
+                    # time.sleep(float(dataset['loading_wait_time']))
                     print('하단광고 로딩바 로딩 중')
                     next_step = check_loading_capture(dataset)
                     if not next_step:
@@ -725,13 +723,14 @@ def activate_auto_tour():
     time.sleep(5)
 
     # 과거 정보
-    dataset = {"accuracy": 0.95, "filename_option": "_2", "speed": 0.5, "limit_time": 5, "scroll_speed": 0.5,
+    dataset = {"accuracy": 0.95, "filename_option": "_1", "speed": 0.5, "limit_time": 5, "scroll_speed": 0.5,
                "scroll_count": 5, "mouse_scroll_cnt": 5, "return_my_view": False, "loading_wait_time": 3,
                "win_title": '상민의 Galaxy S20+ 5G',
                "loading_img_list": ['\loading_bar1', '\loading_bar2', '\loading_bar3', '\loading_bar4', '\loading_bar5',
                                     '\loading_bar6', '\loading_bar7', '\loading_bar8', '\loading_bar9'],
                "more_kakao_board": ['\more_kakaoview_txt', '\more_kakaoview_txt1'],
                'file_name_list': ['\home_for_scroll_base', '\home_for_scroll_base1'],
+               'loading_msg': False,
                'is_refresh': False}
 
     home_for_scroll = find_location_accuracy(dataset, 0.75)

@@ -141,7 +141,7 @@ Loop, %Cnt%
             ChannelAdd:=0
             While (ChannelAdd=0)
             {
-                Sleep, 500
+                Sleep, 1000
                 imagesearch,xx,yy,950,500,1100,600, *%searchDetail% %workDir%\channelAdd%fileName%.png
                 if(ErrorLevel = 0)
                 {
@@ -309,7 +309,7 @@ Loop, %Cnt%
             ChannelAdd:=0
             While (ChannelAdd=0)
             {
-                Sleep, 500
+                Sleep, 1000
                 imagesearch,xx,yy,950,500,1100,600, *%searchDetail% %workDir%\channelAdd%fileName%.png
                 if(ErrorLevel = 0)
                 {

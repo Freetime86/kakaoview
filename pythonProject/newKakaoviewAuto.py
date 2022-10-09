@@ -31,7 +31,7 @@ def find_location_accuracy(dataset, accuracy):
     file_name_list = dataset['file_name_list']
     result = []
     for file_name in file_name_list:
-        # print("find_location : " + file_name + dataset['filename_option'] + file_ext)
+        print("find_location : " + file_name + dataset['filename_option'] + file_ext)
         out_list = pyautogui.locateAllOnScreen(work_dir + file_name + dataset['filename_option'] + file_ext,
                                                confidence=accuracy)
         out_list = list(out_list)
@@ -723,7 +723,7 @@ def activate_auto_tour():
     time.sleep(5)
 
     # 과거 정보
-    dataset = {"accuracy": 0.95, "filename_option": "_1", "speed": 0.5, "limit_time": 5, "scroll_speed": 0.5,
+    dataset = {"accuracy": 0.95, "filename_option": "_2", "speed": 0.5, "limit_time": 5, "scroll_speed": 0.5,
                "scroll_count": 5, "mouse_scroll_cnt": 5, "return_my_view": False, "loading_wait_time": 3,
                "win_title": '상민의 Galaxy S20+ 5G',
                "loading_img_list": ['\loading_bar1', '\loading_bar2', '\loading_bar3', '\loading_bar4', '\loading_bar5',

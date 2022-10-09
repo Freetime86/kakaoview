@@ -3,12 +3,13 @@ import re
 def text_incoding(text):
     target_list = [
         '&amp;#39;', '&#39;', '&middot;', '&quot;', '…', '..', '[영상]', '.gif', '.bmp', '.jpeg', '.png',
-        '.jpg', '.manhwa', '&ldquo;', '&rdquo;', 'gif', 'bmp', 'jpeg', 'png', 'jpg', '&lsquo;', '&rsquo;', '&hellip;'
+        '.jpg', '.manhwa', '&ldquo;', '&rdquo;', 'gif', 'bmp', 'jpeg', 'png', 'jpg', '&lsquo;', '&rsquo;', '&hellip;',
+        'blind'
     ]
     replace_keys = {'&amp;#39;': '', '&#39;': '', '&middot;': '·', '&quot;': '"', '…': '! ', '..': ' ',
                     '[영상]': '', '.gif': '', '.bmp': '', '.jpeg': '', '.png': '', '.jpg': '', '.manhwa': '',
                     '&ldquo;': '“', '&rdquo;': '”', 'gif': '', 'bmp': '', 'jpeg': '', 'png': '', 'jpg': '',
-                    '&lsquo;': '', '&rsquo;': '', '&hellip;': ' '
+                    '&lsquo;': '', '&rsquo;': '', '&hellip;': ' ', 'blind': ''
                     }
 
     for target in target_list:

@@ -262,6 +262,8 @@ def main_process(dataset):
                             for calDay in driver.find_elements(By.CLASS_NAME, "DayPicker-Day"):
                                 if len(calDay.text) < 2:
                                     new_cal_date = "0" + str(calDay.text)
+                                else:
+                                    new_cal_date = str(calDay.text)
                                 if new_cal_date == str(sel_day):
                                     calDay.click()
                                     break

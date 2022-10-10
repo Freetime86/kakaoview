@@ -141,7 +141,7 @@ Loop, %Cnt%
             ChannelAdd:=0
             While (ChannelAdd=0)
             {
-                imagesearch,xx,yy,950,500,1100,565, *%searchDetail% %workDir%\channelAdd%fileName%.png
+                imagesearch,xx,yy,950,500,1100,560, *%searchDetail% %workDir%\channelAdd%fileName%.png
                 if(ErrorLevel = 0)
                 {
                     ;WinActivate, %Title%

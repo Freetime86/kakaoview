@@ -9,6 +9,25 @@ def win_activate(dataset):
     window.activate()
 
 
+def option_figure():
+    work_dir = os.getcwd() + "\img"
+    file_ext = ".png"
+    file_option_1 = ['\setting_icon_1', '\setting_icon1_1']
+    file_option_2 = ['\setting_icon_2', '\setting_icon1_2']
+
+    result = ""
+    for file_name in file_option_1:
+        out_list = pyautogui.locateAllOnScreen(work_dir + file_name + file_ext, confidence=0.80)
+        out_list = list(out_list)
+        if len(out_list) > 0:
+            result = "_1"
+    for file_name in file_option_2:
+        out_list = pyautogui.locateAllOnScreen(work_dir + file_name + file_ext, confidence=0.80)
+        out_list = list(out_list)
+        if len(out_list) > 0:
+            result = "_2"
+    return result
+
 def find_location(dataset):
     work_dir = os.getcwd() + "\img"
     file_ext = ".png"
@@ -723,7 +742,7 @@ def activate_auto_tour():
     time.sleep(5)
 
     # 과거 정보
-    dataset = {"accuracy": 0.95, "filename_option": "_2", "speed": 0.5, "limit_time": 5, "scroll_speed": 0.5,
+    dataset = {"accuracy": 0.95, "filename_option": option_figure(), "speed": 0.5, "limit_time": 5, "scroll_speed": 0.5,
                "scroll_count": 5, "mouse_scroll_cnt": 5, "return_my_view": False, "loading_wait_time": 3,
                "win_title": '상민의 Galaxy S20+ 5G',
                "loading_img_list": ['\loading_bar1', '\loading_bar2', '\loading_bar3', '\loading_bar4', '\loading_bar5',

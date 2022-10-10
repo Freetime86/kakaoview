@@ -38,6 +38,7 @@ def getPixel():
 
     return color
 
+
 def find_location(dataset):
     work_dir = os.getcwd() + "\img"
     file_ext = ".png"
@@ -216,7 +217,6 @@ def capture_back(dataset):
 
                 if len(my_view_return) > 0:
                     my_view_return_loc = pyautogui.center(my_view_return[0])
-                    set_time_out = timeout(dataset)
                     timeout_flag = False
                     first_try = True
                     try_count = 0
@@ -231,37 +231,37 @@ def capture_back(dataset):
                                 print("curr_screen")
                                 print(curr_screen)
 
-                                if try_count > 3 and curr_screen == pos_screen:
-                                    dataset['file_name_list'] = ['\win_close', '\win_close1']
-                                    win_close = find_location(dataset)
+                                dataset['file_name_list'] = ['\win_close', '\win_close1']
+                                win_close = find_location_accuracy(dataset, 0.80)
 
-                                    if len(win_close) > 0:
-                                        if not is_board(dataset):
-                                            win_close_Loc = pyautogui.center(win_close[0])
-                                            pyautogui.click(win_close_Loc)
-                                            print("win_close_Loc")
-                                            print(win_close_Loc)
-                                            try_count = 0
-                                    else:
+                                if len(win_close) > 0 and try_count == 0:
+                                    win_close_Loc = pyautogui.center(win_close[0])
+                                    pyautogui.click(win_close_Loc)
+                                    print("win_close_Loc")
+                                    print(win_close_Loc)
+                                    try_count = try_count + 1
+                                else:
+                                    if try_count > 3 and curr_screen == pos_screen:
                                         if not is_board(dataset):
                                             pyautogui.click(my_view_return_loc)
                                             pyautogui.click(my_view_return_loc)
                                             print("my_view_return_loc")
                                             print(my_view_return_loc)
                                             try_count = 0
-                                else:
-                                    if first_try:
-                                        pos_screen = getPixel()
-                                        pyautogui.click(my_view_return_loc)
-                                        print("my_view_return_loc")
-                                        print(my_view_return_loc)
-                                        first_try = False
-                                        time.sleep(1)
-                                    pyautogui.click(my_view_return_loc)
-                                    print("my_view_return_loc")
-                                    print(my_view_return_loc)
-                                    try_count = try_count + 1
-                                timeout_flag = True
+                                    else:
+                                        if first_try:
+                                            pos_screen = getPixel()
+                                            pyautogui.click(my_view_return_loc)
+                                            print("my_view_return_loc")
+                                            print(my_view_return_loc)
+                                            first_try = False
+                                            time.sleep(1)
+                                        else:
+                                            pyautogui.click(my_view_return_loc)
+                                            print("my_view_return_loc")
+                                            print(my_view_return_loc)
+                                            try_count = try_count + 1
+                                    timeout_flag = True
 
                             dataset['file_name_list'] = ['\my_view_text']
                             my_view_text = find_location(dataset)
@@ -283,6 +283,7 @@ def capture_back(dataset):
                     capture_back_loc = pyautogui.center(capture_back[0])
                     set_time_out = timeout(dataset)
                     timeout_flag = False
+                    first_try = True
                     try_count = 0
                     pos_screen = (0, 0)
                     while not next_step:
@@ -293,9 +294,10 @@ def capture_back(dataset):
                                 print(pos_screen)
                                 print("curr_screen")
                                 print(curr_screen)
+
                                 if try_count > 3 and curr_screen == pos_screen:
                                     dataset['file_name_list'] = ['\win_close']
-                                    win_close = find_location(dataset)
+                                    win_close = find_location_accuracy(dataset, 0.80)
 
                                     if len(win_close) > 0:
                                         if not is_board(dataset):
@@ -648,7 +650,7 @@ def click_contents(dataset):
 
             if title_x > 0 and title_y > 0:
                 title_loc = (title_x - 150, title_y + 30)
-                #title_loc1 = (title_x - 150, title_y + 100)
+                # title_loc1 = (title_x - 150, title_y + 100)
 
                 set_time_out = timeout(dataset)
                 timeout_flag = False
@@ -659,18 +661,18 @@ def click_contents(dataset):
                             if check_times > 1:
                                 this_loc = pyautogui.center(title_loc)
                                 title_loc = (this_loc.x, this_loc.y + 10)
-                                #this_loc = pyautogui.center(title_loc1)
-                                #title_loc1 = (this_loc.x, this_loc.y - 10)
+                                # this_loc = pyautogui.center(title_loc1)
+                                # title_loc1 = (this_loc.x, this_loc.y - 10)
                                 check_times = 0
 
                             print("채널 보드 클릭!")
                             pyautogui.click(title_loc)
                             print("title_loc")
                             print(title_loc)
-                            #time.sleep(0.5)
-                            #pyautogui.click(title_loc1)
-                            #print("title_loc1")
-                            #print(title_loc1)
+                            # time.sleep(0.5)
+                            # pyautogui.click(title_loc1)
+                            # print("title_loc1")
+                            # print(title_loc1)
                             timeout_flag = True
                             check_times = check_times + 1
 

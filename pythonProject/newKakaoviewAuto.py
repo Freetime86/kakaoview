@@ -308,6 +308,7 @@ def capture_back(dataset):
                                         if not is_board(dataset):
                                             pyautogui.click(capture_back_loc)
                                             pyautogui.click(capture_back_loc)
+                                            print("보드인식 불가 더블클릭 실행")
                                             print("capture_back_loc")
                                             print(capture_back_loc)
                                             try_count = 0
@@ -676,6 +677,7 @@ def click_contents(dataset):
                         if not is_board(dataset):
                             print('보드 컨텐츠 입장')
 
+                            time.sleep(0.5)
                             # 로딩 체크
                             dataset['last_location'] = title_loc
                             next_step = check_loading_capture(dataset)

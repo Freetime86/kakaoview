@@ -240,6 +240,7 @@ def capture_back(dataset):
                                     print("win_close_Loc")
                                     print(win_close_Loc)
                                     try_count = try_count + 1
+                                    time.sleep(1)
                                 else:
                                     if try_count > 3 and curr_screen == pos_screen:
                                         if not is_board(dataset):

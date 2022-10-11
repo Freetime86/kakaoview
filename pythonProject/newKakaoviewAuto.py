@@ -155,18 +155,19 @@ def scroll_down(dataset):
 
                 for i in range(1, int(dataset['scroll_count'])):
                     pyautogui.click(scroll_down_loc)
-                    time.sleep(1)
+                    #time.sleep(1)
 
+                dataset['scroll_loc'] = scroll_down_loc
                 dataset['file_name_list'] = ['\scroll_close']
                 scroll_close = find_location(dataset)
 
                 if len(scroll_close) > 0:
-                    scroll_close_loc = pyautogui.center(scroll_close[0])
-                    pyautogui.moveTo(scroll_close_loc)
-                    pyautogui.mouseDown()
-                    pyautogui.moveTo(5, scroll_close_loc.y)
-                    pyautogui.mouseUp()
-
+                    #scroll_close_loc = pyautogui.center(scroll_close[0])
+                    #pyautogui.moveTo(scroll_close_loc)
+                    #pyautogui.mouseDown()
+                    #pyautogui.moveTo(5, scroll_close_loc.y)
+                    #pyautogui.mouseUp()
+                    dataset['scroll_close'] = scroll_close[0]
                     is_capture = False
                     while not next_step:
                         if not is_capture:
@@ -197,6 +198,19 @@ def capture_back(dataset):
         while not is_capture:
             if check_timeout(set_time_out):
                 if is_loaded(dataset):
+                    
+                    #loading 이 완료 되면
+                    #scroll click
+                    pyautogui.click(dataset['scroll_loc'])
+                    time.sleep(2)
+
+                    #scroll close
+                    scroll_close_loc = pyautogui.center(dataset['scroll_close'])
+                    pyautogui.moveTo(scroll_close_loc)
+                    pyautogui.mouseDown()
+                    pyautogui.moveTo(5, scroll_close_loc.y)
+                    pyautogui.mouseUp()
+
                     capture_loc = pyautogui.center(capture_icon[0])
                     pyautogui.click(capture_loc)
                     time.sleep(float(dataset['speed']))
@@ -453,9 +467,9 @@ def find_heart(dataset):
 
         if len(setting_icon) > 0:
             if not init:
+                win_activate(dataset)
+                pyautogui.moveTo(dataset['scroll_base'])
                 while not next_step:
-
-                    win_activate(dataset)
                     # dataset['file_name_list'] = ['\option_dots', '\option_next_dots', '\option_next_dots1']
                     dataset['file_name_list'] = ['\option_dots']
                     option_dots = find_location_accuracy(dataset, '0.80')  # 옵션 닷 버튼 찾기
@@ -484,10 +498,10 @@ def find_heart(dataset):
                         time.sleep(float(dataset['speed']))
                     else:
                         print("마이뷰에서 옵션버튼 위치 찾기 실패")
-                        win_activate(dataset)
-                        pyautogui.moveTo(dataset['scroll_base'])
-                        pyautogui.scroll(-500)
-                    time.sleep(float(dataset['speed']))
+                        #win_activate(dataset)
+                        for idx in range(0, 3):
+                            pyautogui.scroll(-500)
+                    #time.sleep(float(dataset['speed']))
             # 추후 마이뷰 클릭 or 보드 클릭으로 로직 분개 지점
             else:
                 next_step = True
@@ -636,7 +650,7 @@ def click_contents(dataset):
     while not next_step:
 
         dataset['file_name_list'] = ['\split_line', '\split_line1']
-        channel_split_line = find_location_accuracy(dataset, 0.80)  # 채널 메인 옵션 닷 찾기
+        channel_split_line = find_location_accuracy(dataset, 0.70)  # 채널 메인 옵션 닷 찾기
 
         if len(channel_split_line) > 0:
             print('채널 메인 분할 라인 찾음')
@@ -748,17 +762,18 @@ def click_bottom_ad(dataset):
     next_step = False
     win_activate(dataset)
     dataset['return_my_view'] = True
+    pyautogui.moveTo(dataset['scroll_base'])
 
     while not next_step:
 
         # 연관된 주제 보드 찾기
         # dataset['file_name_list'] = ['\similar_msg_txt1', '\similar_msg_txt2', '\similar_msg_txt3']
         dataset['file_name_list'] = ['\similar_msg_txt', '\similar_msg_txt1']
-        similar_msg_txt_loc = find_location_accuracy(dataset, 0.80)
+        similar_msg_txt_loc = find_location_accuracy(dataset, 0.70)
 
         # 이 채널의 다른보드 메시지 찾기
         dataset['file_name_list'] = ['\other_msg_txt', '\more_kakaoview_txt', '\more_kakaoview_txt1']
-        other_msg_txt_loc = find_location_accuracy(dataset, 0.80)
+        other_msg_txt_loc = find_location_accuracy(dataset, 0.70)
 
         if len(other_msg_txt_loc) == 0 and len(similar_msg_txt_loc) > 0:
             print('하단광고 찾음!')
@@ -792,14 +807,14 @@ def click_bottom_ad(dataset):
             pyautogui.moveTo(dataset['scroll_base'])
             for i in range(1, 8):
                 pyautogui.scroll(-500)
-                time.sleep(float(dataset['speed']))
+                #time.sleep(float(dataset['speed']))
 
             # 이 채널의 다른보드 메시지 다시 찾기 위에서 스크롤 이동함
             dataset['file_name_list'] = ['\other_msg_txt']
-            other_msg_txt_loc = find_location_accuracy(dataset, 0.80)
+            other_msg_txt_loc = find_location_accuracy(dataset, 0.70)
 
             dataset['file_name_list'] = ['\more_kakaoview_txt', '\more_kakaoview_txt1']
-            more_kakaoview_loc = find_location_accuracy(dataset, 0.75)
+            more_kakaoview_loc = find_location_accuracy(dataset, 0.70)
             if len(other_msg_txt_loc) > 0:
                 bottom_ad_loc = pyautogui.center(other_msg_txt_loc[0])
                 bottom_ad_loc = (bottom_ad_loc.x + 50, bottom_ad_loc.y + 400)
@@ -830,9 +845,8 @@ def click_bottom_ad(dataset):
                     timeout_flag = True
         else:
             print('하단광고 못찾음..')
-            win_activate(dataset)
-            pyautogui.moveTo(dataset['scroll_base'])
-            pyautogui.scroll(-500)
+            for idx in range(0, 5):
+                pyautogui.scroll(-500)
     return next_step
 
 
@@ -841,7 +855,7 @@ def activate_auto_tour():
 
     # 과거 정보
     dataset = {"accuracy": 0.95, "filename_option": option_figure(), "speed": 0.5, "limit_time": 5, "scroll_speed": 0.5,
-               "scroll_count": 5, "mouse_scroll_cnt": 5, "return_my_view": False, "loading_wait_time": 3,
+               "scroll_count": 2, "mouse_scroll_cnt": 5, "return_my_view": False, "loading_wait_time": 3,
                "win_title": '상민의 Galaxy S20+ 5G',
                "loading_img_list": ['\loading_bar1', '\loading_bar2', '\loading_bar3', '\loading_bar4', '\loading_bar5',
                                     '\loading_bar6', '\loading_bar7', '\loading_bar8', '\loading_bar9'],
@@ -881,6 +895,5 @@ def activate_auto_tour():
 
         # 하단광고 클릭
         click_bottom_ad(dataset)
-
 
 activate_auto_tour()

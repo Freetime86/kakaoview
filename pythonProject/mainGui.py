@@ -263,9 +263,9 @@ def make_frame():
     elif 23 > int(now.hour) > 4:
         set_hour = int(set_hour) + 1
     elif int(now.hour) < 4:
-        set_hour = "04"
+        set_hour = "05"
     else:
-        set_hour = "04"
+        set_hour = "05"
         calendar.set_date(datetime.now() + timedelta(days=1))
 
     # 백업 이전 값
@@ -291,10 +291,10 @@ def make_frame():
     # 백업 이전 값
     min_combo_text = StringVar()
     pre_min_combobox = StringVar()
-    pre_min_combobox.set('00')
+    pre_min_combobox.set('30')
     min_combobox = ttk.Combobox(win, state="readonly", height=15, textvariable=min_combo_text,
                                 values=['00', '10', '20', '30', '40', '50'])
-    min_combobox.set('00')
+    min_combobox.set('30')
     min_combobox.bind("<<ComboboxSelected>>", time_change)
     min_combobox.pack()
     min_combobox.place(x=150, y=210, width=40)

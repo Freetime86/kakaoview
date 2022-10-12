@@ -89,13 +89,19 @@ def find_loading_status(dataset, accuracy):
 
 def is_board(dataset):
     dataset['file_name_list'] = ['\main_board_txt']
-    board_txt = find_location_accuracy(dataset, 0.80)
+    board_txt = find_location_accuracy(dataset, 0.70)
+
+    dataset['file_name_list'] = ['\channel_main_option_dots']
+    board_option_dots = find_location_accuracy(dataset, 0.70)
 
     result = False
     for loc in board_txt:
         this_loc = pyautogui.center(loc)
-        if this_loc.y < 150:
-            result = True
+        if this_loc.y < 120:
+            for option_loc in board_option_dots:
+                op_loc = pyautogui.center(option_loc)
+                if 210 < op_loc.y < 270:
+                    result = True
     return result
 
 
@@ -132,7 +138,7 @@ def check_timeout(timeout):
 def scroll_down(dataset):
     print("scroll_down")
     next_step = False
-    scroll_loc = (18, 931)
+    scroll_loc = (18, 980)
     pyautogui.click(scroll_loc)
     time.sleep(float(dataset['speed']))
     set_time_out = timeout(dataset)
@@ -396,17 +402,52 @@ def refresh_reload(dataset):
 
     next_step = False
     # main channel check
-
     channel_main_flag = False
-    while not channel_main_flag:
+    try_count = 0
+    pos_screen = (0, 0)
 
+    while not channel_main_flag:
         if not is_board(dataset):
+            curr_screen = getPixel()
+
             # BACK BTN
-            dataset['file_name_list'] = ['\capture_back', '\capture_back']
+            dataset['file_name_list'] = ['\capture_back', '\capture_back1']
             capture_back = find_location(dataset)
-            capture_back_loc = pyautogui.center(capture_back[0])
-            pyautogui.doubleClick(capture_back_loc)
-            time.sleep(2)
+
+            if len(capture_back) > 0:
+
+                #back key setting
+                capture_back_loc = pyautogui.center(capture_back[0])
+
+                if try_count > 3 and curr_screen == pos_screen:
+                    dataset['file_name_list'] = ['\win_close']
+                    win_close = find_location_accuracy(dataset, 0.80)
+
+                    if len(win_close) > 0:
+                        if not is_board(dataset):
+                            win_close_Loc = pyautogui.center(win_close[0])
+                            pyautogui.click(win_close_Loc)
+                            print("win_close_Loc")
+                            print(win_close_Loc)
+                            try_count = 0
+                    else:
+                        if not is_board(dataset) and len(capture_back) > 0:
+
+                            pyautogui.click(capture_back_loc)
+                            pyautogui.click(capture_back_loc)
+                            print("뒤로 가기 탈출 더블클릭")
+                            print("capture_back_loc")
+                            print(capture_back_loc)
+                            try_count = 0
+                else:
+                    pyautogui.click(capture_back_loc)
+                    print("뒤로가기")
+                    try_count = try_count + 1
+                    time.sleep(1)
+                    pos_screen = getPixel()
+            else:
+                print("ERROR : 백키 버튼 찾기 불가")
+                return
         else:
             channel_main_flag = True
 
@@ -493,14 +534,16 @@ def find_heart(dataset):
                         setting_icon_loc = pyautogui.center(setting_icon[0])
                         setting_icon_loc = (setting_icon_loc.x, setting_icon_loc.y + 65)
                         pyautogui.moveTo(setting_icon_loc)
+                        time.sleep(float(dataset['speed']))
                         pyautogui.mouseUp()
                         next_step = True
-                        time.sleep(float(dataset['speed']))
+                        time.sleep(1)
                     else:
                         print("마이뷰에서 옵션버튼 위치 찾기 실패")
                         #win_activate(dataset)
                         for idx in range(0, 3):
                             pyautogui.scroll(-500)
+                        time.sleep(0.5)
                     #time.sleep(float(dataset['speed']))
             # 추후 마이뷰 클릭 or 보드 클릭으로 로직 분개 지점
             else:
@@ -644,7 +687,6 @@ def click_contents(dataset):
 
     # 하단광고 클릭 시 MY VIEW RETURN FLAG 초기화
     dataset['return_my_view'] = False
-    # dataset['file_name_list'] = ['\channel_main_option_dots']
     win_activate(dataset)
 
     while not next_step:
@@ -790,8 +832,7 @@ def click_bottom_ad(dataset):
                         print("bottom_ad_loc")
                         print(bottom_ad_loc)
                         timeout_flag = True
-                    # test
-                    # time.sleep(float(dataset['loading_wait_time']))
+
                     print('하단광고 로딩바 로딩 중')
                     next_step = check_loading_capture(dataset)
                     if not next_step:
@@ -845,8 +886,9 @@ def click_bottom_ad(dataset):
                     timeout_flag = True
         else:
             print('하단광고 못찾음..')
-            for idx in range(0, 5):
+            for idx in range(0, 3):
                 pyautogui.scroll(-500)
+            time.sleep(1)
     return next_step
 
 

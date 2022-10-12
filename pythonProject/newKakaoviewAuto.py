@@ -329,9 +329,10 @@ def capture_back(dataset):
                                             try_count = 0
                                     else:
                                         if not is_board(dataset):
+                                            if try_count > 5:
+                                                print("보드인식 불가 더블클릭 실행")
+                                                pyautogui.click(capture_back_loc)
                                             pyautogui.click(capture_back_loc)
-                                            pyautogui.click(capture_back_loc)
-                                            print("보드인식 불가 더블클릭 실행")
                                             print("capture_back_loc")
                                             print(capture_back_loc)
                                             try_count = 0

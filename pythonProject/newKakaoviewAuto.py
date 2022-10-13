@@ -189,7 +189,7 @@ def scroll_down(dataset):
 
                 dataset['scroll_loc'] = scroll_down_loc
                 dataset['file_name_list'] = ['\scroll_close']
-                scroll_close = find_location(dataset)
+                scroll_close = find_location_accuracy(dataset, 0.80)
 
                 if len(scroll_close) > 0:
                     #scroll_close_loc = pyautogui.center(scroll_close[0])

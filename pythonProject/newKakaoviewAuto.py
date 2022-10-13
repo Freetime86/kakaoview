@@ -11,8 +11,30 @@ def win_activate(dataset):
     window.activate()
 
 
-def option_figure():
+def mobile_device():
     work_dir = os.getcwd() + "\img"
+    file_ext = ".png"
+    galaxy_s20plus = ['\s20plus_b1', '\s20plus_w1', '\s20plus_b2', '\s20plus_w2']
+    galaxy_s20 = ['\s20_w1']
+
+    result = ""
+    for file_name in galaxy_s20plus:
+        out_list = pyautogui.locateAllOnScreen(work_dir + file_name + file_ext, confidence=0.80)
+        out_list = list(out_list)
+        if len(out_list) > 0:
+            result = result + "\s20plus"
+            break
+    for file_name in galaxy_s20:
+        out_list = pyautogui.locateAllOnScreen(work_dir + file_name + file_ext, confidence=0.80)
+        out_list = list(out_list)
+        if len(out_list) > 0:
+            result = result + "\s20"
+            break
+    return result
+
+
+def option_figure(dataset):
+    work_dir = os.getcwd() + "\img" + dataset['mobile_type']
     file_ext = ".png"
     file_option_1 = ['\setting_icon_1', '\setting_icon1_1']
     file_option_2 = ['\setting_icon_2', '\setting_icon1_2']
@@ -23,11 +45,13 @@ def option_figure():
         out_list = list(out_list)
         if len(out_list) > 0:
             result = "_1"
+            break
     for file_name in file_option_2:
         out_list = pyautogui.locateAllOnScreen(work_dir + file_name + file_ext, confidence=0.80)
         out_list = list(out_list)
         if len(out_list) > 0:
             result = "_2"
+            break
     return result
 
 
@@ -40,7 +64,7 @@ def getPixel():
 
 
 def find_location(dataset):
-    work_dir = os.getcwd() + "\img"
+    work_dir = os.getcwd() + "\img" + dataset['mobile_type']
     file_ext = ".png"
     file_name_list = dataset['file_name_list']
     result = []
@@ -56,7 +80,7 @@ def find_location(dataset):
 
 
 def find_location_accuracy(dataset, accuracy):
-    work_dir = os.getcwd() + "\img"
+    work_dir = os.getcwd() + "\img" + dataset['mobile_type']
     file_ext = ".png"
     file_name_list = dataset['file_name_list']
     result = []
@@ -72,7 +96,7 @@ def find_location_accuracy(dataset, accuracy):
 
 
 def find_loading_status(dataset, accuracy):
-    work_dir = os.getcwd() + "\img"
+    work_dir = os.getcwd() + "\img" + dataset['mobile_type']
     file_ext = ".png"
     file_name_list = dataset['file_name_list']
     result = []
@@ -261,15 +285,15 @@ def capture_back(dataset):
                                     try_count = try_count + 1
                                     time.sleep(1)
                                 else:
-                                    if try_count > 5 and curr_screen == pos_screen:
+                                    if try_count > 3 and curr_screen == pos_screen:
                                         if not is_board(dataset):
                                             pyautogui.click(my_view_return_loc)
                                         pyautogui.click(my_view_return_loc)
                                         print("마이뷰 복귀 더블클릭")
                                         try_count = 0
                                     else:
+                                        pos_screen = getPixel()
                                         if first_try:
-                                            pos_screen = getPixel()
                                             pyautogui.click(my_view_return_loc)
                                             print("마이뷰 복귀 첫 클릭")
                                             first_try = False
@@ -279,6 +303,7 @@ def capture_back(dataset):
                                             print("마이뷰 복귀 클릭")
                                             try_count = try_count + 1
                                     timeout_flag = True
+                                print("click count : " + str(try_count))
 
                             dataset['file_name_list'] = ['\my_view_text']
                             my_view_text = find_location(dataset)
@@ -893,7 +918,7 @@ def activate_auto_tour():
     time.sleep(5)
 
     # 과거 정보
-    dataset = {"accuracy": 0.95, "filename_option": option_figure(), "speed": 0.5, "limit_time": 5, "scroll_speed": 0.5,
+    dataset = {"accuracy": 0.95, "mobile_type": mobile_device(), "speed": 0.5, "limit_time": 5, "scroll_speed": 0.5,
                "scroll_count": 2, "mouse_scroll_cnt": 5, "return_my_view": False, "loading_wait_time": 3,
                "win_title": '상민의 Galaxy S20+ 5G',
                "loading_img_list": ['\loading_bar1', '\loading_bar2', '\loading_bar3', '\loading_bar4', '\loading_bar5',
@@ -903,6 +928,7 @@ def activate_auto_tour():
                'loading_msg': False,
                'is_refresh': False}
 
+    dataset['filename_option'] = option_figure(dataset)
     home_for_scroll = find_location_accuracy(dataset, 0.75)
     home_for_scroll = pyautogui.center(home_for_scroll[0])
     home_for_scroll = (home_for_scroll.x, home_for_scroll.y - 400)

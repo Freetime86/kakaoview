@@ -257,30 +257,26 @@ def capture_back(dataset):
                                 if len(win_close) > 0 and try_count == 0:
                                     win_close_Loc = pyautogui.center(win_close[0])
                                     pyautogui.click(win_close_Loc)
-                                    print("win_close_Loc")
-                                    print(win_close_Loc)
+                                    print("윈도우 창 닫기")
                                     try_count = try_count + 1
                                     time.sleep(1)
                                 else:
-                                    if try_count > 3 and curr_screen == pos_screen:
+                                    if try_count > 5 and curr_screen == pos_screen:
                                         if not is_board(dataset):
                                             pyautogui.click(my_view_return_loc)
-                                            pyautogui.click(my_view_return_loc)
-                                            print("my_view_return_loc")
-                                            print(my_view_return_loc)
-                                            try_count = 0
+                                        pyautogui.click(my_view_return_loc)
+                                        print("마이뷰 복귀 더블클릭")
+                                        try_count = 0
                                     else:
                                         if first_try:
                                             pos_screen = getPixel()
                                             pyautogui.click(my_view_return_loc)
-                                            print("my_view_return_loc")
-                                            print(my_view_return_loc)
+                                            print("마이뷰 복귀 첫 클릭")
                                             first_try = False
                                             time.sleep(1)
                                         else:
                                             pyautogui.click(my_view_return_loc)
-                                            print("my_view_return_loc")
-                                            print(my_view_return_loc)
+                                            print("마이뷰 복귀 클릭")
                                             try_count = try_count + 1
                                     timeout_flag = True
 
@@ -316,7 +312,7 @@ def capture_back(dataset):
                                 print("curr_screen")
                                 print(curr_screen)
 
-                                if try_count > 3 and curr_screen == pos_screen:
+                                if try_count > 5 and curr_screen == pos_screen:
                                     dataset['file_name_list'] = ['\win_close']
                                     win_close = find_location_accuracy(dataset, 0.80)
 
@@ -420,7 +416,7 @@ def refresh_reload(dataset):
                 #back key setting
                 capture_back_loc = pyautogui.center(capture_back[0])
 
-                if try_count > 3 and curr_screen == pos_screen:
+                if try_count > 5 and curr_screen == pos_screen:
                     dataset['file_name_list'] = ['\win_close']
                     win_close = find_location_accuracy(dataset, 0.80)
 
@@ -432,9 +428,9 @@ def refresh_reload(dataset):
                             print(win_close_Loc)
                             try_count = 0
                     else:
-                        if not is_board(dataset) and len(capture_back) > 0:
-
-                            pyautogui.click(capture_back_loc)
+                        if len(capture_back) > 0:
+                            if not is_board(dataset):
+                                pyautogui.click(capture_back_loc)
                             pyautogui.click(capture_back_loc)
                             print("뒤로 가기 탈출 더블클릭")
                             print("capture_back_loc")

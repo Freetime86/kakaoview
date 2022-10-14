@@ -928,8 +928,8 @@ def activate_auto_tour():
 
     dataset['filename_option'] = option_figure(dataset)
     if mobile_device() == '\s20plus':
-        dataset['win_title'] = '상민의 Galaxy S20+ 5G'
-        #dataset['win_title'] = 'Galaxy S20 5G'
+        #dataset['win_title'] = '상민의 Galaxy S20+ 5G'
+        dataset['win_title'] = 'Galaxy S20 5G'
     else:
         dataset['win_title'] = 'Galaxy S20 5G'
     home_for_scroll = find_location_accuracy(dataset, 0.75)

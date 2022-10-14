@@ -61,7 +61,7 @@ Loop, %Cnt%
     if (yloc > 1005)
     {
         yloc := 105 + FontSize
-        xloc := xloc + 210
+        xloc := xloc + 250
     }
 
     WinActivate, %Title%

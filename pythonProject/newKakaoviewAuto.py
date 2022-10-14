@@ -28,7 +28,7 @@ def mobile_device():
         out_list = pyautogui.locateAllOnScreen(work_dir + file_name + file_ext, confidence=0.80)
         out_list = list(out_list)
         if len(out_list) > 0:
-            result = result + "\s20"
+            result = result + "\s20plus"
             break
     return result
 
@@ -185,18 +185,18 @@ def scroll_down(dataset):
 
                 for i in range(1, int(dataset['scroll_count'])):
                     pyautogui.click(scroll_down_loc)
-                    #time.sleep(1)
+                    # time.sleep(1)
 
                 dataset['scroll_loc'] = scroll_down_loc
                 dataset['file_name_list'] = ['\scroll_close']
                 scroll_close = find_location_accuracy(dataset, 0.80)
 
                 if len(scroll_close) > 0:
-                    #scroll_close_loc = pyautogui.center(scroll_close[0])
-                    #pyautogui.moveTo(scroll_close_loc)
-                    #pyautogui.mouseDown()
-                    #pyautogui.moveTo(5, scroll_close_loc.y)
-                    #pyautogui.mouseUp()
+                    # scroll_close_loc = pyautogui.center(scroll_close[0])
+                    # pyautogui.moveTo(scroll_close_loc)
+                    # pyautogui.mouseDown()
+                    # pyautogui.moveTo(5, scroll_close_loc.y)
+                    # pyautogui.mouseUp()
                     dataset['scroll_close'] = scroll_close[0]
                     is_capture = False
                     while not next_step:
@@ -228,13 +228,12 @@ def capture_back(dataset):
         while not is_capture:
             if check_timeout(set_time_out):
                 if is_loaded(dataset):
-                    
-                    #loading 이 완료 되면
-                    #scroll click
+                    # loading 이 완료 되면
+                    # scroll click
                     pyautogui.click(dataset['scroll_loc'])
                     time.sleep(2)
 
-                    #scroll close
+                    # scroll close
                     scroll_close_loc = pyautogui.center(dataset['scroll_close'])
                     pyautogui.moveTo(scroll_close_loc)
                     pyautogui.mouseDown()
@@ -438,7 +437,7 @@ def refresh_reload(dataset):
 
             if len(capture_back) > 0:
 
-                #back key setting
+                # back key setting
                 capture_back_loc = pyautogui.center(capture_back[0])
 
                 if try_count > 5 and curr_screen == pos_screen:
@@ -477,10 +476,10 @@ def refresh_reload(dataset):
 
         # 구글 팝업인지 체크
         dataset['file_name_list'] = ['\google_play']
-        google_play = find_location_accuracy(dataset, 0.90)
+        google_play = find_location_accuracy(dataset, 0.70)
 
         dataset['file_name_list'] = ['\google_play_x']
-        google_play_x = find_location_accuracy(dataset, 0.90)
+        google_play_x = find_location_accuracy(dataset, 0.70)
 
         if len(google_play) > 0 and len(google_play_x) > 0:
             print("구글팝업닫기")
@@ -562,11 +561,11 @@ def find_heart(dataset):
                         time.sleep(1)
                     else:
                         print("마이뷰에서 옵션버튼 위치 찾기 실패")
-                        #win_activate(dataset)
+                        # win_activate(dataset)
                         for idx in range(0, 3):
                             pyautogui.scroll(-500)
                         time.sleep(0.5)
-                    #time.sleep(float(dataset['speed']))
+                    # time.sleep(float(dataset['speed']))
             # 추후 마이뷰 클릭 or 보드 클릭으로 로직 분개 지점
             else:
                 next_step = True
@@ -870,7 +869,7 @@ def click_bottom_ad(dataset):
             pyautogui.moveTo(dataset['scroll_base'])
             for i in range(1, 8):
                 pyautogui.scroll(-500)
-                #time.sleep(float(dataset['speed']))
+                # time.sleep(float(dataset['speed']))
 
             # 이 채널의 다른보드 메시지 다시 찾기 위에서 스크롤 이동함
             dataset['file_name_list'] = ['\other_msg_txt']
@@ -918,9 +917,8 @@ def activate_auto_tour():
     time.sleep(5)
 
     # 과거 정보
-    dataset = {"accuracy": 0.95, "mobile_type": mobile_device(), "speed": 0.5, "limit_time": 5, "scroll_speed": 0.5,
+    dataset = {"accuracy": 0.95, "mobile_type": '\s20plus', "speed": 0.5, "limit_time": 5, "scroll_speed": 0.5,
                "scroll_count": 2, "mouse_scroll_cnt": 5, "return_my_view": False, "loading_wait_time": 3,
-               "win_title": '상민의 Galaxy S20+ 5G',
                "loading_img_list": ['\loading_bar1', '\loading_bar2', '\loading_bar3', '\loading_bar4', '\loading_bar5',
                                     '\loading_bar6', '\loading_bar7', '\loading_bar8', '\loading_bar9'],
                "more_kakao_board": ['\more_kakaoview_txt', '\more_kakaoview_txt1'],
@@ -929,6 +927,11 @@ def activate_auto_tour():
                'is_refresh': False}
 
     dataset['filename_option'] = option_figure(dataset)
+    if mobile_device() == '\s20plus':
+        dataset['win_title'] = '상민의 Galaxy S20+ 5G'
+        #dataset['win_title'] = 'Galaxy S20 5G'
+    else:
+        dataset['win_title'] = 'Galaxy S20 5G'
     home_for_scroll = find_location_accuracy(dataset, 0.75)
     home_for_scroll = pyautogui.center(home_for_scroll[0])
     home_for_scroll = (home_for_scroll.x, home_for_scroll.y - 400)
@@ -960,5 +963,6 @@ def activate_auto_tour():
 
         # 하단광고 클릭
         click_bottom_ad(dataset)
+
 
 activate_auto_tour()

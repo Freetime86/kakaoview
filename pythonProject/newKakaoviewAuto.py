@@ -6,6 +6,41 @@ import os
 import time
 
 
+def reservation_starter(dataset):
+    is_start_time = False
+
+    scroll_loc = (18, 980)
+    pyautogui.click(scroll_loc)
+    time.sleep(float(dataset['speed']))
+
+    dataset['file_name_list'] = ['\scroll_up']
+    scroll_up_icon = find_location(dataset)
+
+    while not is_start_time:
+
+        now = datetime.now()
+        current_time = now.strftime("%Y%m%d%H%M")
+        print(current_time)
+        if int(current_time) >= int(dataset['reservation']):
+            is_start_time = True
+
+            dataset['file_name_list'] = ['\scroll_close']
+            scroll_close = find_location_accuracy(dataset, 0.80)
+            if len(scroll_close) > 0:
+                scroll_close_loc = pyautogui.center(scroll_close[0])
+            pyautogui.moveTo(scroll_close_loc)
+            pyautogui.mouseDown()
+            pyautogui.moveTo(5, scroll_close_loc.y)
+            pyautogui.mouseUp()
+            print("macro start")
+        else:
+            if len(scroll_up_icon) > 0:
+                scroll_up_loc = pyautogui.center(scroll_up_icon[0])
+                pyautogui.click(scroll_up_loc)
+                print("scroll hold")
+        time.sleep(5)
+
+
 def win_activate(dataset):
     window = pyautogui.getWindowsWithTitle(dataset['win_title'])[0]
     window.activate()
@@ -917,7 +952,8 @@ def activate_auto_tour():
     time.sleep(5)
 
     # 과거 정보
-    dataset = {"accuracy": 0.95, "mobile_type": '\s20plus', "speed": 0.5, "limit_time": 5, "scroll_speed": 0.5,
+    dataset = {"reservation": "202210150601",
+               "accuracy": 0.95, "mobile_type": '\s20plus', "speed": 0.5, "limit_time": 5, "scroll_speed": 0.5,
                "scroll_count": 2, "mouse_scroll_cnt": 5, "return_my_view": False, "loading_wait_time": 3,
                "loading_img_list": ['\loading_bar1', '\loading_bar2', '\loading_bar3', '\loading_bar4', '\loading_bar5',
                                     '\loading_bar6', '\loading_bar7', '\loading_bar8', '\loading_bar9'],
@@ -928,14 +964,18 @@ def activate_auto_tour():
 
     dataset['filename_option'] = option_figure(dataset)
     if mobile_device() == '\s20plus':
-        #dataset['win_title'] = '상민의 Galaxy S20+ 5G'
-        dataset['win_title'] = 'Galaxy S20 5G'
+        dataset['win_title'] = '상민의 Galaxy S20+ 5G'
+        #dataset['win_title'] = 'Galaxy S20 5G'
     else:
         dataset['win_title'] = 'Galaxy S20 5G'
+
     home_for_scroll = find_location_accuracy(dataset, 0.75)
     home_for_scroll = pyautogui.center(home_for_scroll[0])
     home_for_scroll = (home_for_scroll.x, home_for_scroll.y - 400)
     dataset['scroll_base'] = home_for_scroll
+
+    # 예약 시작 모듈
+    reservation_starter(dataset)
 
     # 하트 찾기
     activation = True

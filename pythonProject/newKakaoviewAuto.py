@@ -500,6 +500,11 @@ def capture_back(dataset):
                                             print("capture_back_loc")
                                             print(capture_back_loc)
                                             try_count = try_count + 1
+                                else:
+                                    if not is_board(dataset):
+                                        print("보드인식 불가")
+                                        pyautogui.click(capture_back_loc)
+                                        try_count = try_count + 1
 
                                 pos_screen = getPixel()
                                 timeout_flag = True

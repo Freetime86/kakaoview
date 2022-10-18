@@ -263,6 +263,7 @@ def is_loaded(dataset):
     color = screen.getpixel(location)
 
     print(color)
+    print('color 1 y check : ' + str(set_y))
     #YELLOW BAR 판단
     if color[0] > 230 and color[1] > 200 and color[2] < 150:
         result = False
@@ -274,7 +275,7 @@ def is_loaded(dataset):
         set_y = set_y - 1
         location = (set_x, set_y)
         color = screen.getpixel(location)
-
+        print('color 2 y check : ' + str(set_y))
         # YELLOW BAR 판단
         if color[0] > 230 and color[1] > 200 and color[2] < 150:
             result = False
@@ -286,7 +287,7 @@ def is_loaded(dataset):
         set_y = set_y - 1
         location = (set_x, set_y)
         color = screen.getpixel(location)
-
+        print('color 3 y check : ' + str(set_y))
         # YELLOW BAR 판단
         if color[0] > 230 and color[1] > 200 and color[2] < 150:
             result = False
@@ -298,7 +299,7 @@ def is_loaded(dataset):
         set_y = set_y - 1
         location = (set_x, set_y)
         color = screen.getpixel(location)
-
+        print('color 4 y check : ' + str(set_y))
         # YELLOW BAR 판단
         if color[0] > 230 and color[1] > 200 and color[2] < 150:
             result = False
@@ -437,9 +438,10 @@ def capture_back(dataset):
                     # 다이나믹 조건 처리
                     if dynamic_action(dataset):
                         capture_loc = pyautogui.center(capture_icon[0])
-                        pyautogui.click(capture_loc)
-                        time.sleep(float(dataset['speed']))
-                        is_capture = True
+                        if is_loaded(dataset):
+                            pyautogui.click(capture_loc)
+                            time.sleep(float(dataset['speed']))
+                            is_capture = True
                     else:
                         print('다이나믹 처리, refresh')
                         refresh_reload(dataset)

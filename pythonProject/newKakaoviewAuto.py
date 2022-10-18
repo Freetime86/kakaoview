@@ -271,45 +271,39 @@ def is_loaded(dataset):
 
     # y = 125 try
     if result:
-        # 좌표 오류 체크
-        if color[0] < 10 and color[1] < 10 and color[2] < 10:
-            set_y = set_y - 1
-            location = (set_x, set_y)
-            color = screen.getpixel(location)
+        set_y = set_y - 1
+        location = (set_x, set_y)
+        color = screen.getpixel(location)
 
-            # YELLOW BAR 판단
-            if color[0] > 230 and color[1] > 200 and color[2] < 150:
-                result = False
-            elif color[0] > 190 and color[1] > 170 and color[2] < 50:
-                result = False
+        # YELLOW BAR 판단
+        if color[0] > 230 and color[1] > 200 and color[2] < 150:
+            result = False
+        elif color[0] > 190 and color[1] > 170 and color[2] < 50:
+            result = False
 
     # y = 124 try
     if result:
-        # 좌표 오류 체크
-        if color[0] < 10 and color[1] < 10 and color[2] < 10:
-            set_y = set_y - 1
-            location = (set_x, set_y)
-            color = screen.getpixel(location)
+        set_y = set_y - 1
+        location = (set_x, set_y)
+        color = screen.getpixel(location)
 
-            # YELLOW BAR 판단
-            if color[0] > 230 and color[1] > 200 and color[2] < 150:
-                result = False
-            elif color[0] > 190 and color[1] > 170 and color[2] < 50:
-                result = False
+        # YELLOW BAR 판단
+        if color[0] > 230 and color[1] > 200 and color[2] < 150:
+            result = False
+        elif color[0] > 190 and color[1] > 170 and color[2] < 50:
+            result = False
 
     #y = 123 try
     if result:
-        # 좌표 오류 체크
-        if color[0] < 10 and color[1] < 10 and color[2] < 10:
-            set_y = set_y - 1
-            location = (set_x, set_y)
-            color = screen.getpixel(location)
+        set_y = set_y - 1
+        location = (set_x, set_y)
+        color = screen.getpixel(location)
 
-            # YELLOW BAR 판단
-            if color[0] > 230 and color[1] > 200 and color[2] < 150:
-                result = False
-            elif color[0] > 190 and color[1] > 170 and color[2] < 50:
-                result = False
+        # YELLOW BAR 판단
+        if color[0] > 230 and color[1] > 200 and color[2] < 150:
+            result = False
+        elif color[0] > 190 and color[1] > 170 and color[2] < 50:
+            result = False
 
     return result
 

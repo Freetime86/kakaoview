@@ -222,6 +222,24 @@ def is_board(dataset):
     return result
 
 
+def is_view(dataset):
+    dataset['file_name_list'] = ['\view_check']
+    board_txt = find_location_accuracy(dataset, 0.70)
+
+    dataset['file_name_list'] = ['\channel_main_option_dots']
+    board_option_dots = find_location_accuracy(dataset, 0.70)
+
+    result = False
+    for loc in board_txt:
+        this_loc = pyautogui.center(loc)
+        if this_loc.y < 120:
+            for option_loc in board_option_dots:
+                op_loc = pyautogui.center(option_loc)
+                if 210 < op_loc.y < 270:
+                    result = True
+    return result
+
+
 def is_loaded(dataset):
     # dataset['file_name_list'] = dataset['loading_img_list']
     # loading_bar = find_loading_status(dataset, 1)
@@ -239,7 +257,9 @@ def is_loaded(dataset):
     #     dataset['loading_msg'] = False
     result = True
     screen = ImageGrab.grab()
-    location = (4, 125)
+    set_x = 4
+    set_y = 125
+    location = (set_x, set_y)
     color = screen.getpixel(location)
 
     print(color)
@@ -248,6 +268,35 @@ def is_loaded(dataset):
         result = False
     elif color[0] > 190 and color[1] > 170 and color[2] < 50:
         result = False
+
+    # y = 124 try
+    if not result:
+        # 좌표 오류 체크
+        if color[0] < 10 and color[1] < 10 and color[2] < 10:
+            set_y = set_y - 1
+            location = (set_x, set_y)
+            color = screen.getpixel(location)
+
+            # YELLOW BAR 판단
+            if color[0] > 230 and color[1] > 200 and color[2] < 150:
+                result = False
+            elif color[0] > 190 and color[1] > 170 and color[2] < 50:
+                result = False
+
+    #y = 123 try
+    if not result:
+        # 좌표 오류 체크
+        if color[0] < 10 and color[1] < 10 and color[2] < 10:
+            set_y = set_y - 1
+            location = (set_x, set_y)
+            color = screen.getpixel(location)
+
+            # YELLOW BAR 판단
+            if color[0] > 230 and color[1] > 200 and color[2] < 150:
+                result = False
+            elif color[0] > 190 and color[1] > 170 and color[2] < 50:
+                result = False
+
     return result
 
 
@@ -375,6 +424,8 @@ def capture_back(dataset):
                     while not load_check:
                         load_check = check_pixel_load()
 
+                    capture_loc = pyautogui.center(capture_icon[0])
+                    dataset['last_location'] = capture_loc
                     # 다이나믹 조건 처리
                     if dynamic_action(dataset):
                         capture_loc = pyautogui.center(capture_icon[0])
@@ -460,7 +511,7 @@ def capture_back(dataset):
             while not next_step:
                 dataset['file_name_list'] = ['\capture_back', '\capture_back1']
                 capture_back = find_sel_region_accuracy(dataset, 0.7, 20, 980, 440, 1030)
-                if len(capture_back) > 0:
+                if len(capture_back) > 0 and not is_board():
                     capture_back_loc = pyautogui.center(capture_back[0])
                     set_time_out = timeout(dataset)
                     timeout_flag = False

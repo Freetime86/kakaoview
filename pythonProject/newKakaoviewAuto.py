@@ -1,6 +1,5 @@
 import pyautogui
 from datetime import datetime, timedelta
-import pyautogui as pag
 from PIL import ImageGrab
 import os
 import time
@@ -98,7 +97,8 @@ def getPixel():
     return color
 
 
-def check_pixel_load():
+def check_pixel_load(dataset):
+    print("load checking")
     screen = ImageGrab.grab()
     set_x = 0
     set_y = 0
@@ -118,9 +118,11 @@ def check_pixel_load():
 
         if init:
             pos_color = screen.getpixel(location)
+            print(str(index + 1) + " load checking process : " + str(pos_color))
             init = False
         else:
             color = screen.getpixel(location)
+            print(str(index + 1) + " load checking process : " + str(color))
             if color != pos_color:
                 result = True
                 break
@@ -420,28 +422,39 @@ def capture_back(dataset):
                     # loading 이 완료 되면
                     # scroll click
                     pyautogui.click(dataset['scroll_loc'])
-                    time.sleep(2)
-
-                    # scroll close
-                    scroll_close_loc = pyautogui.center(dataset['scroll_close'])
-                    pyautogui.moveTo(scroll_close_loc)
-                    pyautogui.mouseDown()
-                    pyautogui.moveTo(5, scroll_close_loc.y)
-                    pyautogui.mouseUp()
+                    time.sleep(1)
 
                     load_check = False
                     while not load_check:
-                        load_check = check_pixel_load()
+                        load_check = check_pixel_load(dataset)
 
                     capture_loc = pyautogui.center(capture_icon[0])
                     dataset['last_location'] = capture_loc
                     # 다이나믹 조건 처리
                     if dynamic_action(dataset):
+                        
+                        #스크롤 다운 한번 더
+                        pyautogui.click(dataset['scroll_loc'])
+                        time.sleep(1)
+
+                        # scroll close
+                        scroll_close_loc = pyautogui.center(dataset['scroll_close'])
+                        pyautogui.moveTo(scroll_close_loc)
+                        pyautogui.mouseDown()
+
+                        #스크롤 숨기기
+                        pyautogui.moveTo(5, scroll_close_loc.y)
+                        pyautogui.mouseUp()
+
                         capture_loc = pyautogui.center(capture_icon[0])
                         if is_loaded(dataset):
-                            pyautogui.click(capture_loc)
-                            time.sleep(float(dataset['speed']))
-                            is_capture = True
+                            #깡통화면이 아닌지 판단
+                            if check_pixel_load(dataset):
+                                pyautogui.click(capture_loc)
+                                time.sleep(float(dataset['speed']))
+                                is_capture = True
+                            else:
+                                print("깡통화면 재처리")
                     else:
                         print('다이나믹 처리, refresh')
                         refresh_reload(dataset)
@@ -506,7 +519,7 @@ def capture_back(dataset):
                                 print("click count : " + str(try_count))
 
                             dataset['file_name_list'] = ['\my_view_text']
-                            my_view_text = find_location(dataset)
+                            my_view_text = find_location_detail(dataset, 0.6, 10, 80, 50, 120)
 
                             # 마이뷰 복귀 확인
                             if len(my_view_text) > 0:
@@ -708,6 +721,9 @@ def refresh_reload(dataset):
                     pyautogui.click(page_refresh_loc)
                     page_refresh_flag = True
                     dataset['is_refresh'] = True
+                else:
+                    pyautogui.doubleClick(board_option_loc)
+                    time.sleep(0.5)
 
             # 보드 재클릭
             time.sleep(1)
@@ -1134,8 +1150,8 @@ def activate_auto_tour():
 
     dataset['filename_option'] = option_figure(dataset)
     if mobile_device() == '\s20plus':
-        dataset['win_title'] = '상민의 Galaxy S20+ 5G'
-        #dataset['win_title'] = 'Galaxy S20 5G'
+        #dataset['win_title'] = '상민의 Galaxy S20+ 5G'
+        dataset['win_title'] = 'Galaxy S20 5G'
         # dataset['win_title'] = '수윤의 S20'
     else:
         dataset['win_title'] = 'Galaxy S20 5G'

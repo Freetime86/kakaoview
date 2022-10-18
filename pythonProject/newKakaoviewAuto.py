@@ -208,10 +208,10 @@ def find_loading_status(dataset, accuracy):
 
 def is_board(dataset):
     dataset['file_name_list'] = ['\main_board_txt']
-    board_txt = find_location_accuracy(dataset, 0.70)
+    board_txt = find_location_accuracy(dataset, 0.60)
 
     dataset['file_name_list'] = ['\channel_main_option_dots']
-    board_option_dots = find_location_accuracy(dataset, 0.70)
+    board_option_dots = find_location_accuracy(dataset, 0.60)
 
     result = False
     for loc in board_txt:
@@ -627,13 +627,59 @@ def check_loading_capture(dataset):
             # 일정 시간 후에도 기능이 동작하지 않으면 timeout (refresh)
             if set_timeout < datetime.now():
                 print('리프레쉬2 리로드')
-                refresh_reload(dataset)
+                if is_board(dataset):
+                    refresh(dataset)
+                else:
+                    refresh_reload(dataset)
 
                 # 로딩바 대기 30초
                 set_timeout = datetime.now() + timedelta(seconds=30)
 
     return next_step
 
+
+
+def refresh(dataset):
+    print('refresh')
+
+    next_step = False
+    # main channel check
+    channel_main_flag = False
+    try_count = 0
+    pos_screen = (0, 0)
+
+    while not next_step:
+        # 옵션 페이지 리프레시 (광고 변경)
+        dataset['file_name_list'] = ['\page_refresh_option']
+        board_option = find_location_accuracy(dataset, 0.80)
+        if len(board_option) > 0:
+            board_option_loc = pyautogui.center(board_option[0])
+            pyautogui.doubleClick(board_option_loc)
+            time.sleep(0.5)
+
+            page_refresh_flag = False
+            while not page_refresh_flag:
+                dataset['file_name_list'] = ['\page_refresh']
+                page_refresh = find_location_accuracy(dataset, 0.85)
+                if len(page_refresh) > 0:
+                    print("새로고침")
+                    page_refresh_loc = pyautogui.center(page_refresh[0])
+                    pyautogui.click(page_refresh_loc)
+                    page_refresh_flag = True
+                    dataset['is_refresh'] = True
+                else:
+                    pyautogui.doubleClick(board_option_loc)
+                    time.sleep(0.5)
+
+            # 보드 재클릭
+            time.sleep(1)
+            pyautogui.click(dataset['last_location'])
+            print("last_location")
+            print(dataset['last_location'])
+
+            next_step = True
+
+    return next_step
 
 def refresh_reload(dataset):
     print('refresh_reload')

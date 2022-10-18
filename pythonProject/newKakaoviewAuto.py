@@ -511,7 +511,7 @@ def capture_back(dataset):
             while not next_step:
                 dataset['file_name_list'] = ['\capture_back', '\capture_back1']
                 capture_back = find_sel_region_accuracy(dataset, 0.7, 20, 980, 440, 1030)
-                if len(capture_back) > 0 and not is_board():
+                if len(capture_back) > 0 and not is_board(dataset):
                     capture_back_loc = pyautogui.center(capture_back[0])
                     set_time_out = timeout(dataset)
                     timeout_flag = False
@@ -1124,8 +1124,8 @@ def activate_auto_tour():
 
     dataset['filename_option'] = option_figure(dataset)
     if mobile_device() == '\s20plus':
-        # dataset['win_title'] = '상민의 Galaxy S20+ 5G'
-        dataset['win_title'] = 'Galaxy S20 5G'
+        dataset['win_title'] = '상민의 Galaxy S20+ 5G'
+        #dataset['win_title'] = 'Galaxy S20 5G'
         # dataset['win_title'] = '수윤의 S20'
     else:
         dataset['win_title'] = 'Galaxy S20 5G'

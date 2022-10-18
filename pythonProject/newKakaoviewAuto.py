@@ -9,7 +9,7 @@ import time
 def reservation_starter(dataset):
     is_start_time = False
 
-    scroll_loc = (18, 980)
+    scroll_loc = (20, 950)
     pyautogui.click(scroll_loc)
     time.sleep(float(dataset['speed']))
 
@@ -98,6 +98,35 @@ def getPixel():
     return color
 
 
+def check_pixel_load():
+    screen = ImageGrab.grab()
+    set_x = 0
+    set_y = 0
+    location = (set_y, set_x)
+    pos_color = screen.getpixel(location)
+    result = False
+    init = True
+    for index in range(0, 9):
+        if set_x < 300:
+            set_x = set_x + 100
+        elif set_x >= 300:
+            set_x = 100
+
+        if index % 3 == 0:
+            set_y = set_y + 300
+        location = (set_y, set_x)
+
+        if init:
+            pos_color = screen.getpixel(location)
+            init = False
+        else:
+            color = screen.getpixel(location)
+            if color != pos_color:
+                result = True
+                break
+    return result
+
+
 def find_location(dataset):
     work_dir = os.getcwd() + "\img" + dataset['mobile_type']
     file_ext = ".png"
@@ -130,7 +159,7 @@ def find_location_accuracy(dataset, accuracy):
     return result
 
 
-def find_loading_status(dataset, accuracy):
+def find_sel_region_accuracy(dataset, accuracy, xx, xy, yx, yy):
     work_dir = os.getcwd() + "\img" + dataset['mobile_type']
     file_ext = ".png"
     file_name_list = dataset['file_name_list']
@@ -138,11 +167,40 @@ def find_loading_status(dataset, accuracy):
     for file_name in file_name_list:
         print("find_location : " + file_name + dataset['filename_option'] + file_ext)
         out_list = pyautogui.locateAllOnScreen(work_dir + file_name + dataset['filename_option'] + file_ext,
-                                               confidence=accuracy, region=(0, 100, 150, 400))
+                                               confidence=accuracy, region=(xx, xy, yx, yy))
         out_list = list(out_list)
         if len(out_list) > 0:
             for data in out_list:
                 result.append(data)
+    return result
+
+
+def find_location_detail(dataset, accuracy, xx, xy, yx, yy):
+    work_dir = os.getcwd() + "\img" + dataset['mobile_type']
+    file_ext = ".png"
+    file_name_list = dataset['file_name_list']
+    result = []
+    for file_name in file_name_list:
+        print("find_location : " + file_name + dataset['filename_option'] + file_ext)
+        out_list = pyautogui.locateAllOnScreen(work_dir + file_name + dataset['filename_option'] + file_ext,
+                                               confidence=accuracy, region=(xx, xy, yx, yy))
+        out_list = list(out_list)
+        if len(out_list) > 0:
+            for data in out_list:
+                result.append(data)
+    return result
+
+
+def find_loading_status(dataset, accuracy):
+    work_dir = os.getcwd() + "\img" + dataset['mobile_type']
+    file_ext = ".png"
+    file_name_list = dataset['file_name_list']
+    result = []
+    for file_name in file_name_list:
+        print("find_location : " + file_name + dataset['filename_option'] + file_ext)
+        out_loc = pyautogui.locateOnScreen(work_dir + file_name + dataset['filename_option'] + file_ext,
+                                           confidence=accuracy, region=(5, 100, 446, 125))
+        result.append(out_loc)
     return result
 
 
@@ -165,20 +223,31 @@ def is_board(dataset):
 
 
 def is_loaded(dataset):
-    dataset['file_name_list'] = dataset['loading_img_list']
-    loading_bar = find_location_accuracy(dataset, 0.95)
+    # dataset['file_name_list'] = dataset['loading_img_list']
+    # loading_bar = find_loading_status(dataset, 1)
 
-    if not dataset['loading_msg']:
-        print('로딩 중..')
-        dataset['loading_msg'] = True
+    # if not dataset['loading_msg']:
+    #    print('로딩 중..')
+    #    dataset['loading_msg'] = True
+    # result = True
+    # for loc in loading_bar:
+    #    this_loc = pyautogui.center(loc)
+    #    if 130 > this_loc.y > 100 and 450 > this_loc.x > 0:
+    #        result = False
+
+    # if result:
+    #     dataset['loading_msg'] = False
     result = True
-    for loc in loading_bar:
-        this_loc = pyautogui.center(loc)
-        if 130 > this_loc.y > 100 and 450 > this_loc.x > 0:
-            result = False
+    screen = ImageGrab.grab()
+    location = (4, 125)
+    color = screen.getpixel(location)
 
-    if result:
-        dataset['loading_msg'] = False
+    print(color)
+    #YELLOW BAR 판단
+    if color[0] > 230 and color[1] > 200 and color[2] < 150:
+        result = False
+    elif color[0] > 190 and color[1] > 170 and color[2] < 50:
+        result = False
     return result
 
 
@@ -192,6 +261,33 @@ def check_timeout(timeout):
     if timeout < datetime.now():
         result = False
     return result
+
+
+def dynamic_action(dataset):
+
+    result = True
+    dataset['file_name_list'] = ['\channel_add']
+    #채널 추가 변수 삭제
+    channel_add = find_location_accuracy(dataset, 0.70)
+    if len(channel_add) > 0:
+        action_back(dataset)
+
+    dataset['file_name_list'] = ['\connecting_msg']
+    # 다른프로그램 연결 광고
+    connecting_msg = find_location_accuracy(dataset, 0.70)
+    if len(connecting_msg) > 0:
+        action_back(dataset)
+        result = False
+
+    return result
+
+
+def action_back(dataset):
+    dataset['file_name_list'] = ['\capture_back', '\capture_back1']
+    capture_back = find_sel_region_accuracy(dataset, 0.7, 20, 980, 440, 1030)
+    if len(capture_back) > 0:
+        capture_back_loc = pyautogui.center(capture_back[0])
+        pyautogui.click(capture_back_loc)
 
 
 def scroll_down(dataset):
@@ -255,7 +351,7 @@ def capture_back(dataset):
     next_step = False
     return_my_view = dataset['return_my_view']
     dataset['file_name_list'] = ['\capture', '\capture1']
-    capture_icon = find_location_accuracy(dataset, 0.80)
+    capture_icon = find_location_accuracy(dataset, 0.70)
     if len(capture_icon) > 0:
 
         is_capture = False
@@ -275,10 +371,19 @@ def capture_back(dataset):
                     pyautogui.moveTo(5, scroll_close_loc.y)
                     pyautogui.mouseUp()
 
-                    capture_loc = pyautogui.center(capture_icon[0])
-                    pyautogui.click(capture_loc)
-                    time.sleep(float(dataset['speed']))
-                    is_capture = True
+                    load_check = False
+                    while not load_check:
+                        load_check = check_pixel_load()
+
+                    # 다이나믹 조건 처리
+                    if dynamic_action(dataset):
+                        capture_loc = pyautogui.center(capture_icon[0])
+                        pyautogui.click(capture_loc)
+                        time.sleep(float(dataset['speed']))
+                        is_capture = True
+                    else:
+                        print('다이나믹 처리, refresh')
+                        refresh_reload(dataset)
             else:
                 print("로딩 프로세스 오류 재실행")
                 if set_time_out < datetime.now():
@@ -291,7 +396,7 @@ def capture_back(dataset):
             while not next_step:
 
                 dataset['file_name_list'] = ['\capture_back', '\capture_back1']
-                my_view_return = find_location(dataset)
+                my_view_return = find_sel_region_accuracy(dataset, 0.7, 20, 980, 440, 1030)
 
                 if len(my_view_return) > 0:
                     my_view_return_loc = pyautogui.center(my_view_return[0])
@@ -310,7 +415,7 @@ def capture_back(dataset):
                                 print(curr_screen)
 
                                 dataset['file_name_list'] = ['\win_close', '\win_close1']
-                                win_close = find_location_accuracy(dataset, 0.80)
+                                win_close = find_sel_region_accuracy(dataset, 0.8, 5, 70, 440, 150)
 
                                 if len(win_close) > 0 and try_count == 0:
                                     win_close_Loc = pyautogui.center(win_close[0])
@@ -354,7 +459,7 @@ def capture_back(dataset):
             print("뒤로가기")
             while not next_step:
                 dataset['file_name_list'] = ['\capture_back', '\capture_back1']
-                capture_back = find_location(dataset)
+                capture_back = find_sel_region_accuracy(dataset, 0.7, 20, 980, 440, 1030)
                 if len(capture_back) > 0:
                     capture_back_loc = pyautogui.center(capture_back[0])
                     set_time_out = timeout(dataset)
@@ -371,11 +476,14 @@ def capture_back(dataset):
                                 print("curr_screen")
                                 print(curr_screen)
 
-                                if try_count > 5 and curr_screen == pos_screen:
-                                    dataset['file_name_list'] = ['\win_close']
-                                    win_close = find_location_accuracy(dataset, 0.80)
+                                dataset['file_name_list'] = ['\win_close', '\win_close1']
+                                win_close = find_sel_region_accuracy(dataset, 0.8, 5, 70, 440, 150)
 
-                                    if len(win_close) > 0:
+                                cancel = False
+                                if len(win_close) > 0:
+                                    cancel = True
+                                if try_count > 5 and curr_screen == pos_screen or cancel:
+                                    if len(win_close) > 0 and try_count > 5:
                                         if not is_board(dataset):
                                             win_close_Loc = pyautogui.center(win_close[0])
                                             pyautogui.click(win_close_Loc)
@@ -387,16 +495,11 @@ def capture_back(dataset):
                                             if try_count > 5:
                                                 print("보드인식 불가 더블클릭 실행")
                                                 pyautogui.click(capture_back_loc)
+                                                try_count = 0
                                             pyautogui.click(capture_back_loc)
                                             print("capture_back_loc")
                                             print(capture_back_loc)
-                                            try_count = 0
-
-                                else:
-                                    pyautogui.click(capture_back_loc)
-                                    print("capture_back_loc")
-                                    print(capture_back_loc)
-                                    try_count = try_count + 1
+                                            try_count = try_count + 1
 
                                 pos_screen = getPixel()
                                 timeout_flag = True
@@ -617,10 +720,10 @@ def select_channel(dataset):
     win_activate(dataset)
     # dataset['file_name_list'] = ['\heart_empty', '\heart_empty1', '\heart_empty2', '\heart_empty3']
     dataset['file_name_list'] = ['\heart_empty']
-    heart_empty = find_location_accuracy(dataset, 0.70)
+    heart_empty = find_location_detail(dataset, 0.70, 250, 250, 315, 990)
 
     dataset['file_name_list'] = ['\heart_full']
-    heart_full = find_location_accuracy(dataset, 0.85)
+    heart_full = find_location_detail(dataset, 0.80, 250, 250, 315, 990)
 
     if len(heart_empty) > 0 or len(heart_full) > 0:
         print("좋아요 찾기 완료 (빈거, 꽉찬거)")
@@ -679,8 +782,8 @@ def select_channel(dataset):
                         print(curr_loc)
 
                     if not capture_flag:
-                        dataset['file_name_list'] = ['\capture']
-                        capture_icon = find_location_accuracy(dataset, 0.80)
+                        dataset['file_name_list'] = ['\capture', '\capture1']
+                        capture_icon = find_location_accuracy(dataset, 0.70)
                         if len(capture_icon) > 0:
                             capture_loc = pyautogui.center(capture_icon[0])
                             pyautogui.click(capture_loc)
@@ -955,8 +1058,9 @@ def activate_auto_tour():
     dataset = {"reservation": "202210150601",
                "accuracy": 0.95, "mobile_type": '\s20plus', "speed": 0.5, "limit_time": 5, "scroll_speed": 0.5,
                "scroll_count": 2, "mouse_scroll_cnt": 5, "return_my_view": False, "loading_wait_time": 3,
-               "loading_img_list": ['\loading_bar1', '\loading_bar2', '\loading_bar3', '\loading_bar4', '\loading_bar5',
-                                    '\loading_bar6', '\loading_bar7', '\loading_bar8', '\loading_bar9'],
+               # "loading_img_list": ['\loading_bar1', '\loading_bar2', '\loading_bar3', '\loading_bar4', '\loading_bar5',
+               #                     '\loading_bar6', '\loading_bar7', '\loading_bar8', '\loading_bar9'],
+               "loading_img_list": ['\loading_master'],
                "more_kakao_board": ['\more_kakaoview_txt', '\more_kakaoview_txt1'],
                'file_name_list': ['\home_for_scroll_base', '\home_for_scroll_base1'],
                'loading_msg': False,
@@ -964,8 +1068,9 @@ def activate_auto_tour():
 
     dataset['filename_option'] = option_figure(dataset)
     if mobile_device() == '\s20plus':
-        dataset['win_title'] = '상민의 Galaxy S20+ 5G'
-        #dataset['win_title'] = 'Galaxy S20 5G'
+        # dataset['win_title'] = '상민의 Galaxy S20+ 5G'
+        dataset['win_title'] = 'Galaxy S20 5G'
+        # dataset['win_title'] = '수윤의 S20'
     else:
         dataset['win_title'] = 'Galaxy S20 5G'
 

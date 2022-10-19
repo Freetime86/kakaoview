@@ -1068,6 +1068,10 @@ def click_contents(dataset):
                             dataset['last_location'] = title_loc
                             next_step = check_loading_capture(dataset)
                     else:
+                        print("컨텐츠 진입 확인 불가 : FAIL")
+                        if not is_board(dataset):
+                            pyautogui.click(title_loc)
+                            print("채널 컨텐츠 처리 모듈 재 실행 : CLEAR")
                         set_time_out = timeout(dataset)
                         timeout_flag = False
     return next_step

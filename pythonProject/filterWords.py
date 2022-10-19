@@ -4,12 +4,12 @@ def text_incoding(text):
     target_list = [
         '&amp;#39;', '&#39;', '&middot;', '&quot;', '…', '..', '[영상]', '.gif', '.bmp', '.jpeg', '.png',
         '.jpg', '.manhwa', '&ldquo;', '&rdquo;', 'gif', 'bmp', 'jpeg', 'png', 'jpg', '&lsquo;', '&rsquo;', '&hellip;',
-        'blind'
+        'blind', 'manhwa'
     ]
     replace_keys = {'&amp;#39;': '', '&#39;': '', '&middot;': '·', '&quot;': '"', '…': '! ', '..': ' ',
                     '[영상]': '', '.gif': '', '.bmp': '', '.jpeg': '', '.png': '', '.jpg': '', '.manhwa': '',
                     '&ldquo;': '“', '&rdquo;': '”', 'gif': '', 'bmp': '', 'jpeg': '', 'png': '', 'jpg': '',
-                    '&lsquo;': '', '&rsquo;': '', '&hellip;': ' ', 'blind': ''
+                    '&lsquo;': '', '&rsquo;': '', '&hellip;': ' ', 'blind': '', 'manhwa': ''
                     }
 
     for target in target_list:
@@ -75,6 +75,6 @@ def filter_list():
         , "후장꽂아", "후장뚫어", "흐접", "흐젚", "흐졉", "bitch", "fuck", "fuckyou", "nflavor", "penis", "pennis", "pussy", "sex"
 
                    # 개인적인 추가 대상
-        , "난소", "성관계", "모텔간 썰", "첫경험", "첫키스", "키스", "AV", "AV배우", "불륜"
+        , "난소", "성관계", "모텔간 썰", "첫경험", "첫키스", "키스", "AV", "AV배우", "불륜", "메이드복"
                    ]
     return filter_list

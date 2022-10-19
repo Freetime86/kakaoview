@@ -31,12 +31,12 @@ def reservation_starter(dataset):
             pyautogui.mouseDown()
             pyautogui.moveTo(5, scroll_close_loc.y)
             pyautogui.mouseUp()
-            print("macro start")
+            print("매크로 시작")
         else:
             if len(scroll_up_icon) > 0:
                 scroll_up_loc = pyautogui.center(scroll_up_icon[0])
                 pyautogui.click(scroll_up_loc)
-                print("scroll hold")
+                print("예약 시간 대기 중")
         time.sleep(5)
 
 
@@ -98,7 +98,7 @@ def getPixel():
 
 
 def check_pixel_load(dataset):
-    print("load checking")
+    print("PAGE 로드 체크 시작")
     screen = ImageGrab.grab()
     set_x = 0
     set_y = 0
@@ -118,14 +118,30 @@ def check_pixel_load(dataset):
 
         if init:
             pos_color = screen.getpixel(location)
-            print(str(index + 1) + " load checking process : " + str(pos_color))
+            print("로드 체크 프로세스 최초 레코드 : " + str(pos_color))
             init = False
         else:
             color = screen.getpixel(location)
-            print(str(index + 1) + " load checking process : " + str(color))
+            print("로드 체크 :::: " + str(pos_color) + "  |  " + str(color))
             if color != pos_color:
                 result = True
+                print("청상 페이지 확인 :::: " + str(pos_color) + "  |  " + str(color))
                 break
+    return result
+
+
+def find_dynamic_pop(dataset, accuracy):
+    work_dir = os.getcwd() + "\img\popup"
+    file_ext = ".png"
+    file_name_list = dataset['file_name_list']
+    result = []
+    for file_name in file_name_list:
+        out_list = pyautogui.locateAllOnScreen(work_dir + file_name + file_ext,
+                                               confidence=accuracy)
+        out_list = list(out_list)
+        if len(out_list) > 0:
+            for data in out_list:
+                result.append(data)
     return result
 
 
@@ -135,7 +151,6 @@ def find_location(dataset):
     file_name_list = dataset['file_name_list']
     result = []
     for file_name in file_name_list:
-        print("find_location : " + file_name + dataset['filename_option'] + file_ext)
         out_list = pyautogui.locateAllOnScreen(work_dir + file_name + dataset['filename_option'] + file_ext,
                                                confidence=float(dataset['accuracy']))
         out_list = list(out_list)
@@ -151,7 +166,6 @@ def find_location_accuracy(dataset, accuracy):
     file_name_list = dataset['file_name_list']
     result = []
     for file_name in file_name_list:
-        print("find_location : " + file_name + dataset['filename_option'] + file_ext)
         out_list = pyautogui.locateAllOnScreen(work_dir + file_name + dataset['filename_option'] + file_ext,
                                                confidence=accuracy)
         out_list = list(out_list)
@@ -167,7 +181,6 @@ def find_sel_region_accuracy(dataset, accuracy, xx, xy, yx, yy):
     file_name_list = dataset['file_name_list']
     result = []
     for file_name in file_name_list:
-        print("find_location : " + file_name + dataset['filename_option'] + file_ext)
         out_list = pyautogui.locateAllOnScreen(work_dir + file_name + dataset['filename_option'] + file_ext,
                                                confidence=accuracy, region=(xx, xy, yx, yy))
         out_list = list(out_list)
@@ -264,9 +277,9 @@ def is_loaded(dataset):
     location = (set_x, set_y)
     color = screen.getpixel(location)
 
-    print(color)
-    print('color 1 y check : ' + str(set_y))
-    #YELLOW BAR 판단
+    print("로드 데이터 코드 : " + str(color))
+
+    # YELLOW BAR 판단
     if color[0] > 230 and color[1] > 200 and color[2] < 150:
         result = False
     elif color[0] > 190 and color[1] > 170 and color[2] < 50:
@@ -277,7 +290,6 @@ def is_loaded(dataset):
         set_y = set_y - 1
         location = (set_x, set_y)
         color = screen.getpixel(location)
-        print('color 2 y check : ' + str(set_y))
         # YELLOW BAR 판단
         if color[0] > 230 and color[1] > 200 and color[2] < 150:
             result = False
@@ -289,19 +301,17 @@ def is_loaded(dataset):
         set_y = set_y - 1
         location = (set_x, set_y)
         color = screen.getpixel(location)
-        print('color 3 y check : ' + str(set_y))
         # YELLOW BAR 판단
         if color[0] > 230 and color[1] > 200 and color[2] < 150:
             result = False
         elif color[0] > 190 and color[1] > 170 and color[2] < 50:
             result = False
 
-    #y = 123 try
+    # y = 123 try
     if result:
         set_y = set_y - 1
         location = (set_x, set_y)
         color = screen.getpixel(location)
-        print('color 4 y check : ' + str(set_y))
         # YELLOW BAR 판단
         if color[0] > 230 and color[1] > 200 and color[2] < 150:
             result = False
@@ -320,14 +330,14 @@ def check_timeout(timeout):
     result = True
     if timeout < datetime.now():
         result = False
+        print("TIME OUT! RETRY!")
     return result
 
 
 def dynamic_action(dataset):
-
     result = True
     dataset['file_name_list'] = ['\channel_add']
-    #채널 추가 변수 삭제
+    # 채널 추가 변수 삭제
     channel_add = find_location_accuracy(dataset, 0.70)
     if len(channel_add) > 0:
         action_back(dataset)
@@ -339,8 +349,35 @@ def dynamic_action(dataset):
         action_back(dataset)
         result = False
 
+    # 팝업 제거 실시간 추가
+    # 뷰티영APP
+    dataset['file_name_list'] = ['\pop1']
+    dataset['pop_target'] = (384, 264)
+    pop_close(dataset)
+
+    #AKIII CLASSIC 카카오톡 채널친구 팝업
+    dataset['file_name_list'] = ['\pop2']
+    dataset['pop_target'] = (413, 843)
+    pop_close(dataset)
+
+    # 인증서 선택
+    dataset['file_name_list'] = ['\pop3']
+    dataset['pop_target'] = (124, 960)
+    pop_close(dataset)
+
+    # 지금 이페이지를 나가면
+    dataset['file_name_list'] = ['\pop4']
+    dataset['pop_target'] = (394, 656)
+    pop_close(dataset)
+
     return result
 
+
+def pop_close(dataset):
+    # 다른프로그램 연결 광고
+    pop1 = find_dynamic_pop(dataset, 0.70)
+    if len(pop1) > 0:
+        pyautogui.click(dataset['pop_target'])
 
 def action_back(dataset):
     dataset['file_name_list'] = ['\capture_back', '\capture_back1']
@@ -351,10 +388,10 @@ def action_back(dataset):
 
 
 def scroll_down(dataset):
-    print("scroll_down")
     next_step = False
     scroll_loc = (18, 980)
     pyautogui.click(scroll_loc)
+    print("스크롤 모듈 실행")
     time.sleep(float(dataset['speed']))
     set_time_out = timeout(dataset)
     timeout_flag = False
@@ -396,9 +433,8 @@ def scroll_down(dataset):
                             if next_step:
                                 is_capture = True
         else:
-            print("스크롤 찾기 실패")
+            print("스크롤을 찾을 수 없습니다.")
             if set_time_out < datetime.now():
-                print('리프레쉬2 리로드')
                 refresh_reload(dataset)
                 timeout_flag = False
                 set_time_out = timeout(dataset)
@@ -407,7 +443,7 @@ def scroll_down(dataset):
 
 # 캡처 후 이전 process 로 복귀
 def capture_back(dataset):
-    print("capture_back")
+    print("캡처 프로세스 실행")
     next_step = False
     return_my_view = dataset['return_my_view']
     dataset['file_name_list'] = ['\capture', '\capture1']
@@ -422,57 +458,63 @@ def capture_back(dataset):
                     # loading 이 완료 되면
                     # scroll click
                     pyautogui.click(dataset['scroll_loc'])
+                    print("페이지 로딩 > 스크롤 DOWN")
                     time.sleep(1)
 
                     load_check = False
                     while not load_check:
                         load_check = check_pixel_load(dataset)
+                        print("정상 페이지 여부 체크 : " + str(load_check))
 
                     capture_loc = pyautogui.center(capture_icon[0])
                     dataset['last_location'] = capture_loc
                     # 다이나믹 조건 처리
                     if dynamic_action(dataset):
-                        
-                        #스크롤 다운 한번 더
+
+                        # 스크롤 다운 한번 더
                         pyautogui.click(dataset['scroll_loc'])
-                        time.sleep(1)
+                        time.sleep(3)
 
                         # scroll close
                         scroll_close_loc = pyautogui.center(dataset['scroll_close'])
                         pyautogui.moveTo(scroll_close_loc)
                         pyautogui.mouseDown()
 
-                        #스크롤 숨기기
+                        # 스크롤 숨기기
                         pyautogui.moveTo(5, scroll_close_loc.y)
                         pyautogui.mouseUp()
 
+                        print("페이지 변수 체크 > 스크롤 DOWN > 스크롤 HIDE")
+
                         capture_loc = pyautogui.center(capture_icon[0])
                         if is_loaded(dataset):
-                            #깡통화면이 아닌지 판단
+                            # 깡통화면이 아닌지 판단
                             if check_pixel_load(dataset):
                                 pyautogui.click(capture_loc)
+                                print("정상 페이지 여부 체크 > 캡처")
                                 time.sleep(float(dataset['speed']))
                                 is_capture = True
                             else:
-                                print("깡통화면 재처리")
+                                print("정상 페이지가 아닙니다.")
                     else:
-                        print('다이나믹 처리, refresh')
+                        print('페이지 변수 처리 > REFRESH RELOAD')
                         refresh_reload(dataset)
             else:
-                print("로딩 프로세스 오류 재실행")
+                print("캡처 프로세스 진행이 불가합니다.")
                 if set_time_out < datetime.now():
-                    print('리프레쉬2 리로드')
+                    print("페이지 동기화 > REFRESH RELOAD")
                     refresh_reload(dataset)
                     set_time_out = datetime.now() + timedelta(seconds=15)
 
         if return_my_view:
-            print("마이뷰로 돌아가기")
+            print("마이뷰로 이동 시작")
             while not next_step:
 
                 dataset['file_name_list'] = ['\capture_back', '\capture_back1']
                 my_view_return = find_sel_region_accuracy(dataset, 0.7, 20, 980, 440, 1030)
 
                 if len(my_view_return) > 0:
+
                     my_view_return_loc = pyautogui.center(my_view_return[0])
                     timeout_flag = False
                     first_try = True
@@ -483,10 +525,6 @@ def capture_back(dataset):
                         curr_screen = getPixel()
                         if check_timeout(set_time_out):
                             if not timeout_flag:
-                                print("pos_screen")
-                                print(pos_screen)
-                                print("curr_screen")
-                                print(curr_screen)
 
                                 dataset['file_name_list'] = ['\win_close', '\win_close1']
                                 win_close = find_sel_region_accuracy(dataset, 0.8, 5, 70, 440, 150)
@@ -494,47 +532,53 @@ def capture_back(dataset):
                                 if len(win_close) > 0 and try_count == 0:
                                     win_close_Loc = pyautogui.center(win_close[0])
                                     pyautogui.click(win_close_Loc)
-                                    print("윈도우 창 닫기")
+                                    print("X 버튼 클릭 탈출 시도")
                                     try_count = try_count + 1
                                     time.sleep(1)
                                 else:
                                     if try_count > 3 and curr_screen == pos_screen:
                                         if not is_board(dataset):
                                             pyautogui.click(my_view_return_loc)
+                                            print("뒤로가기 더블 클릭")
                                         pyautogui.click(my_view_return_loc)
-                                        print("마이뷰 복귀 더블클릭")
                                         try_count = 0
                                     else:
                                         pos_screen = getPixel()
                                         if first_try:
                                             pyautogui.click(my_view_return_loc)
-                                            print("마이뷰 복귀 첫 클릭")
+                                            print("마이뷰 이동 전처리")
                                             first_try = False
                                             time.sleep(1)
                                         else:
                                             pyautogui.click(my_view_return_loc)
-                                            print("마이뷰 복귀 클릭")
+                                            print("마이뷰 이동")
                                             try_count = try_count + 1
                                     timeout_flag = True
-                                print("click count : " + str(try_count))
 
                             dataset['file_name_list'] = ['\my_view_text']
                             my_view_text = find_location_detail(dataset, 0.6, 10, 80, 50, 120)
-
+                            print("마이뷰 찾는 중....")
                             # 마이뷰 복귀 확인
                             if len(my_view_text) > 0:
-                                print("마이뷰 확인")
+                                print("마이뷰 돌아가기 완료")
                                 next_step = True
                         else:
-                            print("마이뷰 인식 실패")
+                            print("마이뷰를 찾을 수 없습니다.")
                             timeout_flag = False
                             set_time_out = timeout(dataset)
         else:
-            print("뒤로가기")
+            print("뒤로 이동")
             while not next_step:
                 dataset['file_name_list'] = ['\capture_back', '\capture_back1']
                 capture_back = find_sel_region_accuracy(dataset, 0.7, 20, 980, 440, 1030)
+
+                print("뒤로가기 : 캡처 버튼 찾기 완료, 채널 메인 확인 완료")
+                if is_board(dataset):
+                    print("현재 위치는 내 채널 메인에 있습니다.")
+                else:
+                    print("현재 위치에서 내 채널 메인을 식별할 수 없습니다.")
                 if len(capture_back) > 0 and not is_board(dataset):
+
                     capture_back_loc = pyautogui.center(capture_back[0])
                     set_time_out = timeout(dataset)
                     timeout_flag = False
@@ -545,9 +589,7 @@ def capture_back(dataset):
                         curr_screen = getPixel()
                         if check_timeout(set_time_out):
                             if not timeout_flag:
-                                print("pos_screen")
                                 print(pos_screen)
-                                print("curr_screen")
                                 print(curr_screen)
 
                                 dataset['file_name_list'] = ['\win_close', '\win_close1']
@@ -561,22 +603,21 @@ def capture_back(dataset):
                                         if not is_board(dataset):
                                             win_close_Loc = pyautogui.center(win_close[0])
                                             pyautogui.click(win_close_Loc)
-                                            print("win_close_Loc")
-                                            print(win_close_Loc)
+                                            print("X 버튼을 이용하여 탈출 추가 프로세스를 실행")
                                             try_count = 0
                                     else:
                                         if not is_board(dataset):
                                             if try_count > 5:
-                                                print("보드인식 불가 더블클릭 실행")
+                                                print("5회 시도 : 보드 인식 불가, 연타로 빠져나가기 시도")
                                                 pyautogui.click(capture_back_loc)
                                                 try_count = 0
+                                                print("탈출 시도 횟수 : " + str(try_count))
                                             pyautogui.click(capture_back_loc)
-                                            print("capture_back_loc")
-                                            print(capture_back_loc)
+                                            print("연타 클릭 완료")
                                             try_count = try_count + 1
                                 else:
                                     if not is_board(dataset):
-                                        print("보드인식 불가")
+                                        print("보드로 돌아갈 수 없음. 프로그램 재 기동")
                                         pyautogui.click(capture_back_loc)
                                         try_count = try_count + 1
 
@@ -593,7 +634,6 @@ def capture_back(dataset):
 
 
 def check_loading_capture(dataset):
-    print("check_loading_capture")
     next_step = False
 
     # 로딩바 대기 30초
@@ -607,7 +647,6 @@ def check_loading_capture(dataset):
 
         # 현재 위치가 보드가 아님을 판단
         if not is_board(dataset):
-            print("메인채널 탈출")
 
             # 보드 로딩바 확인 불가 (입장 완료 또는 입장 실패) 확인 될 때까지 재실행
             loading_finish = False
@@ -636,7 +675,6 @@ def check_loading_capture(dataset):
                 set_timeout = datetime.now() + timedelta(seconds=30)
 
     return next_step
-
 
 
 def refresh(dataset):
@@ -681,8 +719,9 @@ def refresh(dataset):
 
     return next_step
 
+
 def refresh_reload(dataset):
-    print('refresh_reload')
+    print('재기동 실행 중')
 
     next_step = False
     # main channel check
@@ -842,7 +881,6 @@ def find_heart(dataset):
 # PROCESS MOUDLES
 # 좋아요 클릭 모듈
 def select_channel(dataset):
-    print('select_channel')
     next_step = False
 
     win_activate(dataset)
@@ -854,7 +892,7 @@ def select_channel(dataset):
     heart_full = find_location_detail(dataset, 0.80, 250, 250, 315, 990)
 
     if len(heart_empty) > 0 or len(heart_full) > 0:
-        print("좋아요 찾기 완료 (빈거, 꽉찬거)")
+        print('마이뷰 : 좋아요 선택')
         full_heart = False
         empty_x = 0
         empty_y = 0
@@ -886,16 +924,19 @@ def select_channel(dataset):
                 empty_y = 9999
 
             if empty_y < full_y:
+                print('마이뷰 : 좋아요 클릭')
                 curr_loc = (empty_x, empty_y)
             else:
+                print('마이뷰 : 좋아요 SKIP')
                 curr_loc = (full_x, full_y)
                 full_heart = True
         elif len(heart_empty) > 0:
             curr_loc = (empty_x, empty_y)
+            print('마이뷰 : 좋아요 클릭')
         elif len(heart_full) > 0:
             curr_loc = (full_x, full_y)
+            print('마이뷰 : 좋아요 SKIP')
             full_heart = True
-        print("좋아요 : " + str(full_heart))
         set_time_out = timeout(dataset)
         timeout_flag = False
         capture_flag = False
@@ -904,10 +945,8 @@ def select_channel(dataset):
                 if not timeout_flag:
                     win_activate(dataset)
                     if not full_heart:
-                        print("좋아요 클릭")
                         pyautogui.click(curr_loc)
-                        print("curr_loc")
-                        print(curr_loc)
+                        print('마이뷰 : 좋아요 클릭 완료')
 
                     if not capture_flag:
                         dataset['file_name_list'] = ['\capture', '\capture1']
@@ -915,8 +954,7 @@ def select_channel(dataset):
                         if len(capture_icon) > 0:
                             capture_loc = pyautogui.center(capture_icon[0])
                             pyautogui.click(capture_loc)
-                            print("capture_loc")
-                            print(capture_loc)
+                            print('마이뷰 : 캡처 완료')
                             time.sleep(float(dataset['speed']))
                             capture_flag = True
                     timeout_flag = True
@@ -945,23 +983,27 @@ def select_channel(dataset):
                         if check_timeout(set_time_out1):
                             if not timeout_flag1:
                                 pyautogui.click(channel_loc)
-                                print("channel_loc")
+                                print("마이뷰 > 채널 입장")
                                 print(channel_loc)
                                 timeout_flag1 = True
 
                             while not next_step:
-
-                                # 메인 보드 클릭
-                                if is_board(dataset):
-                                    next_step = True
-                                    print("채널 보드 입장")
+                                set_time_out2 = timeout(dataset)
+                                if check_timeout(set_time_out2):
+                                    # 메인 보드 클릭
+                                    if is_board(dataset):
+                                        next_step = True
+                                        print("마이뷰 > 채널 이동 완료")
+                                else:
+                                    pyautogui.click(channel_loc)
+                                    print("마이뷰 > 채널 재 입장")
 
                         else:
-                            print('채널 보드 입장 불가')
+                            print('마이뷰 > 채널 입장 대기 시간 초과')
                             set_time_out1 = timeout(dataset)
                             timeout_flag1 = True
             else:
-                print('좋아요 클릭 실패')
+                print('마이뷰 : 좋아요 프로세스 대기 시간 초과')
                 set_time_out = timeout(dataset)
                 timeout_flag = True
     return next_step
@@ -969,7 +1011,6 @@ def select_channel(dataset):
 
 # 보드 클릭 모듈
 def click_contents(dataset):
-    print('click_contents')
     next_step = False
 
     # 하단광고 클릭 시 MY VIEW RETURN FLAG 초기화
@@ -1196,7 +1237,7 @@ def activate_auto_tour():
 
     dataset['filename_option'] = option_figure(dataset)
     if mobile_device() == '\s20plus':
-        #dataset['win_title'] = '상민의 Galaxy S20+ 5G'
+        # dataset['win_title'] = '상민의 Galaxy S20+ 5G'
         dataset['win_title'] = 'Galaxy S20 5G'
         # dataset['win_title'] = '수윤의 S20'
     else:

@@ -375,13 +375,56 @@ def dynamic_action(dataset):
     dataset['file_name_list'] = ['\pop5']
     dataset['pop_target'] = (300, 574)
     pop_close(dataset, 3)
+    dataset['file_name_list'] = ['\pop8']
+    dataset['pop_target'] = (300, 574)
+    pop_close(dataset, 3)
+
+    # 이벤트
+    dataset['file_name_list'] = ['\pop6']
+    dataset['pop_target'] = (416, 464)
+    #pop_close(dataset, 1)
+
+    # GPS 허용안함
+    dataset['file_name_list'] = ['\pop7']
+    dataset['pop_target'] = (255, 933)
+    pop_close(dataset, 1)
+
+    # 카카오뱅크 본인인증
+    dataset['file_name_list'] = ['\pop9']
+    dataset['pop_target'] = (345, 1018)
+    pop_close(dataset, 2)
+
+    # 화장품 광고
+    dataset['file_name_list'] = ['\pop10']
+    dataset['pop_target'] = (134, 901)
+    pop_close(dataset, 2)
+
+    # 부동산 광고
+    dataset['file_name_list'] = ['\pop11']
+    dataset['pop_target'] = (418, 336)
+    pop_close(dataset, 1)
+    
+    # 옷 앱 팝업 제거
+    dataset['file_name_list'] = ['\pop12']
+    dataset['pop_target'] = (390, 356)
+    pop_close(dataset, 1)
+    
+    # 향수광고
+    dataset['file_name_list'] = ['\pop13']
+    dataset['pop_target'] = (338, 724)
+    pop_close(dataset, 1)
+
+    # 위치기반 GPS 메시지
+    dataset['file_name_list'] = ['\pop14']
+    dataset['pop_target'] = (299, 567)
+    pop_close(dataset, 1)
 
     return result
 
 
 def pop_close(dataset, cnt):
     # 다른프로그램 연결 광고
-    pop1 = find_dynamic_pop(dataset, 0.70)
+    pop1 = find_dynamic_pop(dataset, 0.80)
     if len(pop1) > 0:
         for i in range(0, cnt):
             pyautogui.click(dataset['pop_target'])
@@ -428,11 +471,6 @@ def scroll_down(dataset):
                 scroll_close = find_location_accuracy(dataset, 0.80)
 
                 if len(scroll_close) > 0:
-                    # scroll_close_loc = pyautogui.center(scroll_close[0])
-                    # pyautogui.moveTo(scroll_close_loc)
-                    # pyautogui.mouseDown()
-                    # pyautogui.moveTo(5, scroll_close_loc.y)
-                    # pyautogui.mouseUp()
                     dataset['scroll_close'] = scroll_close[0]
                     is_capture = False
                     while not next_step:
@@ -673,7 +711,10 @@ def check_loading_capture(dataset):
             # 일정 시간 후에도 기능이 동작하지 않으면 timeout (refresh)
             if set_timeout < datetime.now():
                 print("현재 위치 채널 동작 없음: FAIL")
-                if is_board(dataset):
+                connecting_msg = find_location_accuracy(dataset, 0.70)
+                if len(connecting_msg) > 0:
+                    print("연결프로그램 메시지 재 갱신만 진행 : CLEAR")
+                if is_board(dataset) or len(connecting_msg) > 0:
                     refresh(dataset)
                 else:
                     refresh_reload(dataset)
@@ -735,8 +776,12 @@ def refresh_reload(dataset):
     try_count = 0
     pos_screen = (0, 0)
 
+    #선처리 다이나믹 변수 처리
+    dynamic_action(dataset)
+
     while not channel_main_flag:
         if not is_board(dataset):
+
             curr_screen = getPixel()
 
             # BACK BTN
@@ -1048,13 +1093,13 @@ def click_contents(dataset):
                 timeout_flag = False
                 check_times = 0
                 while not next_step:
+
+                    if check_times > 0:
+                        title_loc = (title_loc[0], title_loc[1] + 10)
+                        check_times = 0
+
                     if check_timeout(set_time_out):
                         if not timeout_flag:
-                            if check_times > 1:
-                                this_loc = pyautogui.center(title_loc)
-                                title_loc = (this_loc.x, this_loc.y + 10)
-                                check_times = 0
-
                             pyautogui.click(title_loc)
                             print("채널 컨텐츠 처리 모듈 실행 : CLEAR")
                             timeout_flag = True
@@ -1069,9 +1114,6 @@ def click_contents(dataset):
                             next_step = check_loading_capture(dataset)
                     else:
                         print("컨텐츠 진입 확인 불가 : FAIL")
-                        if not is_board(dataset):
-                            pyautogui.click(title_loc)
-                            print("채널 컨텐츠 처리 모듈 재 실행 : CLEAR")
                         set_time_out = timeout(dataset)
                         timeout_flag = False
     return next_step
@@ -1242,7 +1284,7 @@ def activate_auto_tour():
 
     dataset['filename_option'] = option_figure(dataset)
     if mobile_device() == '\s20plus':
-        # dataset['win_title'] = '상민의 Galaxy S20+ 5G'
+        #dataset['win_title'] = '상민의 Galaxy S20+ 5G'
         dataset['win_title'] = 'Galaxy S20 5G'
         # dataset['win_title'] = '수윤의 S20'
     else:

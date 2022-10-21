@@ -836,30 +836,31 @@ def refresh_reload(dataset):
                 # back key setting
                 capture_back_loc = pyautogui.center(capture_back[0])
 
-                if try_count > 5 and curr_screen == pos_screen:
-                    dataset['file_name_list'] = ['\win_close']
-                    win_close = find_location_accuracy(dataset, 0.80)
+                if not is_board():
+                    if try_count > 5 and curr_screen == pos_screen:
+                        dataset['file_name_list'] = ['\win_close']
+                        win_close = find_location_accuracy(dataset, 0.80)
 
-                    if len(win_close) > 0:
-                        if not is_board(dataset):
-                            win_close_Loc = pyautogui.center(win_close[0])
-                            pyautogui.click(win_close_Loc)
-                            print("윈도우 QUIT : CLEAR")
-                            try_count = 0
-                    else:
-                        if len(capture_back) > 0:
+                        if len(win_close) > 0:
                             if not is_board(dataset):
-                                print("BACK BTN 0 : CLEAR")
+                                win_close_Loc = pyautogui.center(win_close[0])
+                                pyautogui.click(win_close_Loc)
+                                print("윈도우 QUIT : CLEAR")
+                                try_count = 0
+                        else:
+                            if len(capture_back) > 0:
+                                if not is_board(dataset):
+                                    print("BACK BTN 0 : CLEAR")
+                                    pyautogui.click(capture_back_loc)
                                 pyautogui.click(capture_back_loc)
-                            pyautogui.click(capture_back_loc)
-                            print("BACK BTN 1 : CLEAR")
-                            try_count = 0
-                else:
-                    pyautogui.click(capture_back_loc)
-                    print("BACK BTN : CLEAR")
-                    try_count = try_count + 1
-                    time.sleep(1)
-                    pos_screen = getPixel()
+                                print("BACK BTN 1 : CLEAR")
+                                try_count = 0
+                    else:
+                        pyautogui.click(capture_back_loc)
+                        print("BACK BTN : CLEAR")
+                        try_count = try_count + 1
+                        time.sleep(1)
+                        pos_screen = getPixel()
             else:
                 print("BACK BTN 확인 불가 : FAIL")
                 return

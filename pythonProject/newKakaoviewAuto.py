@@ -459,12 +459,17 @@ def dynamic_action(dataset):
     dataset['pop_target'] = (225, 691)
     pop_close(dataset, 1)
 
+    # 쿠키 수집에 대한 동의
+    dataset['file_name_list'] = ['\pop22']
+    dataset['pop_target'] = (130, 870)
+    pop_close(dataset, 1)
+
     return result
 
 
 def pop_close(dataset, cnt):
     # 다른프로그램 연결 광고
-    pop1 = find_dynamic_pop(dataset, 0.80)
+    pop1 = find_dynamic_pop(dataset, 0.75)
     if len(pop1) > 0:
         for i in range(0, cnt):
             pyautogui.click(dataset['pop_target'])

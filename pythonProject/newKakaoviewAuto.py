@@ -47,6 +47,7 @@ def win_activate(dataset):
         if len(win_element) > 0:
             window = win_element[0]
             window.activate()
+            break
 
 
 def mobile_device():

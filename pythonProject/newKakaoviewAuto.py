@@ -261,20 +261,6 @@ def is_view(dataset):
 
 
 def is_loaded(dataset):
-    # dataset['file_name_list'] = dataset['loading_img_list']
-    # loading_bar = find_loading_status(dataset, 1)
-
-    # if not dataset['loading_msg']:
-    #    print('로딩 중..')
-    #    dataset['loading_msg'] = True
-    # result = True
-    # for loc in loading_bar:
-    #    this_loc = pyautogui.center(loc)
-    #    if 130 > this_loc.y > 100 and 450 > this_loc.x > 0:
-    #        result = False
-
-    # if result:
-    #     dataset['loading_msg'] = False
     result = True
     screen = ImageGrab.grab()
     set_x = 4
@@ -285,7 +271,7 @@ def is_loaded(dataset):
     print("로드 데이터 코드 : " + str(color))
 
     # YELLOW BAR 판단
-    if color[0] > 230 and color[1] > 200 and color[2] < 150:
+    if color[0] > 220 and color[1] > 200 and color[2] < 150:
         result = False
     elif color[0] > 190 and color[1] > 170 and color[2] < 50:
         result = False
@@ -296,7 +282,7 @@ def is_loaded(dataset):
         location = (set_x, set_y)
         color = screen.getpixel(location)
         # YELLOW BAR 판단
-        if color[0] > 230 and color[1] > 200 and color[2] < 150:
+        if color[0] > 220 and color[1] > 200 and color[2] < 150:
             result = False
         elif color[0] > 190 and color[1] > 170 and color[2] < 50:
             result = False
@@ -307,7 +293,7 @@ def is_loaded(dataset):
         location = (set_x, set_y)
         color = screen.getpixel(location)
         # YELLOW BAR 판단
-        if color[0] > 230 and color[1] > 200 and color[2] < 150:
+        if color[0] > 220 and color[1] > 200 and color[2] < 150:
             result = False
         elif color[0] > 190 and color[1] > 170 and color[2] < 50:
             result = False
@@ -318,7 +304,7 @@ def is_loaded(dataset):
         location = (set_x, set_y)
         color = screen.getpixel(location)
         # YELLOW BAR 판단
-        if color[0] > 230 and color[1] > 200 and color[2] < 150:
+        if color[0] > 220 and color[1] > 200 and color[2] < 150:
             result = False
         elif color[0] > 190 and color[1] > 170 and color[2] < 50:
             result = False
@@ -554,7 +540,7 @@ def capture_back(dataset):
         set_time_out = datetime.now() + timedelta(seconds=15)
         while not is_capture:
             if check_timeout(set_time_out):
-                if is_loaded(dataset):
+                if is_loaded(dataset) and not is_board(dataset):
                     # loading 이 완료 되면
                     # scroll click
                     pyautogui.click(dataset['scroll_loc'])
@@ -576,21 +562,20 @@ def capture_back(dataset):
                         pyautogui.click(dataset['scroll_loc'])
                         time.sleep(3)
 
-                        # scroll close
-                        scroll_close_loc = pyautogui.center(dataset['scroll_close'])
-                        pyautogui.moveTo(scroll_close_loc)
-                        pyautogui.mouseDown()
-
-                        # 스크롤 숨기기
-                        pyautogui.moveTo(5, scroll_close_loc.y)
-                        pyautogui.mouseUp()
-                        print("스크롤 숨김 완료 : CLEAR")
-
                         capture_loc = pyautogui.center(capture_icon[0])
                         if is_loaded(dataset):
                             # 깡통화면이 아닌지 판단
                             if check_pixel_load(dataset):
                                 print("페이지 정상 : CLEAR")
+
+                                # 스크롤 숨기기
+                                scroll_close_loc = pyautogui.center(dataset['scroll_close'])
+                                pyautogui.moveTo(scroll_close_loc)
+                                pyautogui.mouseDown()
+                                pyautogui.moveTo(5, scroll_close_loc.y)
+                                pyautogui.mouseUp()
+                                print("스크롤 숨김 완료 : CLEAR")
+
                                 pyautogui.click(capture_loc)
                                 print("캡처 성공 : CLEAR")
                                 time.sleep(float(dataset['speed']))
@@ -603,9 +588,14 @@ def capture_back(dataset):
             else:
                 print("캡처 프로세스 진행이 불가합니다.")
                 if set_time_out < datetime.now():
-                    print("페이지 동기화 > REFRESH RELOAD")
-                    refresh_reload(dataset)
+                    if is_board(dataset):
+                        refresh(dataset)
+                    else:
+                        refresh_reload(dataset)
+
                     set_time_out = datetime.now() + timedelta(seconds=15)
+                    print("페이지 동기화 > REFRESH RELOAD")
+
 
         if return_my_view:
             print("마이뷰로 이동 시작")
@@ -928,10 +918,10 @@ def refresh_reload(dataset):
                     print("재기동 옵션 버튼 재실행 : CLEAR")
                     time.sleep(0.5)
 
-            # 보드 재클릭
+            # 마지막 액션을 다시 수행
             time.sleep(1)
             pyautogui.click(dataset['last_location'])
-            print("채널 보드 재입장 : CLEAR")
+            print("액션 재 실행 : CLEAR")
 
             next_step = True
 
@@ -1350,12 +1340,6 @@ def activate_auto_tour():
                }
 
     dataset['filename_option'] = option_figure(dataset)
-    if mobile_device() == '\s20plus':
-        #dataset['win_title'] = '상민의 Galaxy S20+ 5G'
-        dataset['win_title'] = 'Galaxy S20 5G'
-        # dataset['win_title'] = '수윤의 S20'
-    else:
-        dataset['win_title'] = 'Galaxy S20 5G'
 
     home_for_scroll = find_location_accuracy(dataset, 0.75)
     home_for_scroll = pyautogui.center(home_for_scroll[0])

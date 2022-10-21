@@ -363,7 +363,7 @@ def dynamic_action(dataset):
 
     # 인증서 선택
     dataset['file_name_list'] = ['\pop3']
-    dataset['pop_target'] = (124, 960)
+    dataset['pop_target'] = (129, 934)
     pop_close(dataset, 1)
 
     # 지금 이페이지를 나가면
@@ -417,6 +417,42 @@ def dynamic_action(dataset):
     # 위치기반 GPS 메시지
     dataset['file_name_list'] = ['\pop14']
     dataset['pop_target'] = (299, 567)
+    pop_close(dataset, 1)
+
+    # 한샘광고
+    dataset['file_name_list'] = ['\pop15']
+    dataset['pop_target'] = (223, 952)
+    pop_close(dataset, 1)
+
+    # AKIII CLASSIC 앱구매 팝업
+    dataset['file_name_list'] = ['\pop16']
+    dataset['pop_target'] = (413, 652)
+    pop_close(dataset, 1)
+
+    # 광고 구글플레이 팝업 제거
+    dataset['file_name_list'] = ['\pop17']
+    dataset['pop_target'] = (417, 418)
+    pop_close(dataset, 1)
+
+    # GPS 사용 여부 차단
+    dataset['file_name_list'] = ['\pop18']
+    dataset['pop_target'] = (375, 566)
+    pop_close(dataset, 1)
+
+    # 캐주얼 옷 앱 구매시 할인 팝업
+    dataset['file_name_list'] = ['\pop19']
+    dataset['pop_target'] = (390, 780)
+    pop_close(dataset, 1)
+
+    # 캐주얼 옷 앱 구매시 할인 팝업
+    dataset['file_name_list'] = ['\pop20']
+    dataset['pop_target'] = (227, 765)
+    dataset['pop_target'] = (391, 761)
+    pop_close(dataset, 1)
+    
+    # gs 프레시몰
+    dataset['file_name_list'] = ['\pop21']
+    dataset['pop_target'] = (225, 691)
     pop_close(dataset, 1)
 
     return result
@@ -680,6 +716,9 @@ def capture_back(dataset):
 def check_loading_capture(dataset):
     print("PAGE LOADING.....")
     next_step = False
+    
+    #다이나믹 액션으로 쓰레기 제거
+    dynamic_action(dataset)
 
     # 로딩바 대기 30초
     set_timeout = datetime.now() + timedelta(seconds=10)
@@ -711,7 +750,7 @@ def check_loading_capture(dataset):
             # 일정 시간 후에도 기능이 동작하지 않으면 timeout (refresh)
             if set_timeout < datetime.now():
                 print("현재 위치 채널 동작 없음: FAIL")
-                connecting_msg = find_location_accuracy(dataset, 0.70)
+                connecting_msg = find_location_accuracy(dataset, 0.80)
                 if len(connecting_msg) > 0:
                     print("연결프로그램 메시지 재 갱신만 진행 : CLEAR")
                 if is_board(dataset) or len(connecting_msg) > 0:
@@ -786,7 +825,7 @@ def refresh_reload(dataset):
 
             # BACK BTN
             dataset['file_name_list'] = ['\capture_back', '\capture_back1']
-            capture_back = find_location(dataset)
+            capture_back = find_sel_region_accuracy(dataset, 0.7, 20, 980, 440, 1030)
 
             if len(capture_back) > 0:
                 print("BACK BTN 위치 확인 : CLEAR")
@@ -1201,8 +1240,6 @@ def click_bottom_ad(dataset):
                         pyautogui.click(bottom_ad_loc)
                         print("하단 광고 입장 중.. : CLEAR")
                         timeout_flag = True
-
-                    print("하단 광고 입장 중.. : CLEAR")
                     next_step = check_loading_capture(dataset)
                     if not next_step:
                         print("하단 광고 로딩 여부 확인 불가 : FAIL")
@@ -1284,9 +1321,9 @@ def activate_auto_tour():
 
     dataset['filename_option'] = option_figure(dataset)
     if mobile_device() == '\s20plus':
-        #dataset['win_title'] = '상민의 Galaxy S20+ 5G'
-        dataset['win_title'] = 'Galaxy S20 5G'
-        # dataset['win_title'] = '수윤의 S20'
+        dataset['win_title'] = '상민의 Galaxy S20+ 5G'
+        #dataset['win_title'] = 'Galaxy S20 5G'
+        #dataset['win_title'] = '수윤의 S20'
     else:
         dataset['win_title'] = 'Galaxy S20 5G'
 

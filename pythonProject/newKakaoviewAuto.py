@@ -42,8 +42,11 @@ def reservation_starter(dataset):
 
 
 def win_activate(dataset):
-    window = pyautogui.getWindowsWithTitle(dataset['win_title'])[0]
-    window.activate()
+    for title in dataset['win_title']:
+        win_element = pyautogui.getWindowsWithTitle(title)
+        if len(win_element) > 0:
+            window = win_element[0]
+            window.activate()
 
 
 def mobile_device():
@@ -1317,15 +1320,11 @@ def activate_auto_tour():
                "more_kakao_board": ['\more_kakaoview_txt', '\more_kakaoview_txt1'],
                'file_name_list': ['\home_for_scroll_base', '\home_for_scroll_base1'],
                'loading_msg': False,
-               'is_refresh': False}
+               'is_refresh': False,
+               'win_title': ['상민의 Galaxy S20+ 5G', 'Galaxy S20 5G', '수윤의 S20']
+               }
 
     dataset['filename_option'] = option_figure(dataset)
-    if mobile_device() == '\s20plus':
-        dataset['win_title'] = '상민의 Galaxy S20+ 5G'
-        #dataset['win_title'] = 'Galaxy S20 5G'
-        #dataset['win_title'] = '수윤의 S20'
-    else:
-        dataset['win_title'] = 'Galaxy S20 5G'
 
     home_for_scroll = find_location_accuracy(dataset, 0.75)
     home_for_scroll = pyautogui.center(home_for_scroll[0])

@@ -354,6 +354,15 @@ def dynamic_action(dataset):
         action_back(dataset)
         result = False
 
+    dataset['file_name_list'] = ['\certificate']
+    # 카카오뱅크 본인인증
+    certificate = find_location_accuracy(dataset, 0.70)
+    if len(certificate) > 0:
+        dataset['pop_target'] = (225, 656)
+        pop_close(dataset, 1)
+        action_back(dataset)
+        result = False
+
     # 팝업 제거 실시간 추가
     # 뷰티영APP
     dataset['file_name_list'] = ['\pop1']
@@ -394,9 +403,9 @@ def dynamic_action(dataset):
     pop_close(dataset, 1)
 
     # 카카오뱅크 본인인증
-    dataset['file_name_list'] = ['\pop9']
-    dataset['pop_target'] = (345, 1018)
-    pop_close(dataset, 2)
+    #dataset['file_name_list'] = ['\pop9']
+    #dataset['pop_target'] = (345, 1018)
+    #pop_close(dataset, 2)
 
     # 화장품 광고
     dataset['file_name_list'] = ['\pop10']

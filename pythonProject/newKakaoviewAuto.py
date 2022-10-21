@@ -724,10 +724,12 @@ def capture_back(dataset):
 
 def check_loading_capture(dataset):
     print("PAGE LOADING.....")
+    #광고 로딩 후 나가리 되는 광고들 존재
+    time.sleep(2)
     next_step = False
     
     #다이나믹 액션으로 쓰레기 제거
-    dynamic_action(dataset)
+    #dynamic_action(dataset)
 
     # 로딩바 대기 30초
     set_timeout = datetime.now() + timedelta(seconds=10)
@@ -841,31 +843,38 @@ def refresh_reload(dataset):
                 # back key setting
                 capture_back_loc = pyautogui.center(capture_back[0])
 
-                if not is_board():
-                    if try_count > 5 and curr_screen == pos_screen:
-                        dataset['file_name_list'] = ['\win_close']
-                        win_close = find_location_accuracy(dataset, 0.80)
+                if try_count > 5 and curr_screen == pos_screen:
+                    dataset['file_name_list'] = ['\win_close']
+                    win_close = find_location_accuracy(dataset, 0.80)
 
-                        if len(win_close) > 0:
-                            if not is_board(dataset):
-                                win_close_Loc = pyautogui.center(win_close[0])
-                                pyautogui.click(win_close_Loc)
-                                print("윈도우 QUIT : CLEAR")
-                                try_count = 0
+                    if len(win_close) > 0:
+                        if not is_board(dataset):
+                            win_close_Loc = pyautogui.center(win_close[0])
+                            pyautogui.click(win_close_Loc)
+                            print("윈도우 QUIT : CLEAR")
+                            try_count = 0
+                            time.sleep(3)
                         else:
-                            if len(capture_back) > 0:
-                                if not is_board(dataset):
-                                    print("BACK BTN 0 : CLEAR")
-                                    pyautogui.click(capture_back_loc)
-                                pyautogui.click(capture_back_loc)
-                                print("BACK BTN 1 : CLEAR")
-                                try_count = 0
+                            channel_main_flag = True
                     else:
-                        pyautogui.click(capture_back_loc)
-                        print("BACK BTN : CLEAR")
-                        try_count = try_count + 1
-                        time.sleep(1)
-                        pos_screen = getPixel()
+                        if len(capture_back) > 0:
+                            if not is_board(dataset):
+                                print("BACK BTN 0 : CLEAR")
+                                pyautogui.click(capture_back_loc)
+                            else:
+                                channel_main_flag = True
+                            pyautogui.click(capture_back_loc)
+                            print("BACK BTN 1 : CLEAR")
+                            try_count = 0
+                            time.sleep(3)
+                else:
+                    pyautogui.click(capture_back_loc)
+                    print("BACK BTN : CLEAR")
+                    try_count = try_count + 1
+                    time.sleep(3)
+                    pos_screen = getPixel()
+                    if is_board(dataset):
+                        channel_main_flag = True
             else:
                 print("BACK BTN 확인 불가 : FAIL")
                 return
@@ -1332,6 +1341,12 @@ def activate_auto_tour():
                }
 
     dataset['filename_option'] = option_figure(dataset)
+    if mobile_device() == '\s20plus':
+        #dataset['win_title'] = '상민의 Galaxy S20+ 5G'
+        dataset['win_title'] = 'Galaxy S20 5G'
+        # dataset['win_title'] = '수윤의 S20'
+    else:
+        dataset['win_title'] = 'Galaxy S20 5G'
 
     home_for_scroll = find_location_accuracy(dataset, 0.75)
     home_for_scroll = pyautogui.center(home_for_scroll[0])

@@ -458,6 +458,11 @@ def dynamic_action(dataset):
     dataset['file_name_list'] = ['\pop22']
     dataset['pop_target'] = (130, 870)
     pop_close(dataset, 1)
+    
+    # 위치기반 동의 차단
+    dataset['file_name_list'] = ['\pop23']
+    dataset['pop_target'] = (300, 569)
+    pop_close(dataset, 1)
 
     return result
 
@@ -946,7 +951,7 @@ def find_heart(dataset):
                 pyautogui.moveTo(dataset['scroll_base'])
                 while not next_step:
                     dataset['file_name_list'] = ['\option_dots']
-                    option_dots = find_location_accuracy(dataset, '0.80')  # 옵션 닷 버튼 찾기
+                    option_dots = find_location_accuracy(dataset, '0.70')  # 옵션 닷 버튼 찾기
 
                     # 0은 첫번째 보드 이미 진행 완료한 건
                     # 1은 다음 보드
@@ -973,7 +978,6 @@ def find_heart(dataset):
                         time.sleep(1)
                     else:
                         print("마이뷰 SCROLL DOWN 동작 : CLEAR")
-                        # win_activate(dataset)
                         for idx in range(0, 3):
                             pyautogui.scroll(-500)
                         time.sleep(0.5)
@@ -1061,6 +1065,8 @@ def select_channel(dataset):
                         capture_icon = find_location_accuracy(dataset, 0.70)
                         if len(capture_icon) > 0:
                             capture_loc = pyautogui.center(capture_icon[0])
+                            if not full_heart:
+                                time.sleep(1)
                             pyautogui.click(capture_loc)
                             print('마이뷰 : 캡처 완료')
                             time.sleep(float(dataset['speed']))

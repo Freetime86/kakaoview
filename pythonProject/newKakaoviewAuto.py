@@ -558,7 +558,7 @@ def capture_back(dataset):
                         print("정상 페이지 여부 체크 : " + str(load_check))
 
                     capture_loc = pyautogui.center(capture_icon[0])
-                    dataset['last_location'] = capture_loc
+                    #dataset['last_location'] = capture_loc
                     # 다이나믹 조건 처리
                     if dynamic_action(dataset):
                         print("다이나믹 체크 완료 : CLEAR")
@@ -780,7 +780,7 @@ def check_loading_capture(dataset):
 
 
 def refresh(dataset):
-    print('재기동 실행 : CLEAR')
+    print('재 갱신 실행 : CLEAR')
 
     next_step = False
     # main channel check
@@ -822,7 +822,7 @@ def refresh(dataset):
 
 
 def refresh_reload(dataset):
-    print("재기동 실행 : CLEAR")
+    print("재 기동 실행 : CLEAR")
 
     next_step = False
     # main channel check
@@ -872,12 +872,15 @@ def refresh_reload(dataset):
                             try_count = 0
                             time.sleep(3)
                 else:
-                    pyautogui.click(capture_back_loc)
-                    print("BACK BTN : CLEAR")
-                    try_count = try_count + 1
-                    time.sleep(3)
-                    pos_screen = getPixel()
-                    if is_board(dataset):
+                    if not is_board(dataset):
+                        pyautogui.click(capture_back_loc)
+                        print("BACK BTN : CLEAR")
+                        try_count = try_count + 1
+                        #time.sleep(3)
+                        pos_screen = getPixel()
+                        #if is_board(dataset):
+                            #channel_main_flag = True
+                    else:
                         channel_main_flag = True
             else:
                 print("BACK BTN 확인 불가 : FAIL")
@@ -968,11 +971,12 @@ def find_heart(dataset):
 
                         win_activate(dataset)
                         pyautogui.moveTo(title_loc)
+                        pyautogui.click(title_loc)
                         pyautogui.mouseDown()
                         setting_icon_loc = pyautogui.center(setting_icon[0])
                         setting_icon_loc = (setting_icon_loc.x, setting_icon_loc.y + 65)
                         pyautogui.moveTo(setting_icon_loc)
-                        time.sleep(float(dataset['speed']))
+                        time.sleep(1)
                         pyautogui.mouseUp()
                         next_step = True
                         time.sleep(1)
@@ -1332,7 +1336,7 @@ def activate_auto_tour():
     time.sleep(5)
 
     # 과거 정보
-    dataset = {"reservation": "202210150601",
+    dataset = {"reservation": "202210250601",
                "accuracy": 0.95, "mobile_type": '\s20plus', "speed": 0.5, "limit_time": 5, "scroll_speed": 0.5,
                "scroll_count": 2, "mouse_scroll_cnt": 5, "return_my_view": False, "loading_wait_time": 3,
                # "loading_img_list": ['\loading_bar1', '\loading_bar2', '\loading_bar3', '\loading_bar4', '\loading_bar5',

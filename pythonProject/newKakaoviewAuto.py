@@ -354,7 +354,7 @@ def dynamic_action(dataset):
     if len(certificate) > 0:
         dataset['pop_target'] = (225, 656)
         pop_close(dataset, 1)
-        action_back(dataset)
+        #action_back(dataset)
         result = False
 
     # 팝업 제거 실시간 추가

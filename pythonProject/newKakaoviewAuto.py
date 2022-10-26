@@ -1118,8 +1118,16 @@ def select_channel(dataset):
 
                         else:
                             print('마이뷰 > 채널 입장 대기 시간 초과')
-                            set_time_out1 = timeout(dataset)
-                            timeout_flag1 = True
+                            dataset['file_name_list'] = ['\chaboard_not_exist']
+                            board_exist = find_location_detail(dataset, 0.80, 120, 570, 340, 610)
+                            if len(board_exist) > 0:
+                                #back to my view
+                                pyautogui.click((423, 94))
+                                time.sleep(0.3)
+                                pyautogui.click(channel_loc)
+                                time.sleep(0.3)
+                                timeout_flag1 = True
+                                set_time_out1 = timeout(dataset)
             else:
                 print('마이뷰 : 좋아요 프로세스 대기 시간 초과')
                 set_time_out = timeout(dataset)

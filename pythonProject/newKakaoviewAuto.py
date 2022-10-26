@@ -5,7 +5,6 @@ import os
 import time
 
 
-
 def reservation_starter(dataset):
     is_start_time = False
 
@@ -433,10 +432,11 @@ def dynamic_action(dataset):
     dataset['pop_target'] = (417, 418)
     pop_close(dataset, 1)
 
-    # GPS 사용 여부 차단
+    # GPS 사용 여부 차단 black
     dataset['file_name_list'] = ['\pop18']
     dataset['pop_target'] = (375, 566)
     pop_close(dataset, 1)
+
 
     # 캐주얼 옷 앱 구매시 할인 팝업
     dataset['file_name_list'] = ['\pop19']
@@ -462,6 +462,11 @@ def dynamic_action(dataset):
     # 위치기반 동의 차단
     dataset['file_name_list'] = ['\pop23']
     dataset['pop_target'] = (300, 569)
+    pop_close(dataset, 1)
+
+    # GPS 사용 여부 차단 white
+    dataset['file_name_list'] = ['\pop24']
+    dataset['pop_target'] = (375, 566)
     pop_close(dataset, 1)
 
     return result

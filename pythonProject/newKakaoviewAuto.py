@@ -723,6 +723,9 @@ def capture_back(dataset):
                                             try_count = try_count + 1
                                         else:
                                             print("현재 위치 마이뷰, BACK BTN 사용 불가")
+                                            if dataset['my_channel'] is not None:
+                                                pyautogui.click(dataset['my_channel'])
+
 
                                 pos_screen = getPixel()
                                 timeout_flag = True
@@ -1105,6 +1108,8 @@ def select_channel(dataset):
 
                     channel_loc = (option_loc_x, option_loc_y + 30)
 
+                    #미리 마지막 채널 클릭 위치 백업, back 키 실수로 마이뷰 이동했을 때 다시 보드 진입시 사용한다.
+                    dataset['my_channel'] = channel_loc
                     set_time_out1 = timeout(dataset)
                     timeout_flag1 = False
                     while not next_step:

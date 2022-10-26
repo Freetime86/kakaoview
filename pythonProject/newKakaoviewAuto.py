@@ -822,8 +822,9 @@ def refresh(dataset):
                     dataset['is_refresh'] = True
                 else:
                     print("새로고침 옵션 확인 불가 : FAIL")
-                    pyautogui.doubleClick(board_option_loc)
-                    time.sleep(0.5)
+                    if is_board(dataset):
+                        pyautogui.doubleClick(board_option_loc)
+                        time.sleep(0.5)
 
             # 보드 재클릭
             time.sleep(1)

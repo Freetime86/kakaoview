@@ -1,5 +1,7 @@
 from urllib.request import urlopen
-
+import urllib
+import requests
+import json
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
@@ -18,15 +20,32 @@ import os
 #musics = soup.select('#body-content > div.newest-list > div > table > tbody > tr')
 #soup.find('span', class_='icon icon-19').decompose()
 
+#sel_year = sel_date[0:4]
 
-html = urlopen("https://m.cafe.daum.net/?t__nil_gnb=home")
-bsObject = BeautifulSoup(html, "html.parser")
-title_list = bsObject.find_all("strong", {"class": "popular-list__title"})
-href_list = bsObject.find_all("a", {"class": "popular-list__link"})
-for title in title_list:
-    print(title.text)
-for link in href_list:
-    print(link.get("href"))
+#html = urlopen("https://api.signal.bz/news/realtime")
+response = requests.get("https://api.signal.bz/news/realtime")
+data = json.loads(response.text)
+keyword_list = data['top10']
+
+link_list = []
+head_list = []
+for word in keyword_list:
+    keyword = word['keyword']
+    encoded_keyword = urllib.parse.quote(keyword)
+    html = urlopen("https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=1&ie=utf8&query=" + encoded_keyword)
+    bsObject = BeautifulSoup(html, "html.parser")
+    print(bsObject.find_all('a'))
+    a_list = bsObject.find_all('a', {'class': 'news_tit'})
+    sub_list = bsObject.find_all('a', {'class': 'sub_tit'})
+    for link in a_list:
+        head_list.append(link.text)
+        link_list.append(link.get('href'))
+
+    for link in sub_list:
+        head_list.append(link.text)
+        link_list.append(link.get('href'))
+
+
 
 
 

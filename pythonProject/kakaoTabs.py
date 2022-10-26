@@ -22,7 +22,8 @@ def kakaoviewTabList():
                         "여행",
                         "쇼핑 정보",
                         "교육",
-                        "자동차"
+                        "자동차",
+                        "실시간검색어(네이버)"
                       ]
     except:
         resultList=[]
@@ -60,6 +61,7 @@ def findkakaoTab(gubn):
             "쇼핑 정보":"21",
             "교육":"22",
             "자동차":"23",
+            "실시간검색어(네이버)": "24",
             }.get(gubn, "")
     return tab
 
@@ -110,6 +112,8 @@ def setBaseInfo(inputText, webGubn):
         result = setWebInfo(webGubn, "22")
     elif inputText == "자동차":
         result = setWebInfo(webGubn, "23")
+    elif inputText == "실시간검색어(네이버)":
+        result = setWebInfo(webGubn, "24")
     return result
 
 def setWebInfo(webGubn, gubnTag):
@@ -170,6 +174,8 @@ def setNaverSite(gubnTag):
         result = ""
     elif gubnTag == "23":
         result = "https://www.naver.com/nvhaproxy/v1/panels/CARGAME/html"
+    elif gubnTag == "24":
+        result = "https://api.signal.bz/news/realtime"
     return result
 
 def fmKoreaSite(gubnTag):

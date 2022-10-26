@@ -14,7 +14,7 @@ import parsingModule
 
 def main_process(dataset):
     # 입력정보 변수 선언
-    sel_tab = dataset['sel_tab']  # 카카오탭 태그
+    sel_tab = dataset['sel_tab']
     sel_site = dataset['sel_site']  # 크롤링 타겟 웹사이트
     user_id = dataset['user_id']  # 입력 유저
     user_pw = dataset['user_pw']  # 유저 패스워드
@@ -33,21 +33,33 @@ def main_process(dataset):
     target_url = target_info['siteUrl']
     target_gubn = target_info['tagCd']
 
+    # 실시간 탭 CONVERTING 실시간 검색어일 경우만, 위에 target info 에서 실시간 검색 사이트 정보를 가져오기 위해 여기서 변환작업 한다.
+    if dataset['sel_tab'] == "실시간검색어(네이버)":
+        sel_tab = "실시간 뉴스"
     # 필터링
     check_list = filterWords.filter_list()
 
-    # 타켓 웹 정보
-    html = urlopen(target_url)
-    bs_object = BeautifulSoup(html, "html.parser")
+    #실시간 검색어 전용 (API를 통해 크롤링 반복문 실행) 구조가 달라서 우회조치
+    if target_gubn != "24":
+        # 타켓 웹 정보
+        html = urlopen(target_url)
+        bs_object = BeautifulSoup(html, "html.parser")
+    else:
+        #실시간 검색어의 경우 URL을 그대로 바인드 해서 파싱한다. 구조가 다름
+        bs_object = target_url
+        
     driver = webdriver.Chrome()
     wait = WebDriverWait(driver, 300)
     url = "https://creators.kakao.com/my-channels/"
     driver.get(url)
     driver.maximize_window()
-
     # 계정 로그인
-    wait.until(EC.visibility_of_element_located((By.ID, "id_email_2"))).send_keys(user_id)
-    wait.until(EC.visibility_of_element_located((By.ID, "id_password_3"))).send_keys(user_pw)
+    if len(driver.find_elements(By.ID, "id_email_2")) > 0:
+        wait.until(EC.visibility_of_element_located((By.ID, "id_email_2"))).send_keys(user_id)
+        wait.until(EC.visibility_of_element_located((By.ID, "id_password_3"))).send_keys(user_pw)
+    else:
+        wait.until(EC.visibility_of_element_located((By.ID, "input-loginKey"))).send_keys(user_id)
+        wait.until(EC.visibility_of_element_located((By.ID, "input-password"))).send_keys(user_pw)
     wait.until(EC.visibility_of_element_located((By.CLASS_NAME, "btn_g"))).click()
 
     time.sleep(7)

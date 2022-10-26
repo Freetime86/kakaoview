@@ -1,3 +1,14 @@
+import urllib
+import requests
+import json
+from urllib.request import urlopen
+from bs4 import BeautifulSoup
+
+
+open_flag = False
+parsing_head = []
+parsing_link = []
+
 def index_validation(targetlist, targetRow):
     result = True
     list_cnt = len(targetlist)
@@ -92,6 +103,43 @@ def parseData(targetGubn, selectSite, targetRow, bsObj):
 
             current_title = bsObj.find_all('a', {'class': 'theme_thumb'})[targetRow].select('img')[0]['alt']
             current_link = bsObj.find_all('a', {'class': 'theme_thumb'})[targetRow].get('href')
+
+        #실시간 검색어 처리 BS_OBJECT 를 통해 API 주소를 받는다.
+        elif targetGubn == "24":
+
+            global open_flag
+            global parsing_head
+            global parsing_link
+
+            if not open_flag:
+                response = requests.get("https://api.signal.bz/news/realtime")
+                data = json.loads(response.text)
+                keyword_list = data['top10']
+
+                link_list = []
+                head_list = []
+                for word in keyword_list:
+                    keyword = word['keyword']
+                    encoded_keyword = urllib.parse.quote(keyword)
+                    html = urlopen(
+                        "https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=1&ie=utf8&query=" + encoded_keyword)
+                    bsObject = BeautifulSoup(html, "html.parser")
+                    a_list = bsObject.find_all('a', {'class': 'news_tit'})
+                    sub_list = bsObject.find_all('a', {'class': 'sub_tit'})
+                    for link in a_list:
+                        head_list.append(link.text)
+                        link_list.append(link.get('href'))
+
+                    for link in sub_list:
+                        head_list.append(link.text)
+                        link_list.append(link.get('href'))
+                parsing_head = head_list
+                parsing_link = link_list
+
+                open_flag = True
+            current_title = parsing_head[targetRow]
+            current_link = parsing_link[targetRow]
+            targetlist = parsing_head
 
     elif selectSite == "FM코리아":
         if targetGubn == "01":
@@ -287,5 +335,6 @@ def parseData(targetGubn, selectSite, targetRow, bsObj):
 
     # 최종 결과 값 맵핑
     dataCnt = len(targetlist)
-    result = {"title": current_title, "link": current_link, "rowIdx": targetRow, "dataCnt": dataCnt}
+    result = {"title": str(current_title), "link": str(current_link), "rowIdx": targetRow, "dataCnt": dataCnt}
     return result
+

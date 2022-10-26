@@ -200,7 +200,7 @@ def find_location_detail(dataset, accuracy, xx, xy, yx, yy):
     file_name_list = dataset['file_name_list']
     result = []
     for file_name in file_name_list:
-        print("find_location : " + file_name + dataset['filename_option'] + file_ext)
+        #print("find_location : " + file_name + dataset['filename_option'] + file_ext)
         out_list = pyautogui.locateAllOnScreen(work_dir + file_name + dataset['filename_option'] + file_ext,
                                                confidence=accuracy, region=(xx, xy, yx, yy))
         out_list = list(out_list)
@@ -238,6 +238,15 @@ def is_board(dataset):
                 op_loc = pyautogui.center(option_loc)
                 if 210 < op_loc.y < 270:
                     result = True
+    return result
+
+
+def is_my_view(dataset):
+    result = False
+    dataset['file_name_list'] = ['\my_view_text']
+    my_view_text = find_location_detail(dataset, 0.6, 10, 80, 50, 120)
+    if len(my_view_text) > 0:
+        result = True
     return result
 
 
@@ -656,11 +665,8 @@ def capture_back(dataset):
                                             try_count = try_count + 1
                                     timeout_flag = True
 
-                            dataset['file_name_list'] = ['\my_view_text']
-                            my_view_text = find_location_detail(dataset, 0.6, 10, 80, 50, 120)
-                            print("마이뷰 찾는 중....")
                             # 마이뷰 복귀 확인
-                            if len(my_view_text) > 0:
+                            if is_my_view(dataset):
                                 print("마이뷰 돌아가기 완료")
                                 next_step = True
                         else:
@@ -703,21 +709,25 @@ def capture_back(dataset):
                                             print("X 버튼을 이용하여 탈출 추가 프로세스를 실행")
                                             try_count = 0
                                     else:
-                                        if not is_board(dataset):
-                                            if try_count > 5:
-                                                print("5회 시도 : 보드 인식 불가, 연타로 빠져나가기 시도")
+                                        if not is_my_view(dataset):
+                                            if not is_board(dataset):
+                                                if try_count > 5:
+                                                    print("5회 시도 : 보드 인식 불가, 연타로 빠져나가기 시도")
+                                                    pyautogui.click(capture_back_loc)
+                                                    try_count = 0
+                                                    print("탈출 시도 횟수 : " + str(try_count))
+                                                    print("BACK BTN 1 실행 : CLEAR")
                                                 pyautogui.click(capture_back_loc)
-                                                try_count = 0
-                                                print("탈출 시도 횟수 : " + str(try_count))
-                                                print("BACK BTN 1 실행 : CLEAR")
-                                            pyautogui.click(capture_back_loc)
-                                            print("BACK BTN 2 실행 : CLEAR")
-                                            try_count = try_count + 1
+                                                print("BACK BTN 2 실행 : CLEAR")
+                                                try_count = try_count + 1
+                                        else:
+                                            pyautogui.click(dataset['my_channel'])
+                                            print("현재 위치 마이뷰, 마지막 보드 재 진입")
+
+
                                 else:
                                     if not is_board(dataset):
-                                        dataset['file_name_list'] = ['\my_view_text']
-                                        my_view_text = find_location_detail(dataset, 0.6, 10, 80, 50, 120)
-                                        if len(my_view_text) == 0:
+                                        if not is_my_view(dataset):
                                             print("보드로 돌아갈 수 없음. 프로그램 재 기동")
                                             pyautogui.click(capture_back_loc)
                                             try_count = try_count + 1
@@ -725,6 +735,7 @@ def capture_back(dataset):
                                             print("현재 위치 마이뷰, BACK BTN 사용 불가")
                                             if dataset['my_channel'] is not None:
                                                 pyautogui.click(dataset['my_channel'])
+                                                print("현재 위치 마이뷰, 마지막 보드 재 진입")
 
 
                                 pos_screen = getPixel()
@@ -1134,9 +1145,7 @@ def select_channel(dataset):
 
                         else:
                             print('마이뷰 > 채널 입장 대기 시간 초과')
-                            dataset['file_name_list'] = ['\chaboard_not_exist']
-                            board_exist = find_location_detail(dataset, 0.80, 120, 570, 340, 610)
-                            if len(board_exist) > 0:
+                            if is_my_view(dataset):
                                 #back to my view
                                 pyautogui.click((423, 94))
                                 time.sleep(0.3)
@@ -1256,6 +1265,9 @@ def click_top_ad(dataset):
 
                     set_time_out = timeout(dataset)
                     timeout_flag = False
+        elif is_my_view(dataset):
+            print("현재 위치 마이뷰, 채널 재 입장")
+            pyautogui.click(dataset['my_channel'])
     return next_step
 
 
@@ -1348,11 +1360,15 @@ def click_bottom_ad(dataset):
                         set_time_out = timeout(dataset)
                         timeout_flag = True
         else:
-            print("하단 광고 확인 불가 : FAIL")
-            for idx in range(0, 3):
-                pyautogui.scroll(-500)
-            print("하단 광고 확인 불가 위치 재조정 : FAIL")
-            time.sleep(1)
+            if not is_my_view(dataset):
+                print("하단 광고 확인 불가 : FAIL")
+                for idx in range(0, 3):
+                    pyautogui.scroll(-500)
+                print("하단 광고 확인 불가 위치 재조정 : FAIL")
+                time.sleep(1)
+            else:
+                pyautogui.click(dataset['my_channel'])
+                print("현재 위치 마이뷰, 마지막 보드 재 진입")
     return next_step
 
 

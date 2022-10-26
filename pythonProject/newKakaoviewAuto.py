@@ -268,7 +268,7 @@ def is_loaded(dataset):
     location = (set_x, set_y)
     color = screen.getpixel(location)
 
-    print("로드 데이터 코드 : " + str(color))
+    #print("로드 데이터 코드 : " + str(color))
 
     # YELLOW BAR 판단
     if color[0] > 220 and color[1] > 200 and color[2] < 150:
@@ -458,7 +458,7 @@ def dynamic_action(dataset):
     dataset['file_name_list'] = ['\pop22']
     dataset['pop_target'] = (130, 870)
     pop_close(dataset, 1)
-    
+
     # 위치기반 동의 차단
     dataset['file_name_list'] = ['\pop23']
     dataset['pop_target'] = (300, 569)
@@ -558,7 +558,7 @@ def capture_back(dataset):
                         print("정상 페이지 여부 체크 : " + str(load_check))
 
                     capture_loc = pyautogui.center(capture_icon[0])
-                    #dataset['last_location'] = capture_loc
+                    dataset['last_location'] = capture_loc
                     # 다이나믹 조건 처리
                     if dynamic_action(dataset):
                         print("다이나믹 체크 완료 : CLEAR")
@@ -780,7 +780,7 @@ def check_loading_capture(dataset):
 
 
 def refresh(dataset):
-    print('재 갱신 실행 : CLEAR')
+    print('재기동 실행 : CLEAR')
 
     next_step = False
     # main channel check
@@ -822,7 +822,7 @@ def refresh(dataset):
 
 
 def refresh_reload(dataset):
-    print("재 기동 실행 : CLEAR")
+    print("재기동 실행 : CLEAR")
 
     next_step = False
     # main channel check
@@ -872,15 +872,12 @@ def refresh_reload(dataset):
                             try_count = 0
                             time.sleep(3)
                 else:
-                    if not is_board(dataset):
-                        pyautogui.click(capture_back_loc)
-                        print("BACK BTN : CLEAR")
-                        try_count = try_count + 1
-                        #time.sleep(3)
-                        pos_screen = getPixel()
-                        #if is_board(dataset):
-                            #channel_main_flag = True
-                    else:
+                    pyautogui.click(capture_back_loc)
+                    print("BACK BTN : CLEAR")
+                    try_count = try_count + 1
+                    time.sleep(3)
+                    pos_screen = getPixel()
+                    if is_board(dataset):
                         channel_main_flag = True
             else:
                 print("BACK BTN 확인 불가 : FAIL")
@@ -971,12 +968,11 @@ def find_heart(dataset):
 
                         win_activate(dataset)
                         pyautogui.moveTo(title_loc)
-                        pyautogui.click(title_loc)
                         pyautogui.mouseDown()
                         setting_icon_loc = pyautogui.center(setting_icon[0])
                         setting_icon_loc = (setting_icon_loc.x, setting_icon_loc.y + 65)
                         pyautogui.moveTo(setting_icon_loc)
-                        time.sleep(1)
+                        time.sleep(float(dataset['speed']))
                         pyautogui.mouseUp()
                         next_step = True
                         time.sleep(1)

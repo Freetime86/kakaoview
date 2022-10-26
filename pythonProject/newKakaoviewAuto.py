@@ -715,9 +715,14 @@ def capture_back(dataset):
                                             try_count = try_count + 1
                                 else:
                                     if not is_board(dataset):
-                                        print("보드로 돌아갈 수 없음. 프로그램 재 기동")
-                                        pyautogui.click(capture_back_loc)
-                                        try_count = try_count + 1
+                                        dataset['file_name_list'] = ['\my_view_text']
+                                        my_view_text = find_location_detail(dataset, 0.6, 10, 80, 50, 120)
+                                        if len(my_view_text) == 0:
+                                            print("보드로 돌아갈 수 없음. 프로그램 재 기동")
+                                            pyautogui.click(capture_back_loc)
+                                            try_count = try_count + 1
+                                        else:
+                                            print("현재 위치 마이뷰, BACK BTN 사용 불가")
 
                                 pos_screen = getPixel()
                                 timeout_flag = True

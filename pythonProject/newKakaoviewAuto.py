@@ -510,7 +510,7 @@ def scroll_down(dataset):
 
         if dataset['is_refresh']:
             pyautogui.click(scroll_loc)
-            time.sleep(float(dataset['speed']))
+            #time.sleep(float(dataset['speed']))
             dataset['is_refresh'] = False
 
         dataset['file_name_list'] = ['\scroll_down']
@@ -521,7 +521,7 @@ def scroll_down(dataset):
                 timeout_flag = True
                 scroll_down_loc = pyautogui.center(scroll_down_icon[0])
 
-                for i in range(1, int(dataset['scroll_count'])):
+                for i in range(0, 2):
                     pyautogui.click(scroll_down_loc)
                     # time.sleep(1)
 
@@ -564,12 +564,12 @@ def capture_back(dataset):
                     # scroll click
                     pyautogui.click(dataset['scroll_loc'])
                     print("페이지 로딩 > 스크롤 DOWN")
-                    time.sleep(1)
+                    #time.sleep(1)
 
-                    load_check = False
-                    while not load_check:
-                        load_check = check_pixel_load(dataset)
-                        print("정상 페이지 여부 체크 : " + str(load_check))
+                    #load_check = False
+                    #while not load_check:
+                        #load_check = check_pixel_load(dataset)
+                        #print("정상 페이지 여부 체크 : " + str(load_check))
 
                     capture_loc = pyautogui.center(capture_icon[0])
                     #dataset['last_location'] = capture_loc
@@ -582,25 +582,25 @@ def capture_back(dataset):
                         time.sleep(3)
 
                         capture_loc = pyautogui.center(capture_icon[0])
-                        if is_loaded(dataset):
+                        #if is_loaded(dataset):
                             # 깡통화면이 아닌지 판단
-                            if check_pixel_load(dataset):
-                                print("페이지 정상 : CLEAR")
+                           # if check_pixel_load(dataset):
+                                #print("페이지 정상 : CLEAR")
 
-                                # 스크롤 숨기기
-                                scroll_close_loc = pyautogui.center(dataset['scroll_close'])
-                                pyautogui.moveTo(scroll_close_loc)
-                                pyautogui.mouseDown()
-                                pyautogui.moveTo(5, scroll_close_loc.y)
-                                pyautogui.mouseUp()
-                                print("스크롤 숨김 완료 : CLEAR")
+                        # 스크롤 숨기기
+                        scroll_close_loc = pyautogui.center(dataset['scroll_close'])
+                        pyautogui.moveTo(scroll_close_loc)
+                        pyautogui.mouseDown()
+                        pyautogui.moveTo(5, scroll_close_loc.y)
+                        pyautogui.mouseUp()
+                        print("스크롤 숨김 완료 : CLEAR")
 
-                                pyautogui.click(capture_loc)
-                                print("캡처 성공 : CLEAR")
-                                time.sleep(float(dataset['speed']))
-                                is_capture = True
-                            else:
-                                print("정상 페이지가 아닙니다 : FAIL")
+                        pyautogui.click(capture_loc)
+                        print("캡처 성공 : CLEAR")
+                        time.sleep(float(dataset['speed']))
+                        is_capture = True
+                          #  else:
+                                #print("정상 페이지가 아닙니다 : FAIL")
                     else:
                         print("다이나믹 처리 : FAIL")
                         refresh_reload(dataset)
@@ -898,13 +898,17 @@ def refresh_reload(dataset):
                             time.sleep(3)
                 else:
                     if not is_board(dataset):
-                        pyautogui.click(capture_back_loc)
-                        print("BACK BTN : CLEAR")
-                        try_count = try_count + 1
-                        pos_screen = getPixel()
-
-
+                        if not is_my_view(dataset):
+                            pyautogui.click(capture_back_loc)
+                            print("BACK BTN : CLEAR")
+                            try_count = try_count + 1
+                            pos_screen = getPixel()
+                        else:
+                            pyautogui.click(dataset['my_channel'])
+                            print("현재 위치 마이뷰, 채널 재 입장")
                     else:
+                        pyautogui.click(dataset['last_location'])
+                        print("현재위치 내 채널 메인, 마지막 액션 재 실행")
                         channel_main_flag = True
             else:
                 print("BACK BTN 확인 불가 : FAIL")

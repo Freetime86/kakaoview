@@ -986,7 +986,7 @@ def find_heart(dataset):
                     real_loc_cnt = 0
                     for location in option_dots:
                         location = pyautogui.center(location)
-                        if 425 < location.y:
+                        if 425 < location.y and 410 < location.x:
                             target = location
                             real_loc_cnt = real_loc_cnt + 1
                             break

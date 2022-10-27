@@ -901,10 +901,9 @@ def refresh_reload(dataset):
                         pyautogui.click(capture_back_loc)
                         print("BACK BTN : CLEAR")
                         try_count = try_count + 1
-                        #time.sleep(3)
                         pos_screen = getPixel()
-                        #if is_board(dataset):
-                            #channel_main_flag = True
+
+
                     else:
                         channel_main_flag = True
             else:

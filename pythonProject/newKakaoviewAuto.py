@@ -1375,7 +1375,7 @@ def activate_auto_tour():
     time.sleep(5)
 
     # 과거 정보
-    dataset = {"reservation": "202210250601",
+    dataset = {"reservation": "202210270601",
                "accuracy": 0.95, "mobile_type": '\s20plus', "speed": 0.5, "limit_time": 5, "scroll_speed": 0.5,
                "scroll_count": 2, "mouse_scroll_cnt": 5, "return_my_view": False, "loading_wait_time": 3,
                # "loading_img_list": ['\loading_bar1', '\loading_bar2', '\loading_bar3', '\loading_bar4', '\loading_bar5',

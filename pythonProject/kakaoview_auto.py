@@ -1327,7 +1327,7 @@ def click_top_ad(dataset):
 def click_bottom_ad(dataset):
 
     result = False
-    print(str(datetime.now().strftime("%X")) + " : " + "상단 광고 모듈 실행")
+    print(str(datetime.now().strftime("%X")) + " : " + "하단 광고 모듈 실행")
 
     win_activate(dataset)
     dataset['return_my_view'] = True

@@ -227,10 +227,10 @@ def find_loading_status(dataset, accuracy):
 
 def is_board(dataset):
     dataset['file_name_list'] = ['\main_board_txt']
-    board_txt = find_location_accuracy(dataset, 0.60)
+    board_txt = find_location_accuracy(dataset, 0.80)
 
     dataset['file_name_list'] = ['\channel_main_option_dots']
-    board_option_dots = find_location_accuracy(dataset, 0.60)
+    board_option_dots = find_location_accuracy(dataset, 0.80)
 
     result = False
     for loc in board_txt:

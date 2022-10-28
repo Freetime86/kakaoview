@@ -39,7 +39,7 @@ startRangeX:=0
 startRangeY:=0
 searchRangeX:=1920
 searchRangeY:=570
-searchDetail:=80
+searchDetail:=90
 Delay=Delay*1000
 
 workDir=%A_scriptDir%\image

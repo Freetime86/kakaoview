@@ -1251,6 +1251,9 @@ def click_contents(dataset):
                             check_times = check_times + 1
                             time.sleep(1)
 
+                            #타임 아웃 시간 갱신
+                            set_time_out = timeout(dataset)
+
                             if not is_board(dataset):
                                 if is_loaded(dataset):
                                     print(str(datetime.now().strftime("%X")) + " : " + "페이지 로드 완료")
@@ -1324,7 +1327,7 @@ def click_top_ad(dataset):
 def click_bottom_ad(dataset):
 
     result = False
-    print(str(datetime.now().strftime("%X")) + " : " + "상단 광고 모듈 실행")
+    print(str(datetime.now().strftime("%X")) + " : " + "하단 광고 모듈 실행")
 
     win_activate(dataset)
     dataset['return_my_view'] = True

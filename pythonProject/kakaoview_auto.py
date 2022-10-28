@@ -1241,7 +1241,6 @@ def click_contents(dataset):
                             print(str(datetime.now().strftime("%X")) + " : " + "컨텐츠 위치 정밀 위치 후처리 계산 중...")
                             title_loc = (title_loc[0], title_loc[1] + 10)
                             print(str(datetime.now().strftime("%X")) + " : " + "컨텐츠 위치 정밀 위치 후처리 계산 완료 : " + str(check_times) + " 번째 계산")
-                            check_times = 0
 
                         if is_board(dataset):
                             dataset['last_location'] = title_loc

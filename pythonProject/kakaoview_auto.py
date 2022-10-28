@@ -1178,8 +1178,8 @@ def select_channel(dataset):
                         print(str(datetime.now().strftime("%X")) + " : " + "채널 입장 중...")
                         init = False
 
-                    set_time_out = timeout(dataset)
-                    if check_timeout(set_time_out):
+                    set_time_out2 = timeout(dataset)
+                    if check_timeout(set_time_out2):
 
                         if is_board(dataset):
                             result = True

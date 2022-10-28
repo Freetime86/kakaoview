@@ -985,7 +985,7 @@ def refresh_reload(dataset):
                     time.sleep(0.5)
 
             # 마지막 액션을 다시 수행
-            time.sleep(1)
+            time.sleep(3)
             pyautogui.click(dataset['last_location'])
             print(str(datetime.now().strftime("%X")) + " : " + "액션 재 실행 : CLEAR")
 

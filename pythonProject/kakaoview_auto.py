@@ -640,6 +640,10 @@ def capture_back(dataset):
             else:
                 print(str(datetime.now().strftime("%X")) + " : " + "다이나믹 필터 후처리 모듈 실행")
                 refresh(dataset)
+        else:
+            print(str(datetime.now().strftime("%X")) + " : " + "현재 위치가 보드 또는 마이뷰에 있어서 캡처가 불가능 합니다.")
+    else:
+        print(str(datetime.now().strftime("%X")) + " : " + "캡처 버튼을 찾을 수가 없습니다.")
     return result
 
 
@@ -985,7 +989,7 @@ def refresh_reload(dataset):
                     time.sleep(0.5)
 
             # 마지막 액션을 다시 수행
-            time.sleep(3)
+            time.sleep(1)
             pyautogui.click(dataset['last_location'])
             print(str(datetime.now().strftime("%X")) + " : " + "액션 재 실행 : CLEAR")
 
@@ -1250,9 +1254,6 @@ def click_contents(dataset):
                             check_times = check_times + 1
                             time.sleep(1)
 
-                            #타임 아웃 시간 갱신
-                            set_time_out = timeout(dataset)
-
                             if not is_board(dataset):
                                 if is_loaded(dataset):
                                     print(str(datetime.now().strftime("%X")) + " : " + "페이지 로드 완료")
@@ -1326,7 +1327,7 @@ def click_top_ad(dataset):
 def click_bottom_ad(dataset):
 
     result = False
-    print(str(datetime.now().strftime("%X")) + " : " + "하단 광고 모듈 실행")
+    print(str(datetime.now().strftime("%X")) + " : " + "상단 광고 모듈 실행")
 
     win_activate(dataset)
     dataset['return_my_view'] = True
@@ -1406,7 +1407,7 @@ def activate_auto_tour():
     #time.sleep(5)
 
     # 과거 정보
-    dataset = {"reservation": "202210290601",
+    dataset = {"reservation": "202210270601",
                "accuracy": 0.95, "mobile_type": '\s20plus', "speed": 0.5, "limit_time": 5, "scroll_speed": 0.5,
                "scroll_count": 2, "mouse_scroll_cnt": 5, "return_my_view": False, "loading_wait_time": 3,
                # "loading_img_list": ['\loading_bar1', '\loading_bar2', '\loading_bar3', '\loading_bar4', '\loading_bar5',

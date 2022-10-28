@@ -1341,64 +1341,75 @@ def click_bottom_ad(dataset):
     dataset['file_name_list'] = ['\other_msg_txt', '\more_kakaoview_txt', '\more_kakaoview_txt1']
     other_msg_txt_loc = find_location_accuracy(dataset, 0.70)
 
-    if len(other_msg_txt_loc) == 0 and len(similar_msg_txt_loc) > 0:
-        print(str(datetime.now().strftime("%X")) + " : " + "하단 광고 위치 확인1")
-        bottom_ad_loc = pyautogui.center(similar_msg_txt_loc[0])
-        bottom_ad_loc = (bottom_ad_loc.x + 50, bottom_ad_loc.y - 140)
-
-        dataset['last_location'] = bottom_ad_loc
-        print(str(datetime.now().strftime("%X")) + " : " + "하단 광고 위치 BACK UP 완료")
-        pyautogui.click(bottom_ad_loc)
-        print(str(datetime.now().strftime("%X")) + " : " + "하단 광고 입장 중...")
-        
-        if is_loaded(dataset):
-            print(str(datetime.now().strftime("%X")) + " : " + "하단 광고 입장 완료")
-            result = True
-    elif len(other_msg_txt_loc) > 0:
-        print(str(datetime.now().strftime("%X")) + " : " + "하단 광고 위치 확인2")
-
-        # 하단에 광고가 위치할 수 도 있기에 어느정도를 스크롤한다.
-        print(str(datetime.now().strftime("%X")) + " : " + "하단 광고 위치 정밀 조정 중...")
-        pyautogui.moveTo(dataset['scroll_base'])
-        for i in range(1, 8):
-            pyautogui.scroll(-500)
-        print(str(datetime.now().strftime("%X")) + " : " + "하단 광고 위치 정밀 조정 완료")
-
-        # 이 채널의 다른보드 메시지 다시 찾기 위에서 스크롤 이동함
-        dataset['file_name_list'] = ['\other_msg_txt']
-        other_msg_txt_loc = find_location_accuracy(dataset, 0.70)
-
-        dataset['file_name_list'] = ['\more_kakaoview_txt', '\more_kakaoview_txt1']
-        more_kakaoview_loc = find_location_accuracy(dataset, 0.70)
-        print(str(datetime.now().strftime("%X")) + " : " + "하단 광고 위치 정밀 계산 중...")
-        if len(other_msg_txt_loc) > 0:
-            bottom_ad_loc = pyautogui.center(other_msg_txt_loc[0])
-            bottom_ad_loc = (bottom_ad_loc.x + 50, bottom_ad_loc.y + 400)
-        elif len(more_kakaoview_loc) > 0:
-            bottom_ad_loc = pyautogui.center(more_kakaoview_loc[0])
-            bottom_ad_loc = (bottom_ad_loc.x + 50, bottom_ad_loc.y - 100)
-
-        if len(other_msg_txt_loc) > 0 or len(more_kakaoview_loc) > 0:
-            print(str(datetime.now().strftime("%X")) + " : " + "하단 광고 위치 정밀 계산 완료")
+    if is_board(dataset):
+        print(str(datetime.now().strftime("%X")) + " : " + "현재 위치 메인 채널")
+        if len(other_msg_txt_loc) == 0 and len(similar_msg_txt_loc) > 0:
+            print(str(datetime.now().strftime("%X")) + " : " + "하단 광고 위치 확인1")
+            bottom_ad_loc = pyautogui.center(similar_msg_txt_loc[0])
+            bottom_ad_loc = (bottom_ad_loc.x + 50, bottom_ad_loc.y - 140)
 
             dataset['last_location'] = bottom_ad_loc
             print(str(datetime.now().strftime("%X")) + " : " + "하단 광고 위치 BACK UP 완료")
             pyautogui.click(bottom_ad_loc)
-            print(str(datetime.now().strftime("%X")) + " : " + "하단 광고 입장 중..")
-            
+            print(str(datetime.now().strftime("%X")) + " : " + "하단 광고 입장 중...")
+
             if is_loaded(dataset):
                 print(str(datetime.now().strftime("%X")) + " : " + "하단 광고 입장 완료")
                 result = True
-    else:
-        print(str(datetime.now().strftime("%X")) + " : " + "하단 광고 위치 확인 불가")
-        if not is_my_view(dataset):
-            print(str(datetime.now().strftime("%X")) + " : " + "하단 광고 위치 재 조정 실행")
-            for idx in range(0, 3):
+        elif len(other_msg_txt_loc) > 0:
+            print(str(datetime.now().strftime("%X")) + " : " + "하단 광고 위치 확인2")
+
+            # 하단에 광고가 위치할 수 도 있기에 어느정도를 스크롤한다.
+            print(str(datetime.now().strftime("%X")) + " : " + "하단 광고 위치 정밀 조정 중...")
+            pyautogui.moveTo(dataset['scroll_base'])
+            for i in range(1, 8):
                 pyautogui.scroll(-500)
-            time.sleep(1)
+            print(str(datetime.now().strftime("%X")) + " : " + "하단 광고 위치 정밀 조정 완료")
+
+            # 이 채널의 다른보드 메시지 다시 찾기 위에서 스크롤 이동함
+            dataset['file_name_list'] = ['\other_msg_txt']
+            other_msg_txt_loc = find_location_accuracy(dataset, 0.70)
+
+            dataset['file_name_list'] = ['\more_kakaoview_txt', '\more_kakaoview_txt1']
+            more_kakaoview_loc = find_location_accuracy(dataset, 0.70)
+            print(str(datetime.now().strftime("%X")) + " : " + "하단 광고 위치 정밀 계산 중...")
+            if len(other_msg_txt_loc) > 0:
+                bottom_ad_loc = pyautogui.center(other_msg_txt_loc[0])
+                bottom_ad_loc = (bottom_ad_loc.x + 50, bottom_ad_loc.y + 400)
+            elif len(more_kakaoview_loc) > 0:
+                bottom_ad_loc = pyautogui.center(more_kakaoview_loc[0])
+                bottom_ad_loc = (bottom_ad_loc.x + 50, bottom_ad_loc.y - 100)
+
+            if len(other_msg_txt_loc) > 0 or len(more_kakaoview_loc) > 0:
+                print(str(datetime.now().strftime("%X")) + " : " + "하단 광고 위치 정밀 계산 완료")
+
+                dataset['last_location'] = bottom_ad_loc
+                print(str(datetime.now().strftime("%X")) + " : " + "하단 광고 위치 BACK UP 완료")
+                pyautogui.click(bottom_ad_loc)
+                print(str(datetime.now().strftime("%X")) + " : " + "하단 광고 입장 중..")
+
+                if is_loaded(dataset):
+                    print(str(datetime.now().strftime("%X")) + " : " + "하단 광고 입장 완료")
+                    result = True
         else:
-            pyautogui.click(dataset['my_channel'])
-            print(str(datetime.now().strftime("%X")) + " : " + "현재 위치 마이뷰, 마지막 보드 재 진입")
+            print(str(datetime.now().strftime("%X")) + " : " + "하단 광고 위치 확인 불가")
+            if not is_my_view(dataset):
+                print(str(datetime.now().strftime("%X")) + " : " + "하단 광고 위치 재 조정 실행")
+                for idx in range(0, 3):
+                    pyautogui.scroll(-500)
+                time.sleep(1)
+            else:
+                pyautogui.click(dataset['my_channel'])
+                print(str(datetime.now().strftime("%X")) + " : " + "현재 위치 마이뷰, 마지막 보드 재 진입")
+    else:
+        if not is_my_view(dataset):
+            print(str(datetime.now().strftime("%X")) + " : " + "현재 위치가 메인 채널이 아닙니다. 메인 채널로 복귀 실행")
+            action_back(dataset)
+        else:
+            print(str(datetime.now().strftime("%X")) + " : " + "현재 위치가 마이뷰 입니다.")
+            sys.exit(str(datetime.now().strftime("%X")) + " : " +
+                     "하단 광고 모듈에서 현재 위치가 마이뷰 입니다. 더 이상 프로세스를 진행 할 수 없습니다.")
+
 
     return result
 

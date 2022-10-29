@@ -625,7 +625,9 @@ def capture_back(dataset):
                             result = True
                         else:
                             print(str(datetime.now().strftime("%X")) + " : " + "캡처 위치가 보드 입니다.")
-                            refresh_reload(dataset)
+
+                            #221029 - 진입 경로 채널 -> 하단광고 입장 실패로 캡처위치가 채널이여서 하단광고의 경우 모듈 재진행이 필요함
+                            return
                     else:
                         print(str(datetime.now().strftime("%X")) + " : " + "스크롤 APP 확인 불가, 캡처 그대로 진행")
                         if not is_board(dataset):

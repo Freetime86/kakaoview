@@ -226,20 +226,23 @@ def find_loading_status(dataset, accuracy):
 
 
 def is_board(dataset):
-    dataset['file_name_list'] = ['\main_board_txt']
-    board_txt = find_location_accuracy(dataset, 0.80)
-
-    dataset['file_name_list'] = ['\channel_main_option_dots']
-    board_option_dots = find_location_accuracy(dataset, 0.80)
-
     result = False
-    for loc in board_txt:
-        this_loc = pyautogui.center(loc)
-        if this_loc.y < 120:
-            for option_loc in board_option_dots:
-                op_loc = pyautogui.center(option_loc)
-                if 210 < op_loc.y < 270:
-                    result = True
+    dataset['file_name_list'] = ['\main_board_txt']
+    board_loc = find_location_accuracy(dataset, 0.75)
+
+    if len(board_loc) > 0:
+        result = True
+    #dataset['file_name_list'] = ['\channel_main_option_dots']
+    #board_option_dots = find_location_accuracy(dataset, 0.80)
+
+    #result = False
+    #for loc in board_txt:
+    #    this_loc = pyautogui.center(loc)
+    #    if this_loc.y < 120:
+    #        for option_loc in board_option_dots:
+    #            op_loc = pyautogui.center(option_loc)
+    #            if 210 < op_loc.y < 270:
+    #                result = True
     return result
 
 

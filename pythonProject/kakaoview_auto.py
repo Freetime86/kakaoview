@@ -520,8 +520,10 @@ def pop_close(dataset, cnt):
 
 
 def action_back(dataset):
-    dataset['file_name_list'] = ['\capture_back', '\capture_back1']
-    capture_back = find_sel_region_accuracy(dataset, 0.7, 20, 980, 440, 1030)
+    dataset['file_name_list'] = ['\capture_back', '\capture_back1', '\capture_back2']
+
+    # 221029 - back 버튼 변질되는 경우가 있어서 60%까지 낮춤
+    capture_back = find_sel_region_accuracy(dataset, 0.6, 20, 980, 390, 1030)
     if len(capture_back) > 0:
         capture_back_loc = pyautogui.center(capture_back[0])
         pyautogui.click(capture_back_loc)
@@ -657,7 +659,7 @@ def back_to_home(dataset):
     print(str(datetime.now().strftime("%X")) + " : " + "EXIT 모듈 실행")
     if dataset['return_my_view']:
         print(str(datetime.now().strftime("%X")) + " : " + "마이뷰 이동 모듈 실행")
-        dataset['file_name_list'] = ['\capture_back', '\capture_back1']
+        dataset['file_name_list'] = ['\capture_back', '\capture_back1', '\capture_back2']
         my_view_return = find_sel_region_accuracy(dataset, 0.7, 20, 980, 440, 1030)
 
         if len(my_view_return) > 0:
@@ -714,8 +716,10 @@ def back_to_home(dataset):
 
     else:
         print(str(datetime.now().strftime("%X")) + " : " + "뒤로 가기 모듈 실행")
-        dataset['file_name_list'] = ['\capture_back', '\capture_back1']
-        capture_back = find_sel_region_accuracy(dataset, 0.7, 20, 980, 440, 1030)
+        dataset['file_name_list'] = ['\capture_back', '\capture_back1', '\capture_back2']
+
+        # 221029 - back 버튼 변질되는 경우가 있어서 60%까지 낮춤
+        capture_back = find_sel_region_accuracy(dataset, 0.6, 20, 980, 390, 1030)
 
         if is_board(dataset):
             print(str(datetime.now().strftime("%X")) + " : " + "현재 위치는 내 채널 메인에 있습니다.")
@@ -901,8 +905,8 @@ def refresh_reload(dataset):
             curr_screen = getPixel()
 
             # BACK BTN
-            dataset['file_name_list'] = ['\capture_back', '\capture_back1']
-            capture_back = find_sel_region_accuracy(dataset, 0.7, 20, 980, 440, 1030)
+            # 221029 - back 버튼 변질되는 경우가 있어서 60%까지 낮춤
+            capture_back = find_sel_region_accuracy(dataset, 0.6, 20, 980, 390, 1030)
 
             if len(capture_back) > 0:
                 print(str(datetime.now().strftime("%X")) + " : " + "BACK BTN 위치 확인 : CLEAR")

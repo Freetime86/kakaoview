@@ -653,7 +653,7 @@ def capture_back(dataset):
 
 
 def back_to_home(dataset):
-    result = False
+    next_step = False
     print(str(datetime.now().strftime("%X")) + " : " + "EXIT 모듈 실행")
     if dataset['return_my_view']:
         print(str(datetime.now().strftime("%X")) + " : " + "마이뷰 이동 모듈 실행")
@@ -668,7 +668,6 @@ def back_to_home(dataset):
             try_count = 0
             pos_screen = (0, 0)
             set_time_out = datetime.now() + timedelta(seconds=10)
-            next_step = False
             while not next_step:
                 curr_screen = getPixel()
                 if check_timeout(set_time_out):
@@ -785,7 +784,6 @@ def back_to_home(dataset):
                 else:
                     timeout_flag = False
                     set_time_out = timeout(dataset)
-
     return next_step
 
 

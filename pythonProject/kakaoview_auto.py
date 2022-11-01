@@ -613,9 +613,10 @@ def capture_module(dataset):
     dataset['file_name_list'] = ['\capture', '\capture1']
     capture_icon = find_location_accuracy(dataset, 0.70)
     if len(capture_icon) > 0:
-        capture_loc = pyautogui.center(capture_icon[0])
-        pyautogui.click(capture_loc)
-        time.sleep(1)
+        if dataset['tour_type'] == "1":
+            capture_loc = pyautogui.center(capture_icon[0])
+            pyautogui.click(capture_loc)
+            time.sleep(1)
         result = True
     return result
 
@@ -641,7 +642,7 @@ def capture_back(dataset):
 
     if len(capture_icon) > 0:
 
-        if not is_board(dataset) and not is_my_view(dataset):
+        if not is_board(dataset) and not is_my_view(dataset) or dataset['tour_type'] == "2":
 
             print(str(datetime.now().strftime("%X")) + " : " + "다이나믹 필터 처리 중...")
             if dynamic_action(dataset):
@@ -656,7 +657,7 @@ def capture_back(dataset):
                     print(str(datetime.now().strftime("%X")) + " : " + "페이지 로드 2차 확인 완료")
                     capture_loc = pyautogui.center(capture_icon[0])
 
-                    if not is_board(dataset):
+                    if not is_board(dataset) or dataset['tour_type'] == "2":
                         time.sleep(3)
                         pyautogui.click(capture_loc)
                         print(str(datetime.now().strftime("%X")) + " : " + "화면 이미지 캡처")
@@ -1525,6 +1526,7 @@ def activate_auto_tour():
                'scroll_up': (21, 912),
                'scroll_down': (21, 982),
                'scroll_pop': (15, 953),
+               'tour_type': "2"
                }
 
     dataset['filename_option'] = option_figure(dataset)
@@ -1540,6 +1542,10 @@ def activate_auto_tour():
     #for idx in range(0, 2):
     #    compare_image_crop(dataset)
     #return
+    
+    # 투어 방법
+    # 1 = 컨텐츠 먼저
+    # 2 = 상단 광고 먼저 하단 제외
 
     # 하트 찾기
     activation = True
@@ -1562,32 +1568,29 @@ def activate_auto_tour():
         while not next_step:
             # My 뷰 채널 진입
             next_step = select_channel(dataset)
-
-        next_step = False
-        while not next_step:
-            # 채널 컨텐츠 진입
-            next_step = click_contents(dataset)
-
-        next_step = False
-        set_time_out = datetime.now() + timedelta(seconds=10)
-        while not next_step:
-            # 캡처 실행
-            if check_timeout(set_time_out):
-                next_step = capture_back(dataset)
-            else:
-                refresh_reload(dataset)
-                set_time_out = datetime.now() + timedelta(seconds=10)
-
-        next_step = False
-        while not next_step:
-            # 뒤로 가기 모듈 실행
-            dataset['return_my_view'] = False
-            next_step = back_to_home(dataset)
-
-        next_step = False
-        while not next_step:
-            # 상단광고 클릭
-            next_step = click_top_ad(dataset)
+        
+        #2번 타입일 경우 진입 후 캡처
+        if dataset['tour_type'] == "2":
+            next_step = False
+            set_time_out = datetime.now() + timedelta(seconds=10)
+            while not next_step:
+                # 캡처 실행
+                if check_timeout(set_time_out):
+                    next_step = capture_back(dataset)
+                else:
+                    refresh_reload(dataset)
+                    set_time_out = datetime.now() + timedelta(seconds=10)
+                    
+        if dataset['tour_type'] == "1":
+            next_step = False
+            while not next_step:
+                # 채널 컨텐츠 진입
+                next_step = click_contents(dataset)
+        elif dataset['tour_type'] == "2":
+            next_step = False
+            while not next_step:
+                # 상단광고 클릭
+                next_step = click_top_ad(dataset)
 
         next_step = False
         set_time_out = datetime.now() + timedelta(seconds=10)
@@ -1605,10 +1608,16 @@ def activate_auto_tour():
             dataset['return_my_view'] = False
             next_step = back_to_home(dataset)
 
-        next_step = False
-        while not next_step:
-            # 하단광고 클릭
-            next_step = click_bottom_ad(dataset)
+        if dataset['tour_type'] == "1":
+            next_step = False
+            while not next_step:
+                # 상단광고 클릭
+                next_step = click_top_ad(dataset)
+        elif dataset['tour_type'] == "2":
+            next_step = False
+            while not next_step:
+                # 채널 컨텐츠 진입
+                next_step = click_contents(dataset)
 
         next_step = False
         set_time_out = datetime.now() + timedelta(seconds=10)
@@ -1620,11 +1629,33 @@ def activate_auto_tour():
                 refresh_reload(dataset)
                 set_time_out = datetime.now() + timedelta(seconds=10)
 
-        next_step = False
-        while not next_step:
-            # 뒤로 가기 모듈 실행
-            dataset['return_my_view'] = True
-            next_step = back_to_home(dataset)
+        if dataset['tour_type'] == "1":
+            next_step = False
+            while not next_step:
+                # 뒤로 가기 모듈 실행
+                dataset['return_my_view'] = False
+                next_step = back_to_home(dataset)
+
+            next_step = False
+            while not next_step:
+                # 하단광고 클릭
+                next_step = click_bottom_ad(dataset)
+
+            next_step = False
+            set_time_out = datetime.now() + timedelta(seconds=10)
+            while not next_step:
+                # 캡처 실행
+                if check_timeout(set_time_out):
+                    next_step = capture_back(dataset)
+                else:
+                    refresh_reload(dataset)
+                    set_time_out = datetime.now() + timedelta(seconds=10)
+        elif dataset['tour_type'] == "2":
+            next_step = False
+            while not next_step:
+                # 뒤로 가기 모듈 실행
+                dataset['return_my_view'] = True
+                next_step = back_to_home(dataset)
 
 
 activate_auto_tour()

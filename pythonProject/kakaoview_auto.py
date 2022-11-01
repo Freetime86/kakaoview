@@ -14,12 +14,8 @@ pyautogui.FAILSAFE = False
 def reservation_starter(dataset):
     is_start_time = False
 
-    scroll_loc = (15, 953)
-    pyautogui.click(scroll_loc)
+    pyautogui.click(dataset['scroll_pop'])
     time.sleep(float(dataset['speed']))
-
-    dataset['file_name_list'] = ['\scroll_up']
-    scroll_up_icon = find_location(dataset)
 
     while not is_start_time:
         now = datetime.now()
@@ -28,20 +24,23 @@ def reservation_starter(dataset):
         if int(current_time) >= int(dataset['reservation']):
             is_start_time = True
 
-            dataset['file_name_list'] = ['\scroll_close']
-            scroll_close = find_location_accuracy(dataset, 0.80)
-            if len(scroll_close) > 0:
-                scroll_close_loc = pyautogui.center(scroll_close[0])
-            pyautogui.moveTo(scroll_close_loc)
-            pyautogui.mouseDown()
-            pyautogui.moveTo(5, scroll_close_loc.y)
-            pyautogui.mouseUp()
+            # dataset['file_name_list'] = ['\scroll_close']
+            # scroll_close = find_location_accuracy(dataset, 0.80)
+            # if len(scroll_close) > 0:
+            #     scroll_close_loc = pyautogui.center(scroll_close[0])
+            # pyautogui.moveTo(scroll_close_loc)
+            # pyautogui.mouseDown()
+            # pyautogui.moveTo(5, scroll_close_loc.y)
+            # pyautogui.mouseUp()
             print(str(datetime.now().strftime("%X")) + " : " + "매크로 시작")
         else:
-            if len(scroll_up_icon) > 0:
-                scroll_up_loc = pyautogui.center(scroll_up_icon[0])
-                pyautogui.click(scroll_up_loc)
-                print(str(datetime.now().strftime("%X")) + " : " + "예약 시간 대기 중")
+            # if len(scroll_up_icon) > 0:
+            #     scroll_up_loc = pyautogui.center(scroll_up_icon[0])
+            #     pyautogui.click(scroll_up_loc)
+            #     print(str(datetime.now().strftime("%X")) + " : " + "예약 시간 대기 중")
+
+            pyautogui.click(dataset['scroll_up'])
+            print(str(datetime.now().strftime("%X")) + " : " + "예약 시간 대기 중")
         time.sleep(5)
 
 
@@ -398,148 +397,159 @@ def check_timeout(timeout):
 
 
 def dynamic_action(dataset):
+
     result = True
-    dataset['file_name_list'] = ['\channel_add']
-    # 채널 추가 변수 삭제
-    channel_add = find_location_accuracy(dataset, 0.70)
-    if len(channel_add) > 0:
-        action_back(dataset, 1)
+    flag = True
+    if not flag:
+        dataset['file_name_list'] = ['\channel_add']
+        # 채널 추가 변수 삭제
+        channel_add = find_location_accuracy(dataset, 0.70)
+        if len(channel_add) > 0:
+            action_back(dataset, 1)
 
-    dataset['file_name_list'] = ['\connecting_msg']
-    # 다른프로그램 연결 광고
-    connecting_msg = find_location_accuracy(dataset, 0.70)
-    if len(connecting_msg) > 0:
-        action_back(dataset, 1)
-        result = False
+        dataset['file_name_list'] = ['\connecting_msg']
+        # 다른프로그램 연결 광고
+        connecting_msg = find_location_accuracy(dataset, 0.70)
+        if len(connecting_msg) > 0:
+            action_back(dataset, 1)
+            result = False
 
-    dataset['file_name_list'] = ['\certificate']
-    # 카카오뱅크 본인인증
-    certificate = find_location_accuracy(dataset, 0.70)
-    if len(certificate) > 0:
-        dataset['pop_target'] = (225, 656)
-        #pop_close(dataset, 1)
-        action_back(dataset, 2)
-        result = False
+        dataset['file_name_list'] = ['\certificate']
+        # 카카오뱅크 본인인증
+        certificate = find_location_accuracy(dataset, 0.70)
+        if len(certificate) > 0:
+            dataset['pop_target'] = (225, 656)
+            #pop_close(dataset, 1)
+            action_back(dataset, 2)
+            result = False
 
-    # 팝업 제거 실시간 추가
-    # 뷰티영APP
-    dataset['file_name_list'] = ['\pop1']
-    dataset['pop_target'] = (384, 264)
-    pop_close(dataset, 1)
+        # GPS 사용 여부 차단 black
+        dataset['file_name_list'] = ['\pop18']
+        dataset['pop_target'] = (375, 566)
+        pop_close(dataset, 1)
 
-    # AKIII CLASSIC 카카오톡 채널친구 팝업
-    dataset['file_name_list'] = ['\pop2']
-    dataset['pop_target'] = (413, 843)
-    pop_close(dataset, 1)
+        # GPS 사용 여부 차단 white
+        dataset['file_name_list'] = ['\pop24']
+        dataset['pop_target'] = (375, 566)
+        pop_close(dataset, 1)
 
-    # 인증서 선택
-    dataset['file_name_list'] = ['\pop3']
-    dataset['pop_target'] = (129, 934)
-    pop_close(dataset, 1)
+        # 인증서 선택
+        dataset['file_name_list'] = ['\pop3']
+        dataset['pop_target'] = (129, 934)
+        pop_close(dataset, 1)
 
-    # 지금 이페이지를 나가면
-    dataset['file_name_list'] = ['\pop4']
-    dataset['pop_target'] = (394, 656)
-    pop_close(dataset, 1)
+        # 아우디 보안 경고
+        dataset['file_name_list'] = ['\pop5']
+        dataset['pop_target'] = (300, 574)
+        pop_close(dataset, 3)
+        # dataset['file_name_list'] = ['\pop8']
+        # dataset['pop_target'] = (300, 574)
+        # pop_close(dataset, 3)
 
-    # 아우디 보안 경고
-    dataset['file_name_list'] = ['\pop5']
-    dataset['pop_target'] = (300, 574)
-    pop_close(dataset, 3)
-    dataset['file_name_list'] = ['\pop8']
-    dataset['pop_target'] = (300, 574)
-    pop_close(dataset, 3)
+        # GPS 허용안함
+        # dataset['file_name_list'] = ['\pop7']
+        # dataset['pop_target'] = (255, 933)
+        # pop_close(dataset, 1)
 
-    # 이벤트
-    dataset['file_name_list'] = ['\pop6']
-    dataset['pop_target'] = (416, 464)
-    # pop_close(dataset, 1)
+        # 팝업 제거 실시간 추가
+        # 뷰티영APP
+        # dataset['file_name_list'] = ['\pop1']
+        # dataset['pop_target'] = (384, 264)
+        # pop_close(dataset, 1)
 
-    # GPS 허용안함
-    dataset['file_name_list'] = ['\pop7']
-    dataset['pop_target'] = (255, 933)
-    pop_close(dataset, 1)
+        # AKIII CLASSIC 카카오톡 채널친구 팝업
+        # dataset['file_name_list'] = ['\pop2']
+        # dataset['pop_target'] = (413, 843)
+        # pop_close(dataset, 1)
 
-    # 카카오뱅크 본인인증
-    # dataset['file_name_list'] = ['\pop9']
-    # dataset['pop_target'] = (345, 1018)
-    # pop_close(dataset, 2)
 
-    # 화장품 광고
-    dataset['file_name_list'] = ['\pop10']
-    dataset['pop_target'] = (134, 901)
-    pop_close(dataset, 2)
 
-    # 부동산 광고
-    dataset['file_name_list'] = ['\pop11']
-    dataset['pop_target'] = (418, 336)
-    pop_close(dataset, 1)
+        # 지금 이페이지를 나가면
+        # dataset['file_name_list'] = ['\pop4']
+        # dataset['pop_target'] = (394, 656)
+        # pop_close(dataset, 1)
 
-    # 옷 앱 팝업 제거
-    dataset['file_name_list'] = ['\pop12']
-    dataset['pop_target'] = (390, 356)
-    pop_close(dataset, 1)
 
-    # 향수광고
-    dataset['file_name_list'] = ['\pop13']
-    dataset['pop_target'] = (338, 724)
-    pop_close(dataset, 1)
 
-    # 위치기반 GPS 메시지
-    dataset['file_name_list'] = ['\pop14']
-    dataset['pop_target'] = (299, 567)
-    pop_close(dataset, 1)
+        # 이벤트
+        # dataset['file_name_list'] = ['\pop6']
+        # dataset['pop_target'] = (416, 464)
+        # # pop_close(dataset, 1)
 
-    # 한샘광고
-    dataset['file_name_list'] = ['\pop15']
-    dataset['pop_target'] = (223, 952)
-    pop_close(dataset, 1)
 
-    # AKIII CLASSIC 앱구매 팝업
-    dataset['file_name_list'] = ['\pop16']
-    dataset['pop_target'] = (413, 652)
-    pop_close(dataset, 1)
 
-    # 광고 구글플레이 팝업 제거
-    dataset['file_name_list'] = ['\pop17']
-    dataset['pop_target'] = (417, 418)
-    pop_close(dataset, 1)
+        # 카카오뱅크 본인인증
+        # dataset['file_name_list'] = ['\pop9']
+        # dataset['pop_target'] = (345, 1018)
+        # pop_close(dataset, 2)
 
-    # GPS 사용 여부 차단 black
-    dataset['file_name_list'] = ['\pop18']
-    dataset['pop_target'] = (375, 566)
-    pop_close(dataset, 1)
+        # 화장품 광고
+        # dataset['file_name_list'] = ['\pop10']
+        # dataset['pop_target'] = (134, 901)
+        # pop_close(dataset, 2)
 
-    # 캐주얼 옷 앱 구매시 할인 팝업
-    dataset['file_name_list'] = ['\pop19']
-    dataset['pop_target'] = (390, 780)
-    pop_close(dataset, 1)
+        # 부동산 광고
+        # dataset['file_name_list'] = ['\pop11']
+        # dataset['pop_target'] = (418, 336)
+        # pop_close(dataset, 1)
 
-    # 캐주얼 옷 앱 구매시 할인 팝업
-    dataset['file_name_list'] = ['\pop20']
-    dataset['pop_target'] = (227, 765)
-    dataset['pop_target'] = (391, 761)
-    pop_close(dataset, 1)
+        # 옷 앱 팝업 제거
+        # dataset['file_name_list'] = ['\pop12']
+        # dataset['pop_target'] = (390, 356)
+        # pop_close(dataset, 1)
 
-    # gs 프레시몰
-    dataset['file_name_list'] = ['\pop21']
-    dataset['pop_target'] = (225, 691)
-    pop_close(dataset, 1)
+        # 향수광고
+        # dataset['file_name_list'] = ['\pop13']
+        # dataset['pop_target'] = (338, 724)
+        # pop_close(dataset, 1)
 
-    # 쿠키 수집에 대한 동의
-    dataset['file_name_list'] = ['\pop22']
-    dataset['pop_target'] = (130, 870)
-    pop_close(dataset, 1)
+        # 위치기반 GPS 메시지
+        # dataset['file_name_list'] = ['\pop14']
+        # dataset['pop_target'] = (299, 567)
+        # pop_close(dataset, 1)
 
-    # 위치기반 동의 차단
-    dataset['file_name_list'] = ['\pop23']
-    dataset['pop_target'] = (300, 569)
-    pop_close(dataset, 1)
+        # 한샘광고
+        # dataset['file_name_list'] = ['\pop15']
+        # dataset['pop_target'] = (223, 952)
+        # pop_close(dataset, 1)
 
-    # GPS 사용 여부 차단 white
-    dataset['file_name_list'] = ['\pop24']
-    dataset['pop_target'] = (375, 566)
-    pop_close(dataset, 1)
+        # AKIII CLASSIC 앱구매 팝업
+        # dataset['file_name_list'] = ['\pop16']
+        # dataset['pop_target'] = (413, 652)
+        # pop_close(dataset, 1)
+
+        # 광고 구글플레이 팝업 제거
+        # dataset['file_name_list'] = ['\pop17']
+        # dataset['pop_target'] = (417, 418)
+        # pop_close(dataset, 1)
+
+        # 캐주얼 옷 앱 구매시 할인 팝업
+        # dataset['file_name_list'] = ['\pop19']
+        # dataset['pop_target'] = (390, 780)
+        # pop_close(dataset, 1)
+
+        # 캐주얼 옷 앱 구매시 할인 팝업
+        # dataset['file_name_list'] = ['\pop20']
+        # dataset['pop_target'] = (227, 765)
+        # dataset['pop_target'] = (391, 761)
+        # pop_close(dataset, 1)
+
+        # gs 프레시몰
+        # dataset['file_name_list'] = ['\pop21']
+        # dataset['pop_target'] = (225, 691)
+        # pop_close(dataset, 1)
+
+        # 쿠키 수집에 대한 동의
+        # dataset['file_name_list'] = ['\pop22']
+        # dataset['pop_target'] = (130, 870)
+        # pop_close(dataset, 1)
+
+        # 위치기반 동의 차단
+        # dataset['file_name_list'] = ['\pop23']
+        # dataset['pop_target'] = (300, 569)
+        # pop_close(dataset, 1)
+
+
 
     return result
 
@@ -568,27 +578,31 @@ def scroll_down(dataset):
     print(str(datetime.now().strftime("%X")) + " : " + "스크롤 실행 모듈 시작")
 
     if not is_board(dataset):
-        dataset['file_name_list'] = ['\scroll_close']
-        scroll_close = find_location_accuracy(dataset, 0.70)
-        scroll_loc = (18, 980)
+        # dataset['file_name_list'] = ['\scroll_close']
+        # scroll_close = find_location_accuracy(dataset, 0.70)
+        # scroll_loc = (18, 980)
+        #
+        # if len(scroll_close) == 0:
+        #     pyautogui.click(scroll_loc)
+        # print(str(datetime.now().strftime("%X")) + " : " + "스크롤 APP ON!")
+        # time.sleep(float(dataset['speed']))
+        #
+        # if dataset['is_refresh']:
+        #     pyautogui.click(scroll_loc)
+        #     dataset['is_refresh'] = False
+        #
+        # dataset['file_name_list'] = ['\scroll_down']
+        # scroll_down_icon = find_location(dataset)
+        # if len(scroll_down_icon) > 0:
+        #     scroll_down_loc = pyautogui.center(scroll_down_icon[0])
+        #
+        #     for i in range(0, 2):
+        #         pyautogui.click(scroll_down_loc)
+        #         time.sleep(0.5)
 
-        if len(scroll_close) == 0:
-            pyautogui.click(scroll_loc)
-        print(str(datetime.now().strftime("%X")) + " : " + "스크롤 APP ON!")
-        time.sleep(float(dataset['speed']))
-
-        if dataset['is_refresh']:
-            pyautogui.click(scroll_loc)
-            dataset['is_refresh'] = False
-
-        dataset['file_name_list'] = ['\scroll_down']
-        scroll_down_icon = find_location(dataset)
-        if len(scroll_down_icon) > 0:
-            scroll_down_loc = pyautogui.center(scroll_down_icon[0])
-
-            for i in range(0, 2):
-                pyautogui.click(scroll_down_loc)
-                time.sleep(0.5)
+        for i in range(0, 2):
+            pyautogui.click(dataset['scroll_down'])
+            time.sleep(0.5)
     else:
         print(str(datetime.now().strftime("%X")) + " : " + "현재 위치는 메인 채널. 모듈 재 실행")
     return
@@ -611,16 +625,16 @@ def capture_back(dataset):
     result = False
     print(str(datetime.now().strftime("%X")) + " : " + "캡처 모듈 실행")
 
-    dataset['file_name_list'] = ['\scroll_down']
-    scroll_down_icon = find_location(dataset)
-
-    if len(scroll_down_icon) > 0:
-        scroll_down_loc = pyautogui.center(scroll_down_icon[0])
-    else:
-        print(str(datetime.now().strftime("%X")) + " : " + "SCROLL APP 이 확인 되지 않음, SCROLL APP ON!")
-        scroll_loc = (18, 980)
-        pyautogui.click(scroll_loc)
-        return
+    # dataset['file_name_list'] = ['\scroll_down']
+    # scroll_down_icon = find_location(dataset)
+    #
+    # if len(scroll_down_icon) > 0:
+    #     scroll_down_loc = pyautogui.center(scroll_down_icon[0])
+    # else:
+    #     print(str(datetime.now().strftime("%X")) + " : " + "SCROLL APP 이 확인 되지 않음, SCROLL APP ON!")
+    #     scroll_loc = (18, 980)
+    #     pyautogui.click(scroll_loc)
+    #     return
 
     dataset['file_name_list'] = ['\capture', '\capture1']
     capture_icon = find_location_accuracy(dataset, 0.70)
@@ -642,40 +656,51 @@ def capture_back(dataset):
                     print(str(datetime.now().strftime("%X")) + " : " + "페이지 로드 2차 확인 완료")
                     capture_loc = pyautogui.center(capture_icon[0])
 
-                    dataset['file_name_list'] = ['\scroll_close']
-                    scroll_close = find_location_accuracy(dataset, 0.80)
-                    time.sleep(1)
-
-                    # 스크롤 숨기기
-                    if len(scroll_close) > 0:
-                        scroll_close_loc = pyautogui.center(scroll_close[0])
-                        pyautogui.moveTo(scroll_close_loc)
-                        pyautogui.mouseDown()
-                        pyautogui.moveTo(5, scroll_close_loc.y)
-                        pyautogui.mouseUp()
-                        print(str(datetime.now().strftime("%X")) + " : " + "SCROLL APP 비활성화")
-
-                        if not is_board(dataset):
-                            pyautogui.click(capture_loc)
-                            print(str(datetime.now().strftime("%X")) + " : " + "화면 이미지 캡처")
-                            time.sleep(1)
-                            result = True
-                        else:
-                            print(str(datetime.now().strftime("%X")) + " : " + "캡처 위치가 보드 입니다.")
-
-                            # 221029 - 진입 경로 채널 -> 하단광고 입장 실패로 캡처위치가 채널이여서 하단광고의 경우 모듈 재진행이 필요함
-                            return
+                    if not is_board(dataset):
+                        time.sleep(3)
+                        pyautogui.click(capture_loc)
+                        print(str(datetime.now().strftime("%X")) + " : " + "화면 이미지 캡처")
+                        result = True
                     else:
-                        print(str(datetime.now().strftime("%X")) + " : " + "스크롤 APP 확인 불가, 캡처 그대로 진행")
-                        if not is_board(dataset):
-                            pyautogui.click(capture_loc)
-                            print(str(datetime.now().strftime("%X")) + " : " + "화면 이미지 캡처")
-                            time.sleep(1)
-                            result = True
-                        else:
-                            print(str(datetime.now().strftime("%X")) + " : " + "캡처 위치가 보드 입니다.")
-                            print(str(datetime.now().strftime("%X")) + " : " + "마지막 액션 재 실행.")
-                            pyautogui.click(dataset['last_location'])
+                        print(str(datetime.now().strftime("%X")) + " : " + "캡처 위치가 보드 입니다.")
+                        pyautogui.click(dataset['last_location'])
+                        # 221029 - 진입 경로 채널 -> 하단광고 입장 실패로 캡처위치가 채널이여서 하단광고의 경우 모듈 재진행이 필요함
+                        return
+
+                    # dataset['file_name_list'] = ['\scroll_close']
+                    # scroll_close = find_location_accuracy(dataset, 0.80)
+                    # time.sleep(1)
+                    #
+                    # # 스크롤 숨기기
+                    # if len(scroll_close) > 0:
+                    #     scroll_close_loc = pyautogui.center(scroll_close[0])
+                    #     pyautogui.moveTo(scroll_close_loc)
+                    #     pyautogui.mouseDown()
+                    #     pyautogui.moveTo(5, scroll_close_loc.y)
+                    #     pyautogui.mouseUp()
+                    #     print(str(datetime.now().strftime("%X")) + " : " + "SCROLL APP 비활성화")
+                    #
+                    #     if not is_board(dataset):
+                    #         pyautogui.click(capture_loc)
+                    #         print(str(datetime.now().strftime("%X")) + " : " + "화면 이미지 캡처")
+                    #         time.sleep(1)
+                    #         result = True
+                    #     else:
+                    #         print(str(datetime.now().strftime("%X")) + " : " + "캡처 위치가 보드 입니다.")
+                    #
+                    #         # 221029 - 진입 경로 채널 -> 하단광고 입장 실패로 캡처위치가 채널이여서 하단광고의 경우 모듈 재진행이 필요함
+                    #         return
+                    # else:
+                    #     print(str(datetime.now().strftime("%X")) + " : " + "스크롤 APP 확인 불가, 캡처 그대로 진행")
+                    #     if not is_board(dataset):
+                    #         pyautogui.click(capture_loc)
+                    #         print(str(datetime.now().strftime("%X")) + " : " + "화면 이미지 캡처")
+                    #         time.sleep(1)
+                    #         result = True
+                    #     else:
+                    #         print(str(datetime.now().strftime("%X")) + " : " + "캡처 위치가 보드 입니다.")
+                    #         print(str(datetime.now().strftime("%X")) + " : " + "마지막 액션 재 실행.")
+                    #         pyautogui.click(dataset['last_location'])
                 else:
                     print(str(datetime.now().strftime("%X")) + " : " + "페이지 로드 정상적인 판단 불가, 모듈 재 실행")
                     refresh_reload(dataset)
@@ -704,12 +729,11 @@ def back_to_home(dataset):
             first_try = True
             try_count = 0
             pos_screen = (0, 0)
-            set_time_out = datetime.now() + timedelta(seconds=10)
+            set_time_out = datetime.now() + timedelta(seconds=5)
             while not next_step:
                 curr_screen = getPixel()
                 if check_timeout(set_time_out):
                     if not timeout_flag:
-
                         dataset['file_name_list'] = ['\win_close', '\win_close1']
                         win_close = find_sel_region_accuracy(dataset, 0.8, 5, 70, 440, 150)
 
@@ -778,8 +802,8 @@ def back_to_home(dataset):
                         cancel = False
                         if len(win_close) > 0:
                             cancel = True
-                        if try_count > 5 and curr_screen == pos_screen or cancel:
-                            if len(win_close) > 0 and try_count > 5:
+                        if try_count > 2 and curr_screen == pos_screen or cancel:
+                            if len(win_close) > 0 and try_count > 2:
                                 if not is_board(dataset):
                                     win_close_Loc = pyautogui.center(win_close[0])
                                     pyautogui.click(win_close_Loc)
@@ -788,7 +812,7 @@ def back_to_home(dataset):
                             else:
                                 if not is_my_view(dataset):
                                     if not is_board(dataset):
-                                        if try_count > 5:
+                                        if try_count > 2:
                                             print(str(datetime.now().strftime(
                                                 "%X")) + " : " + "5회 시도 : 보드 인식 불가, 연타로 빠져나가기 시도")
                                             pyautogui.click(capture_back_loc)
@@ -914,6 +938,9 @@ def refresh(dataset):
                     if is_board(dataset):
                         pyautogui.doubleClick(board_option_loc)
                         time.sleep(0.5)
+                    else:
+                        print(str(datetime.now().strftime("%X")) + " : " + "매인채널로 돌아감")
+                        refresh_reload(dataset)
 
             # 보드 재클릭
             time.sleep(1)
@@ -951,7 +978,7 @@ def refresh_reload(dataset):
                 # back key setting
                 capture_back_loc = pyautogui.center(capture_back[0])
 
-                if try_count > 5 and curr_screen == pos_screen:
+                if try_count > 2 and curr_screen == pos_screen:
                     dataset['file_name_list'] = ['\win_close']
                     win_close = find_location_accuracy(dataset, 0.80)
 
@@ -1037,7 +1064,8 @@ def refresh_reload(dataset):
             time.sleep(1)
             pyautogui.click(dataset['last_location'])
             print(str(datetime.now().strftime("%X")) + " : " + "액션 재 실행 : CLEAR")
-
+            print(str(datetime.now().strftime("%X")) + " : " + "스크롤 다운")
+            scroll_down(dataset)
             next_step = True
 
     return next_step
@@ -1222,6 +1250,12 @@ def select_channel(dataset):
                     if init:
                         print(str(datetime.now().strftime("%X")) + " : " + "채널 입장 중...")
                         init = False
+                    else:
+                        dataset['file_name_list'] = ['\chaboard_not_exist']
+                        no_channel = find_location_accuracy(dataset, 0.70)
+                        if len(no_channel) > 0:
+                            print(str(datetime.now().strftime("%X")) + " : " + "채널 링크 오류 발생, 채널 재 입장 시도")
+                            refresh_reload(dataset)
 
                     set_time_out2 = timeout(dataset)
                     if check_timeout(set_time_out2):
@@ -1355,6 +1389,7 @@ def click_top_ad(dataset):
 
         time.sleep(1)
         pyautogui.click(top_ad_loc)
+        time.sleep(1)
         print(str(datetime.now().strftime("%X")) + " : " + "상단 광고 진입 실행")
 
         if is_loaded(dataset):
@@ -1406,8 +1441,8 @@ def click_bottom_ad(dataset):
                 print(str(datetime.now().strftime("%X")) + " : " + "하단 광고 입장 완료")
                 result = True
             else:
-                print("하단 강고 입장에 실패. 재 입장 시도")
-                return
+                print("하단 광고 입장에 실패. 재 갱신 후 시도")
+                refresh(dataset)
         elif len(other_msg_txt_loc) > 0:
             print(str(datetime.now().strftime("%X")) + " : " + "하단 광고 위치 확인2")
 
@@ -1483,7 +1518,10 @@ def activate_auto_tour():
                'file_name_list': ['\home_for_scroll_base', '\home_for_scroll_base1'],
                'loading_msg': False,
                'is_refresh': False,
-               'win_title': ['상민의 Galaxy S20+ 5G', 'Galaxy S20 5G', '수윤의 S20']
+               'win_title': ['상민의 Galaxy S20+ 5G', 'Galaxy S20 5G', '수윤의 S20'],
+               'scroll_up': (21, 912),
+               'scroll_down': (21, 982),
+               'scroll_pop': (15, 953),
                }
 
     dataset['filename_option'] = option_figure(dataset)

@@ -403,13 +403,13 @@ def dynamic_action(dataset):
     # 채널 추가 변수 삭제
     channel_add = find_location_accuracy(dataset, 0.70)
     if len(channel_add) > 0:
-        action_back(dataset)
+        action_back(dataset, 1)
 
     dataset['file_name_list'] = ['\connecting_msg']
     # 다른프로그램 연결 광고
     connecting_msg = find_location_accuracy(dataset, 0.70)
     if len(connecting_msg) > 0:
-        action_back(dataset)
+        action_back(dataset, 1)
         result = False
 
     dataset['file_name_list'] = ['\certificate']
@@ -417,8 +417,8 @@ def dynamic_action(dataset):
     certificate = find_location_accuracy(dataset, 0.70)
     if len(certificate) > 0:
         dataset['pop_target'] = (225, 656)
-        pop_close(dataset, 1)
-        # action_back(dataset)
+        #pop_close(dataset, 1)
+        action_back(dataset, 2)
         result = False
 
     # 팝업 제거 실시간 추가
@@ -553,14 +553,15 @@ def pop_close(dataset, cnt):
             time.sleep(1)
 
 
-def action_back(dataset):
+def action_back(dataset, cnt):
     dataset['file_name_list'] = ['\capture_back', '\capture_back1', '\capture_back2']
 
     # 221029 - back 버튼 변질되는 경우가 있어서 60%까지 낮춤
     capture_back = find_sel_region_accuracy(dataset, 0.6, 20, 980, 390, 1030)
     if len(capture_back) > 0:
-        capture_back_loc = pyautogui.center(capture_back[0])
-        pyautogui.click(capture_back_loc)
+        for idx in range(0, cnt):
+            capture_back_loc = pyautogui.center(capture_back[0])
+            pyautogui.click(capture_back_loc)
 
 
 def scroll_down(dataset):
@@ -1459,7 +1460,7 @@ def click_bottom_ad(dataset):
     else:
         if not is_my_view(dataset):
             print(str(datetime.now().strftime("%X")) + " : " + "현재 위치가 메인 채널이 아닙니다. 메인 채널로 복귀 실행")
-            action_back(dataset)
+            action_back(dataset, 1)
         else:
             print(str(datetime.now().strftime("%X")) + " : " + "현재 위치가 마이뷰 입니다.")
             sys.exit(str(datetime.now().strftime("%X")) + " : " +
@@ -1472,7 +1473,7 @@ def activate_auto_tour():
     # time.sleep(5)
 
     # 과거 정보
-    dataset = {"reservation": "202210270601",
+    dataset = {"reservation": "202211010601",
                "accuracy": 0.95, "mobile_type": '\s20plus', "speed": 0.5, "limit_time": 5, "scroll_speed": 0.5,
                "scroll_count": 2, "mouse_scroll_cnt": 5, "return_my_view": False, "loading_wait_time": 3,
                # "loading_img_list": ['\loading_bar1', '\loading_bar2', '\loading_bar3', '\loading_bar4', '\loading_bar5',

@@ -1526,7 +1526,7 @@ def activate_auto_tour():
                'scroll_up': (21, 912),
                'scroll_down': (21, 982),
                'scroll_pop': (15, 953),
-               'tour_type': "2"
+               'tour_type': "1"
                }
 
     dataset['filename_option'] = option_figure(dataset)

@@ -377,7 +377,7 @@ def is_loaded(dataset):
 
         else:
             print(str(datetime.now().strftime("%X")) + " : " + "페이지 로딩 TIMEOUT!! 재처리 시작")
-            result = False
+            result = True
             next_step = True
 
     return result
@@ -1360,6 +1360,8 @@ def click_contents(dataset):
                     next_step = True
         else:
             print(str(datetime.now().strftime("%X")) + " : " + "컨텐츠 정밀 위치 파악 실패, 컨텐츠 진입 모듈 재 실행")
+            if not is_board(dataset):
+                refresh_reload(dataset)
 
     return result
 
@@ -1484,6 +1486,7 @@ def click_bottom_ad(dataset):
                     return
         else:
             print(str(datetime.now().strftime("%X")) + " : " + "하단 광고 위치 확인 불가")
+            pyautogui.click((10, 130))
             if not is_my_view(dataset):
                 print(str(datetime.now().strftime("%X")) + " : " + "하단 광고 위치 재 조정 실행")
                 for idx in range(0, 3):

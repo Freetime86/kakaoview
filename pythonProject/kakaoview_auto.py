@@ -945,7 +945,8 @@ def refresh(dataset):
 
             # 보드 재클릭
             time.sleep(1)
-            pyautogui.click(dataset['last_location'])
+            pyautogui.click(dataset['scroll_up'])
+            #pyautogui.click(dataset['last_location'])
 
             next_step = True
 
@@ -1063,7 +1064,8 @@ def refresh_reload(dataset):
 
             # 마지막 액션을 다시 수행
             time.sleep(1)
-            pyautogui.click(dataset['last_location'])
+            #pyautogui.click(dataset['last_location'])
+            pyautogui.click(dataset['scroll_up'])
             print(str(datetime.now().strftime("%X")) + " : " + "액션 재 실행 : CLEAR")
             print(str(datetime.now().strftime("%X")) + " : " + "스크롤 다운")
             scroll_down(dataset)
@@ -1412,6 +1414,7 @@ def click_top_ad(dataset):
 
 # 하단 광고 클릭 모듈
 def click_bottom_ad(dataset):
+    time.sleep(1)
     result = False
     print(str(datetime.now().strftime("%X")) + " : " + "하단 광고 모듈 실행")
 
@@ -1499,7 +1502,7 @@ def click_bottom_ad(dataset):
     else:
         if not is_my_view(dataset):
             print(str(datetime.now().strftime("%X")) + " : " + "현재 위치가 메인 채널이 아닙니다. 메인 채널로 복귀 실행")
-            action_back(dataset, 1)
+            action_back(dataset, 2)
         else:
             print(str(datetime.now().strftime("%X")) + " : " + "현재 위치가 마이뷰 입니다.")
             sys.exit(str(datetime.now().strftime("%X")) + " : " +
@@ -1650,12 +1653,12 @@ def activate_auto_tour():
                 else:
                     refresh_reload(dataset)
                     set_time_out = datetime.now() + timedelta(seconds=10)
-        elif dataset['tour_type'] == "2":
-            next_step = False
-            while not next_step:
-                # 뒤로 가기 모듈 실행
-                dataset['return_my_view'] = True
-                next_step = back_to_home(dataset)
+        next_step = False
+        while not next_step:
+            # 뒤로 가기 모듈 실행
+            dataset['return_my_view'] = True
+            next_step = back_to_home(dataset)
+
 
 
 activate_auto_tour()

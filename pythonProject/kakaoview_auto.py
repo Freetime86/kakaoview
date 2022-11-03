@@ -752,7 +752,7 @@ def back_to_home(dataset):
                         dataset['file_name_list'] = ['\win_close', '\win_close1']
                         win_close = find_sel_region_accuracy(dataset, 0.8, 5, 70, 440, 150)
 
-                        if len(win_close) > 0 and try_count == 0:
+                        if len(win_close) > 0 and try_count == 0 and not is_board(dataset):
                             win_close_Loc = pyautogui.center(win_close[0])
                             time.sleep(0.5)
                             pyautogui.click(win_close_Loc)

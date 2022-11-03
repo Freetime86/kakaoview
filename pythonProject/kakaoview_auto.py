@@ -813,6 +813,7 @@ def back_to_home(dataset):
                             else:
                                 if not is_my_view(dataset):
                                     if not is_board(dataset):
+                                        time.sleep(0.5)
                                         if try_count > 2:
                                             print(str(datetime.now().strftime(
                                                 "%X")) + " : " + "5회 시도 : 보드 인식 불가, 연타로 빠져나가기 시도")
@@ -1412,6 +1413,7 @@ def click_top_ad(dataset):
 
 # 하단 광고 클릭 모듈
 def click_bottom_ad(dataset):
+    time.sleep(1)
     result = False
     print(str(datetime.now().strftime("%X")) + " : " + "하단 광고 모듈 실행")
 
@@ -1421,11 +1423,11 @@ def click_bottom_ad(dataset):
 
     print(str(datetime.now().strftime("%X")) + " : " + "하단 광고 위치 계산 중...")
     dataset['file_name_list'] = ['\similar_msg_txt', '\similar_msg_txt1']
-    similar_msg_txt_loc = find_location_accuracy(dataset, 0.70)
+    similar_msg_txt_loc = find_location_accuracy(dataset, 0.80)
 
     # 이 채널의 다른보드 메시지 찾기
     dataset['file_name_list'] = ['\other_msg_txt', '\more_kakaoview_txt', '\more_kakaoview_txt1']
-    other_msg_txt_loc = find_location_accuracy(dataset, 0.70)
+    other_msg_txt_loc = find_location_accuracy(dataset, 0.80)
 
     if is_board(dataset):
         print(str(datetime.now().strftime("%X")) + " : " + "현재 위치 메인 채널")
@@ -1454,6 +1456,7 @@ def click_bottom_ad(dataset):
             pyautogui.moveTo(dataset['scroll_base'])
             for i in range(1, 8):
                 pyautogui.scroll(-500)
+            time.sleep(3)
             print(str(datetime.now().strftime("%X")) + " : " + "하단 광고 위치 정밀 조정 완료")
 
             # 이 채널의 다른보드 메시지 다시 찾기 위에서 스크롤 이동함
@@ -1461,7 +1464,7 @@ def click_bottom_ad(dataset):
             other_msg_txt_loc = find_location_accuracy(dataset, 0.70)
 
             dataset['file_name_list'] = ['\more_kakaoview_txt', '\more_kakaoview_txt1']
-            more_kakaoview_loc = find_location_accuracy(dataset, 0.70)
+            more_kakaoview_loc = find_location_accuracy(dataset, 0.80)
             print(str(datetime.now().strftime("%X")) + " : " + "하단 광고 위치 정밀 계산 중...")
             if len(other_msg_txt_loc) > 0:
                 bottom_ad_loc = pyautogui.center(other_msg_txt_loc[0])
@@ -1475,16 +1478,17 @@ def click_bottom_ad(dataset):
 
                 dataset['last_location'] = bottom_ad_loc
                 print(str(datetime.now().strftime("%X")) + " : " + "하단 광고 위치 BACK UP 완료")
-                pyautogui.click(bottom_ad_loc)
-                time.sleep(2)
+                pyautogui.doubleClick(bottom_ad_loc)
+               # time.sleep(1)
                 print(str(datetime.now().strftime("%X")) + " : " + "하단 광고 입장 중..")
-
-                if is_loaded(dataset) and not is_board(dataset):
-                    print(str(datetime.now().strftime("%X")) + " : " + "하단 광고 입장 완료")
-                    result = True
-                else:
-                    print("하단 강고 입장에 실패. 재 입장 시도")
-                    return
+                result = True
+                #if is_loaded(dataset) and not is_board(dataset):
+                #    print(str(datetime.now().strftime("%X")) + " : " + "하단 광고 입장 완료")
+                #    result = True
+                #else:
+                #    print("하단 광고 입장에 실패. 재 입장 시도")
+                #    refresh(dataset)
+                #    return
         else:
             print(str(datetime.now().strftime("%X")) + " : " + "하단 광고 위치 확인 불가")
             pyautogui.click((10, 130))
@@ -1509,7 +1513,7 @@ def click_bottom_ad(dataset):
 
 
 def activate_auto_tour():
-    # time.sleep(5)
+    time.sleep(5)
 
     # 과거 정보
     dataset = {"reservation": "202211010601",
@@ -1650,12 +1654,12 @@ def activate_auto_tour():
                 else:
                     refresh_reload(dataset)
                     set_time_out = datetime.now() + timedelta(seconds=10)
-        elif dataset['tour_type'] == "2":
-            next_step = False
-            while not next_step:
-                # 뒤로 가기 모듈 실행
-                dataset['return_my_view'] = True
-                next_step = back_to_home(dataset)
+
+        next_step = False
+        while not next_step:
+            # 뒤로 가기 모듈 실행
+            dataset['return_my_view'] = True
+            next_step = back_to_home(dataset)
 
 
 activate_auto_tour()

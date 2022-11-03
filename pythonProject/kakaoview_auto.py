@@ -1417,7 +1417,7 @@ def click_top_ad(dataset):
 
 # 하단 광고 클릭 모듈
 def click_bottom_ad(dataset):
-    time.sleep(1)
+    time.sleep(0.5)
     result = False
     print(str(datetime.now().strftime("%X")) + " : " + "하단 광고 모듈 실행")
 
@@ -1493,7 +1493,7 @@ def click_bottom_ad(dataset):
                     return
         else:
             print(str(datetime.now().strftime("%X")) + " : " + "하단 광고 위치 확인 불가")
-            pyautogui.click((10, 130))
+            pyautogui.click((10, 210))
             if not is_my_view(dataset):
                 print(str(datetime.now().strftime("%X")) + " : " + "하단 광고 위치 재 조정 실행")
                 for idx in range(0, 3):

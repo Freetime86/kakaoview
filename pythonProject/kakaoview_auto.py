@@ -740,10 +740,11 @@ def back_to_home(dataset):
 
                         if len(win_close) > 0 and try_count == 0:
                             win_close_Loc = pyautogui.center(win_close[0])
+                            time.sleep(0.5)
                             pyautogui.click(win_close_Loc)
                             print(str(datetime.now().strftime("%X")) + " : " + "X 버튼 클릭 탈출 시도")
                             try_count = try_count + 1
-                            time.sleep(1)
+                            #time.sleep(1)
                         else:
                             if try_count > 3 and curr_screen == pos_screen:
                                 if not is_board(dataset):
@@ -753,11 +754,12 @@ def back_to_home(dataset):
                                 try_count = 0
                             else:
                                 pos_screen = getPixel()
+                                time.sleep(0.5)
                                 if first_try:
                                     pyautogui.click(my_view_return_loc)
                                     print(str(datetime.now().strftime("%X")) + " : " + "마이뷰 이동 전처리")
                                     first_try = False
-                                    time.sleep(1)
+                                    #time.sleep(1)
                                 else:
                                     pyautogui.click(my_view_return_loc)
                                     print(str(datetime.now().strftime("%X")) + " : " + "마이뷰 이동")

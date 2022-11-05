@@ -375,7 +375,7 @@ def is_loaded(dataset):
                 print(str(datetime.now().strftime("%X")) + " : " + "페이지 로딩 중...")
                 init = False
 
-            #5초마다 scroll down 을 하여 화면보호기 출몰을 방지한다
+            # 5초마다 scroll down 을 하여 화면보호기 출몰을 방지한다
             if current_time <= datetime.now():
                 pyautogui.click(dataset['scroll_down'])
                 current_time = current_time + timedelta(seconds=5)
@@ -406,17 +406,29 @@ def check_timeout(timeout):
 
 
 def dynamic_action(dataset):
-
     result = True
     flag = True
 
-    #click_pop_out = (447, 985)
-    #click_pop_out = (447, 125)
+    # click_pop_out = (447, 985)
+    # click_pop_out = (447, 125)
     click_pop_out = (447, 550)
+    # click_pop_out = (447, 735)
+    spot_loc = (252, 620)
+    # 오리지날 화면 추출
+    screen = ImageGrab.grab()
+    pos_color = screen.getpixel(spot_loc)
+
     pyautogui.click(click_pop_out)
-    time.sleep(0.5)
-    #if is_loaded(dataset):
-        #action_back(dataset, 1)
+    time.sleep(1)
+
+    # 후 화면 캡처
+    screen = ImageGrab.grab()
+    curr_color = screen.getpixel(spot_loc)
+    if pos_color != curr_color:
+        action_back(dataset, 2)
+
+    # if is_loaded(dataset):
+    # action_back(dataset, 1)
 
     if not flag:
         dataset['file_name_list'] = ['\channel_add']
@@ -436,8 +448,8 @@ def dynamic_action(dataset):
         # 카카오뱅크 본인인증
         certificate = find_location_detail(dataset, 0.60, 180, 640, 280, 670)
         if len(certificate) > 0:
-            #dataset['pop_target'] = (225, 656)
-            #pop_close(dataset, 1)
+            # dataset['pop_target'] = (225, 656)
+            # pop_close(dataset, 1)
             action_back(dataset, 2)
             time.sleep(1)
             refresh(dataset)
@@ -482,21 +494,15 @@ def dynamic_action(dataset):
         # dataset['pop_target'] = (413, 843)
         # pop_close(dataset, 1)
 
-
-
         # 지금 이페이지를 나가면
         # dataset['file_name_list'] = ['\pop4']
         # dataset['pop_target'] = (394, 656)
         # pop_close(dataset, 1)
 
-
-
         # 이벤트
         # dataset['file_name_list'] = ['\pop6']
         # dataset['pop_target'] = (416, 464)
         # # pop_close(dataset, 1)
-
-
 
         # 카카오뱅크 본인인증
         # dataset['file_name_list'] = ['\pop9']
@@ -569,8 +575,6 @@ def dynamic_action(dataset):
         # dataset['pop_target'] = (300, 569)
         # pop_close(dataset, 1)
 
-
-
     return result
 
 
@@ -598,15 +602,16 @@ def action_last_step(dataset):
     result = True
     time.sleep(1)
     pyautogui.click(dataset['scroll_up'])
-    #time.sleep(1)
-    # if dataset['last_step'] == "click_contents":
-    #     click_contents(dataset)
-    # elif dataset['last_step'] == "click_top_ad":
-    #     click_top_ad(dataset)
-    # elif dataset['last_step'] == "click_bottom_ad":
-    #     click_bottom_ad(dataset)
+    time.sleep(1)
+    if dataset['last_step'] == "click_contents":
+        click_contents(dataset)
+    elif dataset['last_step'] == "click_top_ad":
+        click_top_ad(dataset)
+    elif dataset['last_step'] == "click_bottom_ad":
+        click_bottom_ad(dataset)
 
     return result
+
 
 def scroll_down(dataset):
     print(str(datetime.now().strftime("%X")) + " : " + "스크롤 실행 모듈 시작")
@@ -781,7 +786,7 @@ def back_to_home(dataset):
                             pyautogui.click(win_close_Loc)
                             print(str(datetime.now().strftime("%X")) + " : " + "X 버튼 클릭 탈출 시도")
                             try_count = try_count + 1
-                            #time.sleep(1)
+                            # time.sleep(1)
                         else:
                             if try_count > 3 and curr_screen == pos_screen:
                                 if not is_board(dataset):
@@ -796,7 +801,7 @@ def back_to_home(dataset):
                                     pyautogui.click(my_view_return_loc)
                                     print(str(datetime.now().strftime("%X")) + " : " + "마이뷰 이동 전처리")
                                     first_try = False
-                                    #time.sleep(1)
+                                    # time.sleep(1)
                                 else:
                                     pyautogui.click(my_view_return_loc)
                                     print(str(datetime.now().strftime("%X")) + " : " + "마이뷰 이동")
@@ -822,6 +827,8 @@ def back_to_home(dataset):
 
         if is_board(dataset):
             print(str(datetime.now().strftime("%X")) + " : " + "현재 위치는 내 채널 메인에 있습니다.")
+            if action_last_step(dataset):
+                refresh(dataset)
         else:
             print(str(datetime.now().strftime("%X")) + " : " + "현재 위치에서 내 채널 메인을 식별할 수 없습니다.")
         if len(capture_back) > 0 and not is_board(dataset):
@@ -982,7 +989,7 @@ def refresh(dataset):
                     else:
                         print(str(datetime.now().strftime("%X")) + " : " + "매인채널로 돌아감")
                         action_back(dataset, 1)
-                        #refresh_reload(dataset)
+                        # refresh_reload(dataset)
 
             # 보드 재클릭
             time.sleep(1)
@@ -1002,7 +1009,7 @@ def refresh_reload(dataset):
     pos_screen = (0, 0)
 
     # 선처리 다이나믹 변수 처리
-    #dynamic_action(dataset)
+    # dynamic_action(dataset)
 
     while not channel_main_flag:
         if not is_board(dataset):
@@ -1103,7 +1110,7 @@ def refresh_reload(dataset):
 
             # 마지막 액션을 다시 수행
             time.sleep(1)
-            #pyautogui.click(dataset['last_location'])
+            # pyautogui.click(dataset['last_location'])
             if action_last_step(dataset):
                 print(str(datetime.now().strftime("%X")) + " : " + "액션 재 실행 : CLEAR")
                 print(str(datetime.now().strftime("%X")) + " : " + "스크롤 업 초기화")
@@ -1358,7 +1365,7 @@ def click_contents(dataset):
             next_step = False
             while not next_step:
 
-                #if check_timeout(set_time_out):
+                # if check_timeout(set_time_out):
                 if is_board(dataset):
                     print(str(datetime.now().strftime("%X")) + " : " + "현재 위치 : 채널 메인")
                     if check_times > 0:
@@ -1368,7 +1375,7 @@ def click_contents(dataset):
                             check_times) + " 번째 계산")
 
                     if is_board(dataset):
-                        #dataset['last_location'] = title_loc
+                        # dataset['last_location'] = title_loc
                         dataset['last_step'] = "click_contents"
                         print(str(datetime.now().strftime("%X")) + " : " + "컨텐츠 정밀 위치 BACK UP 완료")
                         print(str(datetime.now().strftime("%X")) + " : " + "컨텐츠 클릭 실행")
@@ -1397,9 +1404,9 @@ def click_contents(dataset):
                 else:
                     print(str(datetime.now().strftime("%X")) + " : " + "현재 위치 파악 불가, 컨텐츠 진입 모듈 재 실행")
                     refresh_reload(dataset)
-                #else:
-                    #print(str(datetime.now().strftime("%X")) + " : " + "컨텐츠 진입 대기 시간 초과, 컨텐츠 진입 모듈 재 실행")
-                    #next_step = True
+                # else:
+                # print(str(datetime.now().strftime("%X")) + " : " + "컨텐츠 진입 대기 시간 초과, 컨텐츠 진입 모듈 재 실행")
+                # next_step = True
         else:
             print(str(datetime.now().strftime("%X")) + " : " + "컨텐츠 정밀 위치 파악 실패, 컨텐츠 진입 모듈 재 실행")
             if not is_board(dataset):
@@ -1429,7 +1436,7 @@ def click_top_ad(dataset):
                     top_ad_y))
 
         top_ad_loc = (top_ad_x, top_ad_y + 70)
-        #dataset['last_location'] = top_ad_loc
+        # dataset['last_location'] = top_ad_loc
         dataset['last_step'] = "click_top_ad"
 
         time.sleep(1)
@@ -1437,17 +1444,21 @@ def click_top_ad(dataset):
         time.sleep(1)
         print(str(datetime.now().strftime("%X")) + " : " + "상단 광고 진입 실행")
 
-        if is_loaded(dataset) and not is_board(dataset):
-            print(str(datetime.now().strftime("%X")) + " : " + "상단 광고 로드 완료")
-            result = True
-        else:
-            if is_board(dataset):
-                print(str(datetime.now().strftime("%X")) + " : " + "상단 광고 진입 실패")
-                pyautogui.click(top_ad_loc)
-                print(str(datetime.now().strftime("%X")) + " : " + "상단 광고 진입 재실행")
+        if not is_board(dataset):
+            if is_loaded(dataset):
+                print(str(datetime.now().strftime("%X")) + " : " + "상단 광고 로드 완료")
+                result = True
             else:
-                print(str(datetime.now().strftime("%X")) + " : " + "상단 광고 로드 실패")
-                refresh(dataset)
+                if is_board(dataset):
+                    print(str(datetime.now().strftime("%X")) + " : " + "상단 광고 진입 실패")
+                    pyautogui.click(top_ad_loc)
+                    print(str(datetime.now().strftime("%X")) + " : " + "상단 광고 진입 재실행")
+                else:
+                    print(str(datetime.now().strftime("%X")) + " : " + "상단 광고 로드 실패")
+                    refresh(dataset)
+        else:
+            print(str(datetime.now().strftime("%X")) + " : " + "상단 광고 진입 실패")
+            refresh(dataset)
     else:
         if is_my_view(dataset):
             print(str(datetime.now().strftime("%X")) + " : " + "현재 위치 마이뷰, 채널 재 입장")
@@ -1455,7 +1466,7 @@ def click_top_ad(dataset):
         else:
             print(str(datetime.now().strftime("%X")) + " : " + "현재위치 찾을 수 없음 모듈 재 실행")
             action_last_step(dataset)
-            #refresh_reload(dataset)
+            # refresh_reload(dataset)
     return result
 
 
@@ -1484,7 +1495,7 @@ def click_bottom_ad(dataset):
             bottom_ad_loc = pyautogui.center(similar_msg_txt_loc[0])
             bottom_ad_loc = (bottom_ad_loc.x + 50, bottom_ad_loc.y - 140)
 
-            #dataset['last_location'] = bottom_ad_loc
+            # dataset['last_location'] = bottom_ad_loc
             dataset['last_step'] = "click_bottom_ad"
             print(str(datetime.now().strftime("%X")) + " : " + "하단 광고 위치 BACK UP 완료")
             pyautogui.click(bottom_ad_loc)
@@ -1524,7 +1535,7 @@ def click_bottom_ad(dataset):
             if len(other_msg_txt_loc) > 0 or len(more_kakaoview_loc) > 0:
                 print(str(datetime.now().strftime("%X")) + " : " + "하단 광고 위치 정밀 계산 완료")
 
-                #dataset['last_location'] = bottom_ad_loc
+                # dataset['last_location'] = bottom_ad_loc
                 dataset['last_step'] = "click_bottom_ad"
                 print(str(datetime.now().strftime("%X")) + " : " + "하단 광고 위치 BACK UP 완료")
                 pyautogui.click(bottom_ad_loc)
@@ -1591,10 +1602,10 @@ def activate_auto_tour():
     # 예약 시작 모듈
     reservation_starter(dataset)
 
-    #for idx in range(0, 2):
+    # for idx in range(0, 2):
     #    compare_image_crop(dataset)
-    #return
-    
+    # return
+
     # 투어 방법
     # 1 = 컨텐츠 먼저
     # 2 = 상단 광고 먼저 하단 제외
@@ -1620,8 +1631,8 @@ def activate_auto_tour():
         while not next_step:
             # My 뷰 채널 진입
             next_step = select_channel(dataset)
-        
-        #2번 타입일 경우 진입 후 캡처
+
+        # 2번 타입일 경우 진입 후 캡처
         if dataset['tour_type'] == "2":
             next_step = False
             set_time_out = datetime.now() + timedelta(seconds=10)
@@ -1632,7 +1643,7 @@ def activate_auto_tour():
                 else:
                     refresh_reload(dataset)
                     set_time_out = datetime.now() + timedelta(seconds=10)
-                    
+
         if dataset['tour_type'] == "1":
             next_step = False
             while not next_step:
@@ -1707,7 +1718,6 @@ def activate_auto_tour():
             # 뒤로 가기 모듈 실행
             dataset['return_my_view'] = True
             next_step = back_to_home(dataset)
-
 
 
 activate_auto_tour()

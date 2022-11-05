@@ -1436,7 +1436,7 @@ def click_top_ad(dataset):
         time.sleep(1)
         print(str(datetime.now().strftime("%X")) + " : " + "상단 광고 진입 실행")
 
-        if is_loaded(dataset) and not is_loaded(dataset):
+        if is_loaded(dataset) and not is_board(dataset):
             print(str(datetime.now().strftime("%X")) + " : " + "상단 광고 로드 완료")
             result = True
         else:

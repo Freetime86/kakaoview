@@ -421,13 +421,13 @@ def dynamic_action(dataset):
     if not flag:
         dataset['file_name_list'] = ['\channel_add']
         # 채널 추가 변수 삭제
-        channel_add = find_location_accuracy(dataset, 0.80)
+        channel_add = find_location_accuracy(dataset, 0.70)
         if len(channel_add) > 0:
             action_back(dataset, 1)
 
         dataset['file_name_list'] = ['\connecting_msg']
         # 다른프로그램 연결 광고
-        connecting_msg = find_location_accuracy(dataset, 0.80)
+        connecting_msg = find_location_accuracy(dataset, 0.70)
         if len(connecting_msg) > 0:
             action_back(dataset, 1)
             result = False
@@ -981,7 +981,8 @@ def refresh(dataset):
                         time.sleep(0.5)
                     else:
                         print(str(datetime.now().strftime("%X")) + " : " + "매인채널로 돌아감")
-                        refresh_reload(dataset)
+                        action_back(dataset, 1)
+                        #refresh_reload(dataset)
 
             # 보드 재클릭
             time.sleep(1)
@@ -1446,7 +1447,7 @@ def click_top_ad(dataset):
                 print(str(datetime.now().strftime("%X")) + " : " + "상단 광고 진입 재실행")
             else:
                 print(str(datetime.now().strftime("%X")) + " : " + "상단 광고 로드 실패")
-                refresh_reload(dataset)
+                refresh(dataset)
     else:
         if is_my_view(dataset):
             print(str(datetime.now().strftime("%X")) + " : " + "현재 위치 마이뷰, 채널 재 입장")

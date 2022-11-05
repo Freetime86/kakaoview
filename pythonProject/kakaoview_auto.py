@@ -1451,11 +1451,11 @@ def click_top_ad(dataset):
             else:
                 if is_board(dataset):
                     print(str(datetime.now().strftime("%X")) + " : " + "상단 광고 진입 실패")
-                    pyautogui.click(top_ad_loc)
+                    action_last_step(dataset)
+                   # pyautogui.click(top_ad_loc)
                     print(str(datetime.now().strftime("%X")) + " : " + "상단 광고 진입 재실행")
                 else:
                     print(str(datetime.now().strftime("%X")) + " : " + "상단 광고 로드 실패")
-                    refresh(dataset)
         else:
             print(str(datetime.now().strftime("%X")) + " : " + "상단 광고 진입 실패")
             refresh(dataset)

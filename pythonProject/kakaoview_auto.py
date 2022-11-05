@@ -1001,7 +1001,7 @@ def refresh_reload(dataset):
     pos_screen = (0, 0)
 
     # 선처리 다이나믹 변수 처리
-    dynamic_action(dataset)
+    #dynamic_action(dataset)
 
     while not channel_main_flag:
         if not is_board(dataset):

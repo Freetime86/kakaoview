@@ -1436,12 +1436,17 @@ def click_top_ad(dataset):
         time.sleep(1)
         print(str(datetime.now().strftime("%X")) + " : " + "상단 광고 진입 실행")
 
-        if is_loaded(dataset):
+        if is_loaded(dataset) and not is_loaded(dataset):
             print(str(datetime.now().strftime("%X")) + " : " + "상단 광고 로드 완료")
             result = True
         else:
-            print(str(datetime.now().strftime("%X")) + " : " + "상단 광고 로드 실패")
-            refresh_reload(dataset)
+            if is_board(dataset):
+                print(str(datetime.now().strftime("%X")) + " : " + "상단 광고 진입 실패")
+                pyautogui.click(top_ad_loc)
+                print(str(datetime.now().strftime("%X")) + " : " + "상단 광고 진입 재실행")
+            else:
+                print(str(datetime.now().strftime("%X")) + " : " + "상단 광고 로드 실패")
+                refresh_reload(dataset)
     else:
         if is_my_view(dataset):
             print(str(datetime.now().strftime("%X")) + " : " + "현재 위치 마이뷰, 채널 재 입장")

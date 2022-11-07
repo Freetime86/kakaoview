@@ -422,10 +422,10 @@ def dynamic_action(dataset):
     time.sleep(1)
 
     # 후 화면 캡처
-    screen = ImageGrab.grab()
-    curr_color = screen.getpixel(spot_loc)
-    if pos_color != curr_color:
-        action_back(dataset, 2)
+    # screen = ImageGrab.grab()
+    # curr_color = screen.getpixel(spot_loc)
+    # if pos_color != curr_color:
+    #     action_back(dataset, 2)
 
     # if is_loaded(dataset):
     # action_back(dataset, 1)
@@ -600,6 +600,8 @@ def action_back(dataset, cnt):
 
 def action_last_step(dataset):
     result = True
+    if not is_board(dataset):
+        action_back(dataset, 1)
     time.sleep(1)
     pyautogui.click(dataset['scroll_up'])
     time.sleep(1)
@@ -1464,8 +1466,11 @@ def click_top_ad(dataset):
             print(str(datetime.now().strftime("%X")) + " : " + "현재 위치 마이뷰, 채널 재 입장")
             pyautogui.click(dataset['my_channel'])
         else:
-            print(str(datetime.now().strftime("%X")) + " : " + "현재위치 찾을 수 없음 모듈 재 실행")
-            action_last_step(dataset)
+            if is_board(dataset):
+                print(str(datetime.now().strftime("%X")) + " : " + "메인 채널, 마지막 실행 모듈 재실행")
+                action_last_step(dataset)
+            else:
+                result = True
             # refresh_reload(dataset)
     return result
 

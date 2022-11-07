@@ -1552,7 +1552,9 @@ def click_bottom_ad(dataset):
                     result = True
                 else:
                     print("하단 강고 입장에 실패. 재 입장 시도")
-                    return
+                    refresh(dataset)
+                    if action_last_step(dataset):
+                        result = True
         else:
             print(str(datetime.now().strftime("%X")) + " : " + "하단 광고 위치 확인 불가")
             pyautogui.click((10, 210))

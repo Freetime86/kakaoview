@@ -684,7 +684,7 @@ def capture_back(dataset):
 
     if len(capture_icon) > 0:
 
-        if not is_board(dataset) and not is_my_view(dataset) or dataset['tour_type'] == "2":
+        if (not is_board(dataset) and not is_my_view(dataset)) or dataset['tour_type'] == "2":
 
             print(str(datetime.now().strftime("%X")) + " : " + "다이나믹 필터 처리 중...")
             if dynamic_action(dataset):
@@ -752,8 +752,9 @@ def capture_back(dataset):
                 refresh(dataset)
         else:
             print(str(datetime.now().strftime("%X")) + " : " + "현재 위치가 보드 또는 마이뷰에 있어서 캡처가 불가능 합니다.")
-            if action_last_step(dataset):
-                result = True
+            action_last_step(dataset)
+            #if action_last_step(dataset):
+                #result = True
     else:
         print(str(datetime.now().strftime("%X")) + " : " + "캡처 버튼을 찾을 수가 없습니다.")
     return result

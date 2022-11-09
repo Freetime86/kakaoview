@@ -384,8 +384,10 @@ def is_loaded(dataset):
             if dataset['last_step'] == "click_contents":
                 result = True
             elif dataset['last_step'] == "click_top_ad":
+                refresh_reload(dataset)
                 result = False
             elif dataset['last_step'] == "click_bottom_ad":
+                refresh_reload(dataset)
                 result = False
             next_step = True
 

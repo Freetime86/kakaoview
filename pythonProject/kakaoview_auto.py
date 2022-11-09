@@ -1294,8 +1294,9 @@ def select_channel(dataset):
             print(str(datetime.now().strftime("%X")) + " : " + "채널 클릭 완료.")
 
             init = True
+            set_time_out = timeout(dataset)
+            set_time_out2 = timeout(dataset)
             while not next_step:
-                set_time_out = timeout(dataset)
                 if check_timeout(set_time_out):
                     if init:
                         print(str(datetime.now().strftime("%X")) + " : " + "채널 입장 중...")
@@ -1307,7 +1308,6 @@ def select_channel(dataset):
                             print(str(datetime.now().strftime("%X")) + " : " + "채널 링크 오류 발생, 채널 재 입장 시도")
                             refresh_reload(dataset)
 
-                    set_time_out2 = timeout(dataset)
                     if check_timeout(set_time_out2):
 
                         if is_board(dataset):
@@ -1320,7 +1320,7 @@ def select_channel(dataset):
                             next_step = True
                         else:
                             print(str(datetime.now().strftime("%X")) + " : " + "채널 입장 대기 시간 초과, 마이뷰 인식 불가 ERROR")
-                            sys.exit("채널 입장 대기 시간 초과, 마이뷰 인식 불가 ERROR")
+                            sys.exit("시스템 종료")
                 else:
                     print(str(datetime.now().strftime("%X")) + " : " + "채널 입장 대기 시간 초과, 재 실행")
                     refresh_reload(dataset)

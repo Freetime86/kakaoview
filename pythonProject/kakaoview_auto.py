@@ -1575,7 +1575,7 @@ def click_bottom_ad(dataset):
     else:
         if not is_my_view(dataset):
             print(str(datetime.now().strftime("%X")) + " : " + "현재 위치가 메인 채널이 아닙니다. 메인 채널로 복귀 실행")
-            action_back(dataset, 2)
+            action_back(dataset, 1)
         else:
             print(str(datetime.now().strftime("%X")) + " : " + "현재 위치가 마이뷰 입니다. 프로세스 재입장 시도")
             pyautogui.click(dataset['my_channel'])

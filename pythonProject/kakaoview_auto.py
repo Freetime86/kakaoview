@@ -1128,6 +1128,14 @@ def refresh_reload(dataset):
 def find_heart(dataset):
     print(str(datetime.now().strftime("%X")) + " : " + "좋아요 처리 모듈 실행")
 
+    #return 여부 확인 (반복 동작을 위한 로직)
+    dataset['file_name_list'] = ['\start_return', '\start_return']
+    up_loc = find_location_accuracy(dataset, 0.80)  # 옵션 닷 버튼 찾기
+    if len(up_loc) > 0:
+        for i in range(0, 2):
+            pyautogui.click(23, 908)
+            time.sleep(0.5)
+
     # 함수 실행 결과 값
     result = False
 

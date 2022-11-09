@@ -1512,7 +1512,7 @@ def click_bottom_ad(dataset):
                 if is_loaded(dataset):
                     print(str(datetime.now().strftime("%X")) + " : " + "하단 광고 입장 완료")
                     #action_last_step(dataset)
-                    #result = True
+                    result = True
             else:
                 print(str(datetime.now().strftime("%X")) + " : " + "하단 광고 입장에 실패. 재 갱신 후 시도")
                 refresh(dataset)
@@ -1555,7 +1555,7 @@ def click_bottom_ad(dataset):
                     if is_loaded(dataset):
                         print(str(datetime.now().strftime("%X")) + " : " + "하단 광고 입장 완료")
                         # action_last_step(dataset)
-                        # result = True
+                        result = True
                 else:
                     print("하단 광고 입장에 실패. 재 입장 시도")
                     refresh(dataset)

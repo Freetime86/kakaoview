@@ -788,8 +788,9 @@ def back_to_home(dataset):
                             pyautogui.click(win_close_Loc)
                             print(str(datetime.now().strftime("%X")) + " : " + "X 버튼 클릭 탈출 시도")
                             try_count = try_count + 1
-                            # time.sleep(1)
+                            time.sleep(1)
                         else:
+
                             if try_count > 3 and curr_screen == pos_screen:
                                 if not is_board(dataset):
                                     pyautogui.click(my_view_return_loc)

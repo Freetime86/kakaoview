@@ -1507,10 +1507,12 @@ def click_bottom_ad(dataset):
             time.sleep(2)
             print(str(datetime.now().strftime("%X")) + " : " + "하단 광고 입장 중...")
 
-            if is_loaded(dataset) and not is_board(dataset):
-                print(str(datetime.now().strftime("%X")) + " : " + "하단 광고 입장 완료")
-                action_last_step(dataset)
-                result = True
+            if not is_board(dataset):
+                time.sleep(1)
+                if is_loaded(dataset):
+                    print(str(datetime.now().strftime("%X")) + " : " + "하단 광고 입장 완료")
+                    #action_last_step(dataset)
+                    #result = True
             else:
                 print(str(datetime.now().strftime("%X")) + " : " + "하단 광고 입장에 실패. 재 갱신 후 시도")
                 refresh(dataset)
@@ -1548,10 +1550,12 @@ def click_bottom_ad(dataset):
                 time.sleep(2)
                 print(str(datetime.now().strftime("%X")) + " : " + "하단 광고 입장 중..")
 
-                if is_loaded(dataset) and not is_board(dataset):
-                    print(str(datetime.now().strftime("%X")) + " : " + "하단 광고 입장 완료")
-                    action_last_step(dataset)
-                    #result = True
+                if not is_board(dataset):
+                    time.sleep(1)
+                    if is_loaded(dataset):
+                        print(str(datetime.now().strftime("%X")) + " : " + "하단 광고 입장 완료")
+                        # action_last_step(dataset)
+                        # result = True
                 else:
                     print("하단 광고 입장에 실패. 재 입장 시도")
                     refresh(dataset)

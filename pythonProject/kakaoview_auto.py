@@ -611,7 +611,8 @@ def action_last_step(dataset):
     if dataset['last_step'] == "click_contents":
         click_contents(dataset)
     elif dataset['last_step'] == "click_top_ad":
-        click_top_ad(dataset)
+        if refresh(dataset):
+            click_top_ad(dataset)
     elif dataset['last_step'] == "click_bottom_ad":
         if refresh(dataset):
             click_bottom_ad(dataset)

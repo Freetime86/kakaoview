@@ -613,6 +613,7 @@ def action_last_step(dataset):
         click_top_ad(dataset)
     elif dataset['last_step'] == "click_bottom_ad":
         click_bottom_ad(dataset)
+        pyautogui.click(dataset['last_location'])
 
     return result
 
@@ -1395,7 +1396,7 @@ def click_contents(dataset):
                             check_times) + " 번째 계산")
 
                     if is_board(dataset):
-                        # dataset['last_location'] = title_loc
+                        dataset['last_location'] = title_loc
                         dataset['last_step'] = "click_contents"
                         print(str(datetime.now().strftime("%X")) + " : " + "컨텐츠 정밀 위치 BACK UP 완료")
                         print(str(datetime.now().strftime("%X")) + " : " + "컨텐츠 클릭 실행")
@@ -1456,7 +1457,7 @@ def click_top_ad(dataset):
                     top_ad_y))
 
         top_ad_loc = (top_ad_x, top_ad_y + 70)
-        # dataset['last_location'] = top_ad_loc
+        dataset['last_location'] = top_ad_loc
         dataset['last_step'] = "click_top_ad"
 
         time.sleep(1)
@@ -1518,7 +1519,7 @@ def click_bottom_ad(dataset):
             bottom_ad_loc = pyautogui.center(similar_msg_txt_loc[0])
             bottom_ad_loc = (bottom_ad_loc.x + 50, bottom_ad_loc.y - 140)
 
-            # dataset['last_location'] = bottom_ad_loc
+            dataset['last_location'] = bottom_ad_loc
             dataset['last_step'] = "click_bottom_ad"
             print(str(datetime.now().strftime("%X")) + " : " + "하단 광고 위치 BACK UP 완료")
             pyautogui.click(bottom_ad_loc)
@@ -1561,7 +1562,7 @@ def click_bottom_ad(dataset):
             if len(other_msg_txt_loc) > 0 or len(more_kakaoview_loc) > 0:
                 print(str(datetime.now().strftime("%X")) + " : " + "하단 광고 위치 정밀 계산 완료")
 
-                # dataset['last_location'] = bottom_ad_loc
+                dataset['last_location'] = bottom_ad_loc
                 dataset['last_step'] = "click_bottom_ad"
                 print(str(datetime.now().strftime("%X")) + " : " + "하단 광고 위치 BACK UP 완료")
                 pyautogui.click(bottom_ad_loc)

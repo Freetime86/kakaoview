@@ -1282,7 +1282,10 @@ def select_channel(dataset):
                         no_channel = find_location_accuracy(dataset, 0.70)
                         if len(no_channel) > 0:
                             print(str(datetime.now().strftime("%X")) + " : " + "채널 링크 오류 발생, 채널 재 입장 시도")
-                            refresh_reload(dataset)
+                            action_back(dataset, 1)
+                            time.sleep(1)
+                            return
+                            #refresh_reload(dataset)
 
                     if check_timeout(set_time_out2):
 

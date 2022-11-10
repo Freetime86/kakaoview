@@ -819,7 +819,7 @@ def back_to_home(dataset):
                             else:
                                 if not is_my_view(dataset):
                                     if not is_board(dataset):
-                                        time.sleep(0.5)
+                                        time.sleep(1)
                                         if try_count > 2:
                                             print(str(datetime.now().strftime(
                                                 "%X")) + " : " + "5회 시도 : 보드 인식 불가, 연타로 빠져나가기 시도")

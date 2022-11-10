@@ -795,7 +795,7 @@ def back_to_home(dataset):
                         else:
 
                             if try_count > 3 and curr_screen == pos_screen:
-                                if not is_board(dataset):
+                                if not is_board(dataset) and not is_my_view(dataset):
                                     pyautogui.click(my_view_return_loc)
                                     print(str(datetime.now().strftime("%X")) + " : " + "뒤로가기 더블 클릭")
                                 pyautogui.click(my_view_return_loc)
@@ -804,14 +804,20 @@ def back_to_home(dataset):
                                 pos_screen = getPixel()
                                 time.sleep(0.5)
                                 if first_try:
-                                    pyautogui.click(my_view_return_loc)
-                                    print(str(datetime.now().strftime("%X")) + " : " + "마이뷰 이동 전처리")
+                                    if not is_my_view(dataset):
+                                        pyautogui.click(my_view_return_loc)
+                                        print(str(datetime.now().strftime("%X")) + " : " + "마이뷰 이동 전처리")
+                                    else:
+                                        print(str(datetime.now().strftime("%X")) + " : " + "마이뷰 이동 처리 캔슬1, 위치가 마이뷰입니다.")
                                     first_try = False
                                     # time.sleep(1)
                                 else:
-                                    pyautogui.click(my_view_return_loc)
-                                    print(str(datetime.now().strftime("%X")) + " : " + "마이뷰 이동")
-                                    try_count = try_count + 1
+                                    if not is_my_view(dataset):
+                                        pyautogui.click(my_view_return_loc)
+                                        print(str(datetime.now().strftime("%X")) + " : " + "마이뷰 이동")
+                                        try_count = try_count + 1
+                                    else:
+                                        print(str(datetime.now().strftime("%X")) + " : " + "마이뷰 이동 처리 캔슬2, 위치가 마이뷰입니다.")
                             timeout_flag = True
 
                     # 마이뷰 복귀 확인
@@ -1145,7 +1151,7 @@ def find_heart(dataset):
     dataset['file_name_list'] = ['\setting_icon', '\setting_icon1']
     setting_icon = find_location_accuracy(dataset, 0.80)  # 옵션 닷 버튼 찾기
 
-    if len(setting_icon) > 0:
+    if is_my_view(dataset):
         print(str(datetime.now().strftime("%X")) + " : " + "현재 위치 마이뷰")
         if not init:
             print(str(datetime.now().strftime("%X")) + " : " + "다음 채널 선택")

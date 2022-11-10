@@ -954,6 +954,7 @@ def refresh(dataset):
                         else:
                             print(str(datetime.now().strftime("%X")) + " : " + "마이뷰까지 나옴. 다시 매인채널로 입장")
                             pyautogui.click(dataset['my_channel'])
+                            page_refresh_flag = True
                             time.sleep(1)
 
             # 보드 재클릭

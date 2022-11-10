@@ -1462,7 +1462,7 @@ def click_top_ad(dataset):
 
         time.sleep(1)
         pyautogui.click(top_ad_loc)
-        time.sleep(1)
+        time.sleep(2)
         print(str(datetime.now().strftime("%X")) + " : " + "상단 광고 진입 실행")
 
         if not is_board(dataset):

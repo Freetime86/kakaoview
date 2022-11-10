@@ -938,7 +938,7 @@ def refresh(dataset):
                     pyautogui.click(page_refresh_loc)
                     print(str(datetime.now().strftime("%X")) + " : " + "새로고침 실행 : CLEAR")
                     page_refresh_flag = True
-                    dataset['is_refresh'] = True
+                    # dataset['is_refresh'] = True
                 else:
                     print(str(datetime.now().strftime("%X")) + " : " + "새로고침 옵션 확인 불가 : FAIL")
                     if is_board(dataset):
@@ -966,7 +966,6 @@ def refresh(dataset):
 
 def refresh_reload(dataset):
     print(str(datetime.now().strftime("%X")) + " : " + "재 기동 실행 : CLEAR")
-
     next_step = False
     # main channel check
     channel_main_flag = False
@@ -1009,6 +1008,7 @@ def refresh_reload(dataset):
                             if not is_board(dataset):
                                 print(str(datetime.now().strftime("%X")) + " : " + "BACK BTN 0 : CLEAR")
                                 pyautogui.click(capture_back_loc)
+                                time.sleep(1)
                             else:
                                 channel_main_flag = True
                             pyautogui.click(capture_back_loc)
@@ -1020,6 +1020,7 @@ def refresh_reload(dataset):
                         if not is_my_view(dataset):
                             pyautogui.click(capture_back_loc)
                             print(str(datetime.now().strftime("%X")) + " : " + "BACK BTN : CLEAR")
+                            time.sleep(1)
                             try_count = try_count + 1
                             pos_screen = getPixel()
                         else:
@@ -1053,28 +1054,28 @@ def refresh_reload(dataset):
         dataset['file_name_list'] = ['\page_refresh_option']
         board_option = find_location_accuracy(dataset, 0.80)
         if len(board_option) > 0:
-            board_option_loc = pyautogui.center(board_option[0])
-            pyautogui.doubleClick(board_option_loc)
-            print(str(datetime.now().strftime("%X")) + " : " + "재기동 옵션 버튼 실행 : CLEAR")
-            time.sleep(0.5)
-
-            page_refresh_flag = False
-            while not page_refresh_flag:
-                dataset['file_name_list'] = ['\page_refresh']
-                page_refresh = find_location_accuracy(dataset, 0.85)
-                if len(page_refresh) > 0:
-                    page_refresh_loc = pyautogui.center(page_refresh[0])
-                    pyautogui.click(page_refresh_loc)
-                    print(str(datetime.now().strftime("%X")) + " : " + "페이지 새로고침 : CLEAR")
-                    page_refresh_flag = True
-                    dataset['is_refresh'] = True
-                else:
-                    pyautogui.doubleClick(board_option_loc)
-                    print(str(datetime.now().strftime("%X")) + " : " + "재기동 옵션 버튼 재실행 : CLEAR")
-                    time.sleep(0.5)
+            # board_option_loc = pyautogui.center(board_option[0])
+            # pyautogui.doubleClick(board_option_loc)
+            # print(str(datetime.now().strftime("%X")) + " : " + "재기동 옵션 버튼 실행 : CLEAR")
+            # time.sleep(0.5)
+            #
+            # page_refresh_flag = False
+            # while not page_refresh_flag:
+            #     dataset['file_name_list'] = ['\page_refresh']
+            #     page_refresh = find_location_accuracy(dataset, 0.85)
+            #     if len(page_refresh) > 0:
+            #         page_refresh_loc = pyautogui.center(page_refresh[0])
+            #         pyautogui.click(page_refresh_loc)
+            #         print(str(datetime.now().strftime("%X")) + " : " + "페이지 새로고침 : CLEAR")
+            #         page_refresh_flag = True
+            #         dataset['is_refresh'] = True
+            #     else:
+            #         pyautogui.doubleClick(board_option_loc)
+            #         print(str(datetime.now().strftime("%X")) + " : " + "재기동 옵션 버튼 재실행 : CLEAR")
+            #         time.sleep(0.5)
 
             # 마지막 액션을 다시 수행
-            time.sleep(1)
+            # time.sleep(1)
             # pyautogui.click(dataset['last_location'])
             if action_last_step(dataset):
                 print(str(datetime.now().strftime("%X")) + " : " + "액션 재 실행 : CLEAR")
@@ -1094,6 +1095,8 @@ def find_heart(dataset):
         for i in range(0, 2):
             pyautogui.click(23, 908)
             time.sleep(0.5)
+        #초기 첫번째 채널도 돈다
+        dataset['start'] = True
 
     # 함수 실행 결과 값
     result = False
@@ -1565,8 +1568,6 @@ def activate_auto_tour():
                "loading_img_list": ['\loading_master'],
                "more_kakao_board": ['\more_kakaoview_txt', '\more_kakaoview_txt1'],
                'file_name_list': ['\home_for_scroll_base', '\home_for_scroll_base1'],
-               'loading_msg': False,
-               'is_refresh': False,
                'win_title': ['상민의 Galaxy S20+ 5G', 'Galaxy S20 5G', '수윤의 S20'],
                'scroll_up': (21, 912),
                'scroll_down': (21, 982),

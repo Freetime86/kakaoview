@@ -1274,18 +1274,25 @@ def select_channel(dataset):
             set_time_out2 = timeout(dataset)
             while not next_step:
                 if check_timeout(set_time_out):
-                    if init:
-                        print(str(datetime.now().strftime("%X")) + " : " + "채널 입장 중...")
-                        init = False
-                    else:
-                        dataset['file_name_list'] = ['\chaboard_not_exist']
-                        no_channel = find_location_accuracy(dataset, 0.70)
+                    
+                    #채널 링크 오류 체크
+                    dataset['file_name_list'] = ['\chaboard_not_exist']
+                    no_channel = find_location_accuracy(dataset, 0.70)
+
+                    is_link_error = True
+                    while is_link_error:
                         if len(no_channel) > 0:
                             print(str(datetime.now().strftime("%X")) + " : " + "채널 링크 오류 발생, 채널 재 입장 시도")
                             action_back(dataset, 1)
                             time.sleep(1)
-                            return
-                            #refresh_reload(dataset)
+                            pyautogui.click(channel_loc)
+                            time.sleep(1)
+                        else:
+                            is_link_error = False
+                    
+                    if init:
+                        print(str(datetime.now().strftime("%X")) + " : " + "채널 입장 중...")
+                        init = False
 
                     if check_timeout(set_time_out2):
 

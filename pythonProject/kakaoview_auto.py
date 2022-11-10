@@ -1596,7 +1596,7 @@ def click_bottom_ad(dataset):
 
 
 def activate_auto_tour():
-    # time.sleep(5)
+    time.sleep(5)
 
     # 과거 정보
     dataset = {"reservation": "202211010601",

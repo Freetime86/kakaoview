@@ -1026,7 +1026,7 @@ def refresh_reload(dataset):
 
     while not channel_main_flag:
         if not is_board(dataset):
-
+            print(str(datetime.now().strftime("%X")) + " : " + "채널 flag 못벗어남")
             curr_screen = getPixel()
 
             # BACK BTN

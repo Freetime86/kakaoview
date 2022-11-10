@@ -689,9 +689,9 @@ def capture_back(dataset):
                         result = True
                     else:
                         print(str(datetime.now().strftime("%X")) + " : " + "캡처 위치가 보드 입니다.")
-                        action_last_step(dataset)
+                        if action_last_step(dataset):
                         # 221029 - 진입 경로 채널 -> 하단광고 입장 실패로 캡처위치가 채널이여서 하단광고의 경우 모듈 재진행이 필요함
-                        return
+                            return
                 else:
                     print(str(datetime.now().strftime("%X")) + " : " + "페이지 로드 정상적인 판단 불가, 모듈 재 실행")
                     refresh_reload(dataset)
@@ -785,8 +785,9 @@ def back_to_home(dataset):
 
         if is_board(dataset):
             print(str(datetime.now().strftime("%X")) + " : " + "현재 위치는 내 채널 메인에 있습니다.")
-            if action_last_step(dataset):
-                refresh(dataset)
+            action_last_step(dataset)
+            # if action_last_step(dataset):
+            #     refresh(dataset)
         else:
             print(str(datetime.now().strftime("%X")) + " : " + "아직 메인 채널이 아닙니다.")
         if len(capture_back) > 0 and not is_board(dataset):
@@ -1426,9 +1427,10 @@ def click_top_ad(dataset):
             else:
                 if is_board(dataset):
                     print(str(datetime.now().strftime("%X")) + " : " + "상단 광고 진입 실패")
-                    action_last_step(dataset)
                    # pyautogui.click(top_ad_loc)
                     print(str(datetime.now().strftime("%X")) + " : " + "상단 광고 진입 재실행")
+                    if action_last_step(dataset):
+                        result = True
                 else:
                     print(str(datetime.now().strftime("%X")) + " : " + "상단 광고 로드 실패")
         else:
@@ -1441,7 +1443,8 @@ def click_top_ad(dataset):
         else:
             if is_board(dataset):
                 print(str(datetime.now().strftime("%X")) + " : " + "메인 채널, 마지막 실행 모듈 재실행")
-                action_last_step(dataset)
+                if action_last_step(dataset):
+                    result = True
             else:
                 result = True
             # refresh_reload(dataset)

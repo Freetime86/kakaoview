@@ -1032,6 +1032,13 @@ def refresh_reload(dataset):
                         else:
                             pyautogui.click(dataset['my_channel'])
                             print(str(datetime.now().strftime("%X")) + " : " + "현재 위치 마이뷰, 채널 재 입장")
+                            print("클릭 위치 : " + str(dataset['my_channel']))
+                            target_location = False
+                            while not target_location:
+                                target_location = is_board(dataset)
+                                channel_main_flag = True
+                            print(str(datetime.now().strftime("%X")) + " : " + "메인 채널 여부 ? " + str(channel_main_flag))
+
                     else:
                         # pyautogui.click(dataset['last_location'])
                         # print(str(datetime.now().strftime("%X")) + " : " + "현재위치 내 채널 메인, 마지막 액션 재 실행")
@@ -1141,14 +1148,15 @@ def find_heart(dataset):
 
                     win_activate(dataset)
                     pyautogui.moveTo(title_loc)
-                    pyautogui.click(title_loc)
+                    #pyautogui.click(title_loc)
                     pyautogui.mouseDown()
+                    time.sleep(0.5)
                     setting_icon_loc = pyautogui.center(setting_icon[0])
                     setting_icon_loc = (setting_icon_loc.x, setting_icon_loc.y + 65)
                     pyautogui.moveTo(setting_icon_loc)
-                    time.sleep(1)
+                    time.sleep(0.5)
                     pyautogui.mouseUp()
-                    time.sleep(1)
+                    #time.sleep(1)
                     print(str(datetime.now().strftime("%X")) + " : " + "다음 채널 위치로 이동 완료")
                     result = True
                 else:
@@ -1281,7 +1289,7 @@ def select_channel(dataset):
                     
                     #채널 링크 오류 체크
                     dataset['file_name_list'] = ['\chaboard_not_exist']
-                    no_channel = find_location_accuracy(dataset, 0.70)
+                    no_channel = find_location_accuracy(dataset, 0.80)
 
                     is_link_error = True
                     while is_link_error:
@@ -1299,7 +1307,6 @@ def select_channel(dataset):
                         init = False
 
                     if check_timeout(set_time_out2):
-
                         if is_board(dataset):
                             result = True
                             next_step = True

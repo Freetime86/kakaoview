@@ -1156,7 +1156,7 @@ def find_heart(dataset):
                     pyautogui.moveTo(setting_icon_loc)
                     time.sleep(0.5)
                     pyautogui.mouseUp()
-                    #time.sleep(1)
+                    time.sleep(0.5)
                     print(str(datetime.now().strftime("%X")) + " : " + "다음 채널 위치로 이동 완료")
                     result = True
                 else:

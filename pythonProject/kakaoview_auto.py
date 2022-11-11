@@ -266,17 +266,18 @@ def is_board(dataset):
 
     if len(board_loc) > 0:
         result = True
-    # dataset['file_name_list'] = ['\channel_main_option_dots']
-    # board_option_dots = find_location_accuracy(dataset, 0.80)
+    return result
 
-    # result = False
-    # for loc in board_txt:
-    #    this_loc = pyautogui.center(loc)
-    #    if this_loc.y < 120:
-    #        for option_loc in board_option_dots:
-    #            op_loc = pyautogui.center(option_loc)
-    #            if 210 < op_loc.y < 270:
-    #                result = True
+
+def is_background(dataset):
+    result = False
+    dataset['file_name_list'] = ['\_background']
+    board_loc = find_location_detail(dataset, 0.75, 5, 850, 450, 1000)
+
+    if len(board_loc) > 0:
+        print(str(datetime.now().strftime("%X")) + " : " + "현재 위치는 바탕화면 입니다. 카카오톡으로 복귀")
+        pyautogui.click(board_loc)
+        result = True
     return result
 
 
@@ -842,6 +843,8 @@ def back_to_home(dataset):
                                     print(str(datetime.now().strftime("%X")) + " : " + "보드로 돌아갈 수 없음. 프로그램 재 기동")
                                     pyautogui.click(capture_back_loc)
                                     try_count = try_count + 1
+                                elif is_background(dataset):
+                                    print(str(datetime.now().strftime("%X")) + " : " + "현재 바탕화면 튕김. 카카오톡 재진입")
                                 else:
                                     print(str(datetime.now().strftime("%X")) + " : " + "현재 위치 마이뷰, BACK BTN 사용 불가")
                                     if dataset['my_channel'] is not None:
@@ -1359,9 +1362,12 @@ def click_contents(dataset):
                     print(str(datetime.now().strftime("%X")) + " : " + "현재 위치 : 채널 메인")
                     if check_times > 0:
                         print(str(datetime.now().strftime("%X")) + " : " + "컨텐츠 위치 정밀 위치 후처리 계산 중...")
-                        title_loc = (title_loc[0], title_loc[1] + 10)
-                        print(str(datetime.now().strftime("%X")) + " : " + "컨텐츠 위치 정밀 위치 후처리 계산 완료 : " + str(
-                            check_times) + " 번째 계산")
+                        if not title_loc[0] > 1000:
+                            title_loc = (title_loc[0], title_loc[1] + 10)
+                            print(str(datetime.now().strftime("%X")) + " : " + "컨텐츠 위치 정밀 위치 후처리 계산 완료 : " + str(
+                                check_times) + " 번째 계산")
+                        else:
+                            action_last_step(dataset)
 
                     if is_board(dataset):
                         dataset['last_location'] = title_loc
@@ -1557,6 +1563,7 @@ def click_bottom_ad(dataset):
                 for idx in range(0, 3):
                     pyautogui.scroll(-500)
                 time.sleep(1)
+
             else:
                 pyautogui.click(dataset['my_channel'])
                 print(str(datetime.now().strftime("%X")) + " : " + "현재 위치 마이뷰, 마지막 보드 재 진입")

@@ -756,7 +756,7 @@ def back_to_home(dataset):
                                         next_step = True
                             else:
                                 print(str(datetime.now().strftime("%X")) + " : " + "현재 위치 식별 불가")
-                                pyautogui.click(my_view_return_loc)
+                                pyautogui.doubleClick(my_view_return_loc)
                                 print(str(datetime.now().strftime("%X")) + " : " + "뒤로가기")
                                 time.sleep(5)
                         else:

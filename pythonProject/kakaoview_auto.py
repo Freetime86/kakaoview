@@ -1511,7 +1511,7 @@ def click_bottom_ad(dataset):
     dataset['file_name_list'] = ['\other_msg_txt', '\more_kakaoview_txt', '\more_kakaoview_txt1']
     other_msg_txt_loc = find_location_accuracy(dataset, 0.70)
 
-    if is_board(dataset):
+    if is_board(dataset) or len(similar_msg_txt_loc) > 0 or len(other_msg_txt_loc):
         print(str(datetime.now().strftime("%X")) + " : " + "현재 위치 메인 채널")
         if len(other_msg_txt_loc) == 0 and len(similar_msg_txt_loc) > 0:
             print(str(datetime.now().strftime("%X")) + " : " + "하단 광고 위치 확인1")

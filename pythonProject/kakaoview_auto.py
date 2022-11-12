@@ -744,11 +744,13 @@ def back_to_home(dataset):
                                 if curr_screen == pos_screen and is_board(dataset):
                                     pyautogui.click(my_view_return_loc)
                                     print(str(datetime.now().strftime("%X")) + " : " + "뒤로가기")
+                                    time.sleep(1)
                                     pos_screen = getPixel()
                                 else:
                                     if not is_my_view(dataset):
                                         pyautogui.doubleClick(my_view_return_loc)
                                         print(str(datetime.now().strftime("%X")) + " : " + "더블클릭 뒤로가기")
+                                        time.sleep(1)
                                     else:
                                         print(str(datetime.now().strftime("%X")) + " : " + "마이뷰 돌아가기 완료")
                                         next_step = True
@@ -760,6 +762,7 @@ def back_to_home(dataset):
                                     pyautogui.click(my_view_return_loc)
                                     print(str(datetime.now().strftime("%X")) + " : " + "마이뷰 이동 전처리")
                                     try_count = try_count + 1
+                                    time.sleep(1)
                                 else:
                                     print(str(datetime.now().strftime("%X")) + " : " + "마이뷰 이동 처리 캔슬1, 위치가 마이뷰입니다.")
                                     next_step = True
@@ -1310,7 +1313,13 @@ def select_channel(dataset):
                             next_step = True
                         else:
                             print(str(datetime.now().strftime("%X")) + " : " + "채널 입장 대기 시간 초과, 마이뷰 인식 불가 ERROR")
-                            sys.exit("시스템 종료")
+                            if is_board(dataset):
+                                action_back(dataset, 1)
+                                time.sleep(1)
+                                pyautogui.click(channel_loc)
+                                time.sleep(1)
+                                print(str(datetime.now().strftime("%X")) + " : " + "채널 재입장 시도")
+                                set_time_out2 = timeout(dataset)
                 else:
                     print(str(datetime.now().strftime("%X")) + " : " + "채널 입장 대기 시간 초과, 재 실행")
                     refresh_reload(dataset)

@@ -721,61 +721,54 @@ def back_to_home(dataset):
         if len(my_view_return) > 0:
 
             my_view_return_loc = pyautogui.center(my_view_return[0])
-            timeout_flag = False
             first_try = True
             try_count = 0
             pos_screen = (0, 0)
-            set_time_out = datetime.now() + timedelta(seconds=5)
             while not next_step:
                 curr_screen = getPixel()
-                if check_timeout(set_time_out):
-                    if not is_my_view(dataset):
-                        if not timeout_flag:
-                            dataset['file_name_list'] = ['\win_close', '\win_close1']
-                            win_close = find_sel_region_accuracy(dataset, 0.8, 5, 70, 440, 150)
+                if not is_my_view(dataset):
+                    dataset['file_name_list'] = ['\win_close', '\win_close1']
+                    win_close = find_sel_region_accuracy(dataset, 0.8, 5, 70, 440, 150)
 
-                            if len(win_close) > 0 and try_count == 0 and not is_board(dataset):
-                                win_close_Loc = pyautogui.center(win_close[0])
-                                time.sleep(0.5)
-                                pyautogui.click(win_close_Loc)
-                                print(str(datetime.now().strftime("%X")) + " : " + "X 버튼 클릭 탈출 시도")
-                                try_count = try_count + 1
-                                time.sleep(1)
-                            else:
-
-                                if try_count > 3 and curr_screen == pos_screen:
-                                    if not is_board(dataset) and not is_my_view(dataset):
-                                        pyautogui.click(my_view_return_loc)
-                                        print(str(datetime.now().strftime("%X")) + " : " + "뒤로가기 더블 클릭")
-                                    pyautogui.click(my_view_return_loc)
-                                    try_count = 0
-                                else:
-                                    pos_screen = getPixel()
-                                    time.sleep(0.5)
-                                    if first_try:
-                                        if not is_my_view(dataset):
-                                            pyautogui.click(my_view_return_loc)
-                                            print(str(datetime.now().strftime("%X")) + " : " + "마이뷰 이동 전처리")
-                                        else:
-                                            print(str(datetime.now().strftime("%X")) + " : " + "마이뷰 이동 처리 캔슬1, 위치가 마이뷰입니다.")
-                                        first_try = False
-                                        # time.sleep(1)
-                                    else:
-                                        if not is_my_view(dataset):
-                                            pyautogui.click(my_view_return_loc)
-                                            print(str(datetime.now().strftime("%X")) + " : " + "마이뷰 이동")
-                                            try_count = try_count + 1
-                                        else:
-                                            print(str(datetime.now().strftime("%X")) + " : " + "마이뷰 이동 처리 캔슬2, 위치가 마이뷰입니다.")
-                                timeout_flag = True
-                    # 마이뷰 복귀 확인
+                    if len(win_close) > 0 and try_count == 0 and not is_board(dataset):
+                        win_close_Loc = pyautogui.center(win_close[0])
+                        time.sleep(0.5)
+                        pyautogui.click(win_close_Loc)
+                        print(str(datetime.now().strftime("%X")) + " : " + "X 버튼 클릭 탈출 시도")
+                        try_count = try_count + 1
+                        time.sleep(1)
+                        pos_screen = getPixel()
                     else:
-                        print(str(datetime.now().strftime("%X")) + " : " + "마이뷰 돌아가기 완료")
-                        next_step = True
+                        if try_count >= 2:
+                            if is_board(dataset) or is_my_view(dataset):
+                                if curr_screen == pos_screen and is_board(dataset):
+                                    pyautogui.click(my_view_return_loc)
+                                    print(str(datetime.now().strftime("%X")) + " : " + "뒤로가기")
+                                    pos_screen = getPixel()
+                                else:
+                                    if not is_my_view(dataset):
+                                        pyautogui.doubleClick(my_view_return_loc)
+                                        print(str(datetime.now().strftime("%X")) + " : " + "더블클릭 뒤로가기")
+                                    else:
+                                        print(str(datetime.now().strftime("%X")) + " : " + "마이뷰 돌아가기 완료")
+                                        next_step = True
+                            else:
+                                print(str(datetime.now().strftime("%X")) + " : " + "현재 위치 식별 불가 시스템 종료")
+                        else:
+                            if first_try:
+                                if not is_my_view(dataset):
+                                    pyautogui.click(my_view_return_loc)
+                                    print(str(datetime.now().strftime("%X")) + " : " + "마이뷰 이동 전처리")
+                                    try_count = try_count + 1
+                                else:
+                                    print(str(datetime.now().strftime("%X")) + " : " + "마이뷰 이동 처리 캔슬1, 위치가 마이뷰입니다.")
+                                    next_step = True
+                                first_try = False
+                                pos_screen = getPixel()
+                # 마이뷰 복귀 확인
                 else:
-                    print(str(datetime.now().strftime("%X")) + " : " + "마이뷰를 찾을 수 없습니다.")
-                    timeout_flag = False
-                    set_time_out = timeout(dataset)
+                    print(str(datetime.now().strftime("%X")) + " : " + "마이뷰 돌아가기 완료")
+                    next_step = True
 
 
     else:

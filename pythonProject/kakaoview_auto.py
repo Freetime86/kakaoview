@@ -1294,7 +1294,7 @@ def select_channel(dataset):
                     
                     #채널 링크 오류 체크
                     dataset['file_name_list'] = ['\chaboard_not_exist']
-                    no_channel = find_location_accuracy(dataset, 0.80)
+                    no_channel = find_location_accuracy(dataset, 0.90)
 
                     is_link_error = True
                     while is_link_error:

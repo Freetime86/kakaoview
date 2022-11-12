@@ -744,13 +744,13 @@ def back_to_home(dataset):
                                 if curr_screen == pos_screen and is_board(dataset):
                                     pyautogui.click(my_view_return_loc)
                                     print(str(datetime.now().strftime("%X")) + " : " + "뒤로가기")
-                                    time.sleep(1)
+                                    time.sleep(2)
                                     pos_screen = getPixel()
                                 else:
                                     if not is_my_view(dataset):
                                         pyautogui.doubleClick(my_view_return_loc)
                                         print(str(datetime.now().strftime("%X")) + " : " + "더블클릭 뒤로가기")
-                                        time.sleep(1)
+                                        time.sleep(2)
                                     else:
                                         print(str(datetime.now().strftime("%X")) + " : " + "마이뷰 돌아가기 완료")
                                         next_step = True
@@ -760,14 +760,23 @@ def back_to_home(dataset):
                             if first_try:
                                 if not is_my_view(dataset):
                                     pyautogui.click(my_view_return_loc)
-                                    print(str(datetime.now().strftime("%X")) + " : " + "마이뷰 이동 전처리")
+                                    print(str(datetime.now().strftime("%X")) + " : " + "마이뷰 이동 전처리1")
                                     try_count = try_count + 1
-                                    time.sleep(1)
+                                    time.sleep(2)
                                 else:
                                     print(str(datetime.now().strftime("%X")) + " : " + "마이뷰 이동 처리 캔슬1, 위치가 마이뷰입니다.")
                                     next_step = True
                                 first_try = False
                                 pos_screen = getPixel()
+                            else:
+                                if not is_my_view(dataset):
+                                    pyautogui.click(my_view_return_loc)
+                                    print(str(datetime.now().strftime("%X")) + " : " + "마이뷰 이동 전처리2")
+                                    try_count = try_count + 1
+                                    time.sleep(2)
+                                else:
+                                    print(str(datetime.now().strftime("%X")) + " : " + "마이뷰 이동 처리 캔슬2, 위치가 마이뷰입니다.")
+                                    next_step = True
                 # 마이뷰 복귀 확인
                 else:
                     print(str(datetime.now().strftime("%X")) + " : " + "마이뷰 돌아가기 완료")

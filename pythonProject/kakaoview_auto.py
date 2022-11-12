@@ -1321,6 +1321,7 @@ def select_channel(dataset):
                 else:
                     print(str(datetime.now().strftime("%X")) + " : " + "채널 입장 대기 시간 초과, 재 실행")
                     refresh_reload(dataset)
+                    set_time_out = timeout(dataset)
         else:
             print(str(datetime.now().strftime("%X")) + " : " + "채널 보드 위치 파악 불가")
     return result

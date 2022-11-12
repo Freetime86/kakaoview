@@ -641,6 +641,7 @@ def capture_module(dataset):
     capture_icon = find_location_accuracy(dataset, 0.70)
     if len(capture_icon) > 0:
         if dataset['tour_type'] == "1":
+            time.sleep(0.5)
             capture_loc = pyautogui.center(capture_icon[0])
             pyautogui.click(capture_loc)
             time.sleep(1)

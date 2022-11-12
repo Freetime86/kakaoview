@@ -262,10 +262,9 @@ def find_loading_status(dataset, accuracy):
 def is_board(dataset):
     result = False
     dataset['file_name_list'] = ['\main_board_txt']
-    board_loc = find_location_detail(dataset, 0.75, 50, 80, 370, 130)
-    dataset['file_name_list'] = ['\channel_main_option_dots']
-    channel_main_loc = find_location_detail(dataset, 0.75, 400, 170, 440, 350)
-    if len(board_loc) > 0 and len(channel_main_loc) > 0:
+    board_loc = find_location_detail(dataset, 0.85, 50, 80, 370, 130)
+
+    if len(board_loc) > 0:
         result = True
     return result
 
@@ -1511,7 +1510,7 @@ def click_bottom_ad(dataset):
     dataset['file_name_list'] = ['\other_msg_txt', '\more_kakaoview_txt', '\more_kakaoview_txt1']
     other_msg_txt_loc = find_location_accuracy(dataset, 0.70)
 
-    if is_board(dataset) or len(similar_msg_txt_loc) > 0 or len(other_msg_txt_loc):
+    if is_board(dataset):
         print(str(datetime.now().strftime("%X")) + " : " + "현재 위치 메인 채널")
         if len(other_msg_txt_loc) == 0 and len(similar_msg_txt_loc) > 0:
             print(str(datetime.now().strftime("%X")) + " : " + "하단 광고 위치 확인1")

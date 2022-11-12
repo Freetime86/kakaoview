@@ -755,7 +755,10 @@ def back_to_home(dataset):
                                         print(str(datetime.now().strftime("%X")) + " : " + "마이뷰 돌아가기 완료")
                                         next_step = True
                             else:
-                                print(str(datetime.now().strftime("%X")) + " : " + "현재 위치 식별 불가 시스템 종료")
+                                print(str(datetime.now().strftime("%X")) + " : " + "현재 위치 식별 불가")
+                                pyautogui.click(my_view_return_loc)
+                                print(str(datetime.now().strftime("%X")) + " : " + "뒤로가기")
+                                time.sleep(5)
                         else:
                             if first_try:
                                 if not is_my_view(dataset):

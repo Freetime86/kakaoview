@@ -654,17 +654,6 @@ def capture_back(dataset):
     result = False
     print(str(datetime.now().strftime("%X")) + " : " + "캡처 모듈 실행")
 
-    # dataset['file_name_list'] = ['\scroll_down']
-    # scroll_down_icon = find_location(dataset)
-    #
-    # if len(scroll_down_icon) > 0:
-    #     scroll_down_loc = pyautogui.center(scroll_down_icon[0])
-    # else:
-    #     print(str(datetime.now().strftime("%X")) + " : " + "SCROLL APP 이 확인 되지 않음, SCROLL APP ON!")
-    #     scroll_loc = (18, 980)
-    #     pyautogui.click(scroll_loc)
-    #     return
-
     dataset['file_name_list'] = ['\capture', '\capture1']
     capture_icon = find_location_accuracy(dataset, 0.70)
 
@@ -675,10 +664,6 @@ def capture_back(dataset):
             print(str(datetime.now().strftime("%X")) + " : " + "다이나믹 필터 처리 중...")
             if dynamic_action(dataset):
                 print(str(datetime.now().strftime("%X")) + " : " + "다이나믹 필터 처리 완료")
-
-                # print(str(datetime.now().strftime("%X")) + " : " + "페이지 2차 SCROLL DOWN")
-                # pyautogui.click(scroll_down_loc)
-                # time.sleep(1)
 
                 # 로딩 한번 더 체크
                 if is_loaded(dataset):
@@ -1792,11 +1777,11 @@ def activate_auto_tour():
             set_time_out = datetime.now() + timedelta(seconds=10)
             while not next_step:
                 # 캡처 실행
-                if check_timeout(set_time_out):
-                    next_step = capture_back(dataset)
-                else:
-                    refresh_reload(dataset)
-                    set_time_out = datetime.now() + timedelta(seconds=10)
+                # if check_timeout(set_time_out):
+                next_step = capture_back(dataset)
+                # else:
+                #     refresh_reload(dataset)
+                #     set_time_out = datetime.now() + timedelta(seconds=10)
         next_step = False
         while not next_step:
             # 뒤로 가기 모듈 실행

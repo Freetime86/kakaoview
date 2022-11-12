@@ -724,6 +724,7 @@ def back_to_home(dataset):
             first_try = True
             try_count = 0
             pos_screen = (0, 0)
+            is_changed = True
             while not next_step:
                 curr_screen = getPixel()
                 if not is_my_view(dataset):
@@ -738,45 +739,99 @@ def back_to_home(dataset):
                         try_count = try_count + 1
                         time.sleep(1)
                         pos_screen = getPixel()
+                        compare_a = getPixel()
+                        compare_b = getPixel()
                     else:
                         if try_count >= 2:
                             if is_board(dataset) or is_my_view(dataset):
                                 if curr_screen == pos_screen and is_board(dataset):
-                                    pyautogui.click(my_view_return_loc)
-                                    print(str(datetime.now().strftime("%X")) + " : " + "뒤로가기")
-                                    time.sleep(2)
-                                    pos_screen = getPixel()
+                                    if is_changed:
+                                        compare_a = getPixel()
+                                        pyautogui.click(my_view_return_loc)
+                                        print(str(datetime.now().strftime("%X")) + " : " + "뒤로가기")
+                                        time.sleep(2)
+                                        compare_b = getPixel()
+                                        if compare_a != compare_b:
+                                            is_changed = True
+                                        else:
+                                            is_changed = False
+                                        pos_screen = getPixel()
+                                    else:
+                                        print(str(datetime.now().strftime("%X")) + " : " + "화면 Freezing 상태")
+                                        if compare_a != compare_b:
+                                            is_changed = True
+                                        else:
+                                            is_changed = False
+                                            compare_b = getPixel()
                                 else:
-                                    if not is_my_view(dataset):
+                                    if not is_my_view(dataset) and is_changed:
+                                        compare_a = getPixel()
                                         pyautogui.doubleClick(my_view_return_loc)
                                         print(str(datetime.now().strftime("%X")) + " : " + "더블클릭 뒤로가기")
                                         time.sleep(2)
+                                        compare_b = getPixel()
+                                        if compare_a != compare_b:
+                                            is_changed = True
+                                        else:
+                                            is_changed = False
                                     else:
                                         print(str(datetime.now().strftime("%X")) + " : " + "마이뷰 돌아가기 완료")
                                         next_step = True
                             else:
                                 print(str(datetime.now().strftime("%X")) + " : " + "현재 위치 식별 불가")
-                                pyautogui.doubleClick(my_view_return_loc)
-                                print(str(datetime.now().strftime("%X")) + " : " + "뒤로가기")
-                                time.sleep(5)
+                                if is_changed:
+                                    compare_a = getPixel()
+                                    pyautogui.doubleClick(my_view_return_loc)
+                                    print(str(datetime.now().strftime("%X")) + " : " + "뒤로가기")
+                                    time.sleep(2)
+                                    compare_b = getPixel()
+                                    if compare_a != compare_b:
+                                        is_changed = True
+                                    else:
+                                        is_changed = False
+                                else:
+                                    dataset['file_name_list'] = ['\_kakaback']
+                                    _kakaback = find_sel_region_accuracy(dataset, 0.8, 5, 70, 50, 120)
+                                    if len(_kakaback) == 0:
+                                        pyautogui.doubleClick(my_view_return_loc)
+                                        print(str(datetime.now().strftime("%X")) + " : " + "뷰인식 불가, 뒤로가기 더블클릭")
+                                        time.sleep(2)
+                                        compare_b = getPixel()
+                                        if compare_a != compare_b:
+                                            is_changed = True
+                                        else:
+                                            is_changed = False
+
                         else:
                             if first_try:
-                                if not is_my_view(dataset):
+                                if not is_my_view(dataset) and is_changed:
+                                    compare_a = getPixel()
                                     pyautogui.click(my_view_return_loc)
                                     print(str(datetime.now().strftime("%X")) + " : " + "마이뷰 이동 전처리1")
                                     try_count = try_count + 1
                                     time.sleep(2)
+                                    compare_b = getPixel()
+                                    if compare_a != compare_b:
+                                        is_changed = True
+                                    else:
+                                        is_changed = False
                                 else:
                                     print(str(datetime.now().strftime("%X")) + " : " + "마이뷰 이동 처리 캔슬1, 위치가 마이뷰입니다.")
                                     next_step = True
                                 first_try = False
                                 pos_screen = getPixel()
                             else:
-                                if not is_my_view(dataset):
+                                if not is_my_view(dataset) and is_changed:
+                                    compare_a = getPixel()
                                     pyautogui.click(my_view_return_loc)
                                     print(str(datetime.now().strftime("%X")) + " : " + "마이뷰 이동 전처리2")
                                     try_count = try_count + 1
                                     time.sleep(2)
+                                    compare_b = getPixel()
+                                    if compare_a != compare_b:
+                                        is_changed = True
+                                    else:
+                                        is_changed = False
                                 else:
                                     print(str(datetime.now().strftime("%X")) + " : " + "마이뷰 이동 처리 캔슬2, 위치가 마이뷰입니다.")
                                     next_step = True

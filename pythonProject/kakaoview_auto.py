@@ -1256,6 +1256,7 @@ def select_channel(dataset):
         if not full_heart:
             print(str(datetime.now().strftime("%X")) + " : " + "좋아요 클릭 완료")
             pyautogui.click(curr_loc)
+            time.sleep(0.5)
             if not capture_module(dataset):
                 print(str(datetime.now().strftime("%X")) + " : " + "캡처 실패 모듈 재 실행")
                 return False

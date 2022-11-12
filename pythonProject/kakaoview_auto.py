@@ -263,8 +263,9 @@ def is_board(dataset):
     result = False
     dataset['file_name_list'] = ['\main_board_txt']
     board_loc = find_location_detail(dataset, 0.75, 50, 80, 370, 130)
-
-    if len(board_loc) > 0:
+    dataset['file_name_list'] = ['\channel_main_option_dots']
+    channel_main_loc = find_location_detail(dataset, 0.80, 50, 80, 370, 130)
+    if len(board_loc) > 0 and len(channel_main_loc) > 0:
         result = True
     return result
 
